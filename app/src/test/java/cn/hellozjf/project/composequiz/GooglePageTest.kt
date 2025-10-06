@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz
 
+import org.jsoup.Jsoup
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -66,6 +67,9 @@ class GooglePageTest {
    */
   @Test
   fun testOpenComposeQuizPage() {
+
+    val timeoutSeconds = 10L
+
     val url = "https://www.answertopia.com/quizzes/compose-project-quiz/"
     println("正在打开 URL: $url")
 
@@ -80,7 +84,7 @@ class GooglePageTest {
     clickButtonWithMultipleStrategies(
       driver, listOf(
         "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_start"
-      ), 10
+      ), timeoutSeconds
     )
 
     while (true) {
@@ -88,7 +92,7 @@ class GooglePageTest {
       if (!clickButtonWithMultipleStrategies(
           driver, listOf(
             "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_next"
-          ), 10
+          ), timeoutSeconds
         )
       ) {
         break
@@ -99,9 +103,42 @@ class GooglePageTest {
     clickButtonWithMultipleStrategies(
       driver, listOf(
         "CSS" to ".qsm-btn.qsm-submit-btn.qmn_btn"
-      ), 10
+      ), timeoutSeconds
     )
 
+    // 等到答案出现
+    WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
+      ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.qsm-results-page"))
+    )
+
+    // 记录问题
+    val questionList = mutableListOf<Question>()
+    val questions = driver.findElements(By.cssSelector("div.qmn_question_answer"))
+    for (question in questions) {
+      val questionText = question.findElement(By.cssSelector("span.qsm-result-question-title")).text
+      val simpleOptions = mutableListOf<String>()
+      question.findElements(By.cssSelector("span.qsm-text-simple-option")).forEach {
+        simpleOptions.add(it.text)
+      }
+      val correctOption = question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
+      val explanation = question.text.split("\n").last().replace("Explanation: ", "")
+
+//      println("questionText = $questionText")
+//      println("correctOption = $correctOption")
+//      println("simpleOptions = $simpleOptions")
+//      println("explanation = $explanation")
+
+      questionList.add(Question(questionText, simpleOptions.toList(), correctOption, explanation))
+    }
+
+    for (question in questionList) {
+      // TODO 明天把这些写入到数据库中
+      println("questionText = ${question.question}")
+      println("correctOption = ${question.correctOption}")
+      println("simpleOptions = ${question.simpleOptions}")
+      println("explanation = ${question.explanation}")
+      println()
+    }
     Thread.sleep(60 * 60 * 1000)
   }
 
@@ -163,3 +200,10 @@ class GooglePageTest {
     println("浏览器已关闭。")
   }
 }
+
+data class Question(
+  val question: String,
+  val simpleOptions: List<String>,
+  val correctOption: String,
+  val explanation: String
+)
