@@ -13,5 +13,5 @@ enum class Destinations(
 ) {
   HOME("Home", "Home Screen", Icons.Default.Home),
   CONTACTS("Contacts", "Contects screen", Icons.Default.Face),
-  FAVORITES("Favorites", "Favorites screen", Icons.Default.Favorite)
+  FAVORITES("Favorites", "Favorites screen", Icons.Default.Favorite),
 }

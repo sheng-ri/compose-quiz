@@ -19,11 +19,11 @@ import androidx.compose.ui.Modifier
 fun MainScreen(
   modifier: Modifier = Modifier
 ) {
-  var destination by rememberSaveable { mutableStateOf(Destinations.HOME) }
+  var destination by rememberSaveable { mutableStateOf(DestinationQuiz.DAILY_QUIZ) }
 
   NavigationSuiteScaffold(
     navigationSuiteItems = {
-      Destinations.entries.forEach {
+      DestinationQuiz.entries.forEach {
         item(
           icon = {
             Icon(
@@ -47,19 +47,19 @@ fun MainScreen(
         .fillMaxSize()
     ) {
       when (destination) {
-        Destinations.HOME -> HomeScreen(
+        DestinationQuiz.CHAPTER_QUIZ -> ChapterQuizScreen(
           modifier = modifier,
           icon = destination.icon,
           contentDescription = destination.contentDescription
         )
 
-        Destinations.CONTACTS -> ContactsScreen(
+        DestinationQuiz.FAVORITE_QUIZ -> FavoriteQuizScreen(
           modifier = modifier,
           icon = destination.icon,
           contentDescription = destination.contentDescription
         )
 
-        Destinations.FAVORITES -> FavoritesScreen(
+        DestinationQuiz.DAILY_QUIZ -> DialyQuizScreen(
           modifier = modifier,
           icon = destination.icon,
           contentDescription = destination.contentDescription

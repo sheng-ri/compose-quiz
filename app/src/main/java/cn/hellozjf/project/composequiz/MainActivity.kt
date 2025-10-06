@@ -20,11 +20,6 @@ class MainActivity : ComponentActivity() {
     setContent {
       ComposeQuizTheme {
         MainScreen()
-//        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//          NavDisplayScreen(
-//            modifier = Modifier.padding(innerPadding)
-//          )
-//        }
       }
     }
   }
