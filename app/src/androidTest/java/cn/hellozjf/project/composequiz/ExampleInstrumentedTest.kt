@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composeexam
+package cn.hellozjf.project.composequiz
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

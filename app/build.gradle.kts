@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-  namespace = "cn.hellozjf.project.composeexam"
+  namespace = "cn.hellozjf.project.composequiz"
   compileSdk = 36
 
   defaultConfig {
-    applicationId = "cn.hellozjf.project.composeexam"
+    applicationId = "cn.hellozjf.project.composequiz"
     minSdk = 26
     targetSdk = 36
     versionCode = 1

@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composeexam
+package cn.hellozjf.project.composequiz
 
 import org.junit.Test
 

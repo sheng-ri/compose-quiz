@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composeexam
+package cn.hellozjf.project.composequiz
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,14 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import cn.hellozjf.project.composeexam.ui.theme.ComposeExamTheme
+import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 
 class MainActivity : ComponentActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
     setContent {
-      ComposeExamTheme {
+      ComposeQuizTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
           Greeting(
             name = "Android",
@@ -41,7 +41,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-  ComposeExamTheme {
+  ComposeQuizTheme {
     Greeting("Android")
   }
 }

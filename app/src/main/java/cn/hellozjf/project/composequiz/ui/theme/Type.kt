@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composeexam.ui.theme
+package cn.hellozjf.project.composequiz.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

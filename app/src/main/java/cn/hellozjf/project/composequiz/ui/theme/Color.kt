@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composeexam.ui.theme
+package cn.hellozjf.project.composequiz.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
