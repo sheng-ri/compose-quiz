@@ -20,14 +20,20 @@ class MainActivity : ComponentActivity() {
     setContent {
       ComposeQuizTheme {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-          Greeting(
-            name = "Android",
+          MainScreen(
             modifier = Modifier.padding(innerPadding)
           )
         }
       }
     }
   }
+}
+
+@Composable
+fun MainScreen(
+  modifier: Modifier = Modifier
+) {
+
 }
 
 @Composable
