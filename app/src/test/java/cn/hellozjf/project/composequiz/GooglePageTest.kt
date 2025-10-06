@@ -1,12 +1,15 @@
 package cn.hellozjf.project.composequiz
 
-import junit.framework.TestCase.assertTrue
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
 import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
+import org.openqa.selenium.support.ui.ExpectedConditions
+import org.openqa.selenium.support.ui.WebDriverWait
+import java.time.Duration
 
 /**
  * 演示如何在 Android 模块的本地单元测试 (JVM) 中使用 Selenium 打开 Google 首页。
@@ -18,17 +21,31 @@ class GooglePageTest {
 
   // !!! 关键步骤：设置 ChromeDriver 的路径 !!!
   // 请将此路径替换为您 ChromeDriver 可执行文件的实际绝对路径！
-  private val CHROME_DRIVER_PATH = "D:\\hellozjf\\soft\\chromedriver-win64\\141.0.7390.54\\chromedriver.exe"
+  private val CHROME_DRIVER_PATH =
+    "D:\\hellozjf\\soft\\chromedriver-win64\\141.0.7390.54\\chromedriver.exe"
+
+  private val ZIP_RESOURCE_PATH =
+    System.getProperty("user.dir") + "\\..\\other\\driver\\chromedriver.zip"
+  private val TARGET_DIR = System.getProperty("java.io.tmpdir") + "\\.chrome_driver"
+  private val DRIVER_FILE_NAME = "chromedriver.exe"
 
   /**
    * 在每个测试方法运行前执行 (对应 JUnit 4 的 @Before)。
    */
   @Before
   fun setUp() {
+
+    // 解压 ChromeDriver
+    val chromeDriverPath = ChromeDriverExtractor.extractChromeDriverFromFilepath(
+      zipFilePath = ZIP_RESOURCE_PATH,
+      targetDir = TARGET_DIR,
+      driverFileName = DRIVER_FILE_NAME
+    )
+
     // 1. 设置 WebDriver 系统属性
     // 如果您使用 Selenium 4.6+ 并信任 Selenium Manager 自动管理驱动，可以省略这行。
     // 如果需要手动指定路径：
-    System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH)
+    System.setProperty("webdriver.chrome.driver", chromeDriverPath)
 
     println("正在初始化 ChromeDriver...")
 
@@ -48,7 +65,7 @@ class GooglePageTest {
    * 测试打开 Google 首页并验证标题 (对应 JUnit 4 的 @Test)。
    */
   @Test
-  fun testOpenGoogleHomePage() {
+  fun testOpenComposeQuizPage() {
     val url = "https://www.answertopia.com/quizzes/compose-project-quiz/"
     println("正在打开 URL: $url")
 
@@ -59,11 +76,80 @@ class GooglePageTest {
     val pageTitle = driver.title
     println("页面标题是: $pageTitle")
 
-//    // 3. 验证断言：标题中是否包含 "Google"
-//    // 使用 JUnit 4 的 Assert.assertTrue
-//    assertTrue("页面标题不包含 'Google'，打开 Google 首页失败。", pageTitle?.contains("Google") ?: true)
+    // 点击 Start Quiz 按钮
+    clickButtonWithMultipleStrategies(
+      driver, listOf(
+        "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_start"
+      ), 10
+    )
 
-    println("✅ 成功打开 Google 首页并验证标题！")
+    while (true) {
+      // 如果能找到 Next 按钮，就一直点 Next 按钮
+      if (!clickButtonWithMultipleStrategies(
+          driver, listOf(
+            "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_next"
+          ), 10
+        )
+      ) {
+        break
+      }
+    }
+
+    // 点击 Submit 按钮
+    clickButtonWithMultipleStrategies(
+      driver, listOf(
+        "CSS" to ".qsm-btn.qsm-submit-btn.qmn_btn"
+      ), 10
+    )
+
+    Thread.sleep(60 * 60 * 1000)
+  }
+
+  /**
+   * 点击动态加载的按钮
+   *
+   * @param driver WebDriver实例
+   * @param by 定位方式
+   * @param timeoutSeconds 最大等待时间(秒)，默认为10秒
+   * @return 成功点击返回true，否则返回false
+   */
+  fun clickDynamicButton(driver: WebDriver, by: By, timeoutSeconds: Long = 10): Boolean {
+    return try {
+      val wait = WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds))
+      val button = wait.until(ExpectedConditions.elementToBeClickable(by))
+      button.click()
+      println("成功点击按钮: $by")
+      true
+    } catch (e: Exception) {
+      println("点击按钮失败: ${e.message}")
+      false
+    }
+  }
+
+  /**
+   * 使用多种策略尝试点击按钮
+   */
+  fun clickButtonWithMultipleStrategies(
+    driver: WebDriver,
+    strategies: List<Pair<String, String>>,
+    timeoutSeconds: Long = 10
+  ): Boolean {
+    for ((method, selector) in strategies) {
+      val by = when (method.uppercase()) {
+        "ID" -> By.id(selector)
+        "XPATH" -> By.xpath(selector)
+        "CSS" -> By.cssSelector(selector)
+        "CLASS" -> By.className(selector)
+        "NAME" -> By.name(selector)
+        else -> continue
+      }
+
+      if (clickDynamicButton(driver, by, timeoutSeconds)) {
+        return true
+      }
+    }
+    println("所有定位策略都失败了")
+    return false
   }
 
   /**
