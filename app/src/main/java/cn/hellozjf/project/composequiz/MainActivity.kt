@@ -19,11 +19,12 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       ComposeQuizTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-          MainScreen(
-            modifier = Modifier.padding(innerPadding)
-          )
-        }
+        MainScreen()
+//        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//          NavDisplayScreen(
+//            modifier = Modifier.padding(innerPadding)
+//          )
+//        }
       }
     }
   }
