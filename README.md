@@ -2,7 +2,7 @@
 
 ## 本 App 目标
 
-将《JetpackCompose1.8Essentials》（见本项目的 book 目录）书中的习题做成一个 App，以便我以后在坐公交车的时候可以随时拿出来刷刷题，巩固 compose 基础知识。
+将《JetpackCompose1.8Essentials》（见本项目的 other/book 目录）书中的习题做成一个 App，以便我以后在坐公交车的时候可以随时拿出来刷刷题，巩固 compose 基础知识。
 
 ## 本 App 核心功能
 
