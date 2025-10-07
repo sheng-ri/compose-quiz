@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.nav.ProfileScreen
 
 @Composable
 fun Welcome(
