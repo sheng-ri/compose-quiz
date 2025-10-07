@@ -1,16 +1,15 @@
-package cn.hellozjf.project.composequiz
+package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.sp
 
 @Composable
-fun ContactsScreen(
+fun ChapterQuizScreen(
   modifier: Modifier = Modifier,
   icon: ImageVector,
   contentDescription: String
@@ -18,13 +17,9 @@ fun ContactsScreen(
   Box(
     modifier = modifier.fillMaxSize()
   ) {
-    Icon(
-      imageVector = icon,
-      contentDescription = contentDescription,
-      tint = Color.Magenta,
-      modifier = Modifier
-        .align(Alignment.Center)
-        .fillMaxSize()
+    Text(
+      text = "章节测试",
+      fontSize = 32.sp
     )
   }
 }

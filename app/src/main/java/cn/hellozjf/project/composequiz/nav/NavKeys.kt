@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composequiz
+package cn.hellozjf.project.composequiz.nav
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

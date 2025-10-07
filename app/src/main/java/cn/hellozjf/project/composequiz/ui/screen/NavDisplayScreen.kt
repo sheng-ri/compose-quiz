@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composequiz
+package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -6,6 +6,9 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import cn.hellozjf.project.composequiz.nav.HomeScreen
+import cn.hellozjf.project.composequiz.nav.ProfileScreen
+import cn.hellozjf.project.composequiz.nav.WelcomeScreen
 
 @Composable
 fun NavDisplayScreen(

@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composequiz
+package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,23 +12,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
 
 @Composable
-fun Profile(onClearBackStack: () -> Unit) {
+fun Welcome(
+  onNavigation: (NavKey) -> Unit,
+  name: String = ""
+) {
   Box(
     modifier = Modifier.fillMaxSize(),
     contentAlignment = Alignment.Center
   ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
       Text(
-        text = "Setup your profile",
+        text = "Welcome $name",
         style = MaterialTheme.typography.headlineSmall
       )
       Spacer(modifier = Modifier.size(30.dp))
       Button(onClick = {
-        onClearBackStack()
+        onNavigation(ProfileScreen)
       }) {
-        Text(text = "Go Home")
+        Text(text = "Set up your Profile")
       }
     }
   }

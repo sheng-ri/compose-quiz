@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composequiz
+package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun FavoritesScreen(
+fun ContactsScreen(
   modifier: Modifier = Modifier,
   icon: ImageVector,
   contentDescription: String
@@ -21,7 +21,7 @@ fun FavoritesScreen(
     Icon(
       imageVector = icon,
       contentDescription = contentDescription,
-      tint = Color.Red,
+      tint = Color.Magenta,
       modifier = Modifier
         .align(Alignment.Center)
         .fillMaxSize()

@@ -1,4 +1,4 @@
-package cn.hellozjf.project.composequiz
+package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.nav.WelcomeScreen
 
 @Composable
 fun Home(onNavigation: (NavKey) -> Unit) {

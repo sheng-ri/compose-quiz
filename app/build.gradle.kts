@@ -3,6 +3,7 @@ plugins {
   alias(libs.plugins.kotlin.android)
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.jetbrains.kotlin.serialization)
+  alias(libs.plugins.devtoolsKsp)
 }
 
 android {
@@ -53,6 +54,12 @@ dependencies {
   implementation(libs.kotlinx.serialization.core)
   implementation(libs.kotlinx.serialization.json)
   implementation(libs.androidx.material3.adaptive.navigation.suite)
+  implementation(libs.androidx.room.runtime)
+  implementation(libs.androidx.room.ktx)
+  implementation(libs.androidx.runtime.livedata)
+  implementation(libs.androidx.lifecycle.viewmodel.compose)
+  annotationProcessor(libs.androidx.room.room.compiler)
+  ksp(libs.androidx.room.room.compiler)
   testImplementation(libs.junit)
   androidTestImplementation(libs.androidx.junit)
   androidTestImplementation(libs.androidx.espresso.core)
@@ -61,5 +68,4 @@ dependencies {
   debugImplementation(libs.androidx.ui.tooling)
   debugImplementation(libs.androidx.ui.test.manifest)
   testImplementation(libs.selenium.java)
-  testImplementation(libs.jsoup)
 }

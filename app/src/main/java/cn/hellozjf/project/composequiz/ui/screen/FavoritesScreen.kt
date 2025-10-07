@@ -1,6 +1,5 @@
-package cn.hellozjf.project.composequiz
+package cn.hellozjf.project.composequiz.ui.screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
@@ -11,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 
 @Composable
-fun HomeScreen(
+fun FavoritesScreen(
   modifier: Modifier = Modifier,
   icon: ImageVector,
   contentDescription: String
@@ -22,7 +21,7 @@ fun HomeScreen(
     Icon(
       imageVector = icon,
       contentDescription = contentDescription,
-      tint = Color.Blue,
+      tint = Color.Red,
       modifier = Modifier
         .align(Alignment.Center)
         .fillMaxSize()
