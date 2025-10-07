@@ -15,9 +15,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import cn.hellozjf.project.composequiz.nav.DestinationQuiz
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 
 @Composable
 fun MainScreen(
+  chapterQuizViewModel: ChapterQuizViewModel,
   modifier: Modifier = Modifier
 ) {
   var destination by rememberSaveable { mutableStateOf(DestinationQuiz.DAILY_QUIZ) }
@@ -49,9 +51,8 @@ fun MainScreen(
     ) {
       when (destination) {
         DestinationQuiz.CHAPTER_QUIZ -> ChapterQuizScreen(
-          modifier = modifier,
-          icon = destination.icon,
-          contentDescription = destination.contentDescription
+          chapterQuizViewModel = chapterQuizViewModel,
+          modifier = modifier
         )
 
         DestinationQuiz.FAVORITE_QUIZ -> FavoriteQuizScreen(
