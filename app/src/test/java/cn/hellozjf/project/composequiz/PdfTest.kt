@@ -124,9 +124,6 @@ class PdfTest {
   private fun getPageNumberFromDestination(destination: PDDestination, document: PDDocument): Int {
     return when (destination) {
 
-      // 普通页面目标
-      is PDPageDestination -> destination.pageNumber + 1
-
       // 命名目标
       is PDNamedDestination -> {
         val resolvedDest = document.documentCatalog.findNamedDestinationPage(destination)
@@ -137,6 +134,39 @@ class PdfTest {
 //        } else {
 //          -1
 //        }
+      }
+      is PDPageXYZDestination -> {
+        // 然后处理具体的子类
+        if (destination.page != null) {
+          document.pages.indexOf(destination.page) + 1
+        } else {
+          -1
+        }
+      }
+      is PDPageFitDestination -> {
+        if (destination.page != null) {
+          document.pages.indexOf(destination.page) + 1
+        } else {
+          -1
+        }
+      }
+      is PDPageFitHeightDestination -> {
+        if (destination.page != null) {
+          document.pages.indexOf(destination.page) + 1
+        } else {
+          -1
+        }
+      }
+      is PDPageFitWidthDestination -> {
+        if (destination.page != null) {
+          document.pages.indexOf(destination.page) + 1
+        } else {
+          -1
+        }
+      }
+      is PDPageDestination -> {
+        // 最后处理通用的父类
+        destination.pageNumber + 1
       }
       // 其他类型的目标
       else -> -1
