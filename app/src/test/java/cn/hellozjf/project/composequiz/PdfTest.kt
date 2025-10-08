@@ -12,13 +12,14 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPa
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineNode
 import org.apache.pdfbox.text.PDFTextStripper
-import org.junit.Test
 import java.io.File
 
 class PdfTest {
 
-  @Test
-  fun test() {
+  /**
+   * 获得有效的章节信息列表
+   */
+  fun getAllChapterInfoList(): List<ChapterInfo> {
     val pdfFile =
       "D:\\hellozjf\\code\\gitee\\ComposeQuiz\\other\\book\\JetpackCompose1.8Essentials\\JetpackCompose1.8Essentials.pdf"
     val bookmarks = extractBookmarksWithContent(pdfFile)
@@ -33,25 +34,7 @@ class PdfTest {
     val bookmarkLevelContentList = convert(bookmarks)
     // List<BookmarkLevelContent> 转换为 List<ChapterInfo>
     val chapterInfoList = convert2(bookmarkLevelContentList)
-    // 把 chapterInfoList 写入到 excel 中
-    val excelTest = ExcelTest()
-    val title = listOf("章节号", "章节标题", "习题网址")
-    val dataList = mutableListOf<List<String>>()
-    for (chapterInfo in chapterInfoList) {
-      // println(chapterInfo)
-      if (chapterInfo.number == 1) {
-        // 第一章是所有测试的汇总地址，跳过
-        continue
-      }
-      chapterInfo.url?.let {
-        // 只记录有习题网址的章节
-        // 好像书升级之后，原来1.7版本书中的一些章节在1.8版本没有了，但是在习题网站中依旧有1.7版本书中的章节测试
-        // 这些仅在1.7版本书中的章节我就忽略了
-        val data = listOf(chapterInfo.number.toString(), chapterInfo.title, it)
-        dataList.add(data)
-      }
-    }
-    excelTest.writeToExcel(title, dataList)
+    return chapterInfoList
   }
 
   fun isAnswerTopiaUrl(url: String): Boolean {
@@ -63,7 +46,8 @@ class PdfTest {
     val chapterInfoList = mutableListOf<ChapterInfo>()
     for (bookmarkLevelContent in bookmarkLevelContentList) {
       // 把 id 的最后一个 . 去掉，转换为数字
-      val number: Int = bookmarkLevelContent.id.substring(0, bookmarkLevelContent.id.length - 1).toInt()
+      val number: Int =
+        bookmarkLevelContent.id.substring(0, bookmarkLevelContent.id.length - 1).toInt()
       // title 跳过 id，就是标题了
       val title: String = bookmarkLevelContent.title.substring(bookmarkLevelContent.id.length + 1)
       var url: String? = null

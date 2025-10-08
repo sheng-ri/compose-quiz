@@ -46,6 +46,7 @@ class SeleniumTest {
 
     // 2. 配置 Chrome 选项
     val options = ChromeOptions()
+    options.addArguments("--proxy-server=socks5://127.0.0.1:1080")
     // options.addArguments("--headless") // 可选：如果不需要界面显示，请取消注释
 
     // 3. 创建 ChromeDriver 实例
@@ -54,6 +55,52 @@ class SeleniumTest {
     // 4. 最大化窗口（可选）
     driver.manage().window().maximize()
     println("ChromeDriver 初始化成功。")
+  }
+
+  @Test
+  fun readPdfAndWriteExcel() {
+
+    val timeoutSeconds = 10L
+
+    // 把 chapterInfoList 写入到 excel 中
+    val title = listOf("章节号", "章节标题", "简化标题", "习题网址", "实际网址")
+    val dataList = mutableListOf<List<String>>()
+
+    val pdfTest = PdfTest()
+    val chapterInfoList = pdfTest.getAllChapterInfoList()
+    for (chapterInfo in chapterInfoList) {
+      // println(chapterInfo)
+      if (chapterInfo.number == 1) {
+        // 第一章是所有测试的汇总地址，跳过
+        continue
+      }
+      chapterInfo.url?.let {
+        // 只记录有习题网址的章节
+        // 好像书升级之后，原来1.7版本书中的一些章节在1.8版本没有了，但是在习题网站中依旧有1.7版本书中的章节测试
+        // 这些仅在1.7版本书中的章节我就忽略了
+//        val data = listOf(chapterInfo.number.toString(), chapterInfo.title, it)
+//        dataList.add(data)
+
+        // 上面的内容还不够，我需要简化的标题和实际的习题网址
+        driver.get(it)
+        WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
+          ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
+        )
+        val elements = driver.findElements(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
+        val title = elements[0].text
+        println("number: ${chapterInfo.number}, title: $title, url: ${driver.currentUrl}")
+        val data = listOf(
+          chapterInfo.number.toString(),
+          chapterInfo.title,
+          title,
+          it,
+          driver.currentUrl ?: ""
+        )
+        dataList.add(data)
+      }
+    }
+     val excelTest = ExcelTest()
+     excelTest.writeToExcel(title, dataList)
   }
 
   /**
