@@ -86,6 +86,7 @@ class SeleniumTest {
         WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
           ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
         )
+        // 获取本章简化标题
         val elements = driver.findElements(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
         val title = elements[0].text
         println("number: ${chapterInfo.number}, title: $title, url: ${driver.currentUrl}")
@@ -101,6 +102,102 @@ class SeleniumTest {
     }
      val excelTest = ExcelTest()
      excelTest.writeToExcel(title, dataList)
+  }
+
+  /**
+   * 从 PDF 中获取章节信息，然后用 selenium 打开网页，读取题目列表，并写入数据库中
+   */
+  @Test
+  fun readPdfAndWriteToDatabase() {
+
+    val timeoutSeconds = 10L
+
+    val pdfTest = PdfTest()
+    val chapterInfoList = pdfTest.getAllChapterInfoList()
+    for (chapterInfo in chapterInfoList) {
+      // println(chapterInfo)
+      if (chapterInfo.number == 1) {
+        // 第一章是所有测试的汇总地址，跳过
+        continue
+      }
+      chapterInfo.url?.let {
+        driver.get(it)
+
+        // 等待标题出现
+        WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
+          ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
+        )
+        // 获取本章简化标题
+        val elements = driver.findElements(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
+        val title = elements[0].text
+        println("number: ${chapterInfo.number}, title: $title, url: ${driver.currentUrl}")
+        val data = listOf(
+          chapterInfo.number.toString(),
+          chapterInfo.title,
+          title,
+          it,
+          driver.currentUrl ?: ""
+        )
+      }
+    }
+  }
+
+  private fun getQuizList(
+    driver: WebDriver,
+    timeoutSeconds: Long
+  ): List<Quiz> {
+    // 点击 Start Quiz 按钮
+    clickButtonWithMultipleStrategies(
+      driver, listOf(
+        "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_start"
+      ), timeoutSeconds
+    )
+
+    while (true) {
+      // 如果能找到 Next 按钮，就一直点 Next 按钮
+      if (!clickButtonWithMultipleStrategies(
+          driver, listOf(
+            "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_next"
+          ), timeoutSeconds
+        )
+      ) {
+        break
+      }
+    }
+
+    // 点击 Submit 按钮
+    clickButtonWithMultipleStrategies(
+      driver, listOf(
+        "CSS" to ".qsm-btn.qsm-submit-btn.qmn_btn"
+      ), timeoutSeconds
+    )
+
+    // 等到答案出现
+    WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
+      ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.qsm-results-page"))
+    )
+
+    // 记录问题
+    val quizList = mutableListOf<Quiz>()
+    val questions = driver.findElements(By.cssSelector("div.qmn_question_answer"))
+    for (question in questions) {
+      val questionText = question.findElement(By.cssSelector("span.qsm-result-question-title")).text
+      val simpleOptions = mutableListOf<String>()
+      question.findElements(By.cssSelector("span.qsm-text-simple-option")).forEach {
+        simpleOptions.add(it.text)
+      }
+      val correctOption = question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
+      val explanation = question.text.split("\n").last().replace("Explanation: ", "")
+
+//      println("questionText = $questionText")
+//      println("correctOption = $correctOption")
+//      println("simpleOptions = $simpleOptions")
+//      println("explanation = $explanation")
+
+      quizList.add(Quiz(questionText, simpleOptions.toList(), correctOption, explanation))
+    }
+
+    return quizList.toList()
   }
 
   /**
@@ -153,7 +250,7 @@ class SeleniumTest {
     )
 
     // 记录问题
-    val questionList = mutableListOf<Question>()
+    val quizList = mutableListOf<Quiz>()
     val questions = driver.findElements(By.cssSelector("div.qmn_question_answer"))
     for (question in questions) {
       val questionText = question.findElement(By.cssSelector("span.qsm-result-question-title")).text
@@ -169,10 +266,10 @@ class SeleniumTest {
 //      println("simpleOptions = $simpleOptions")
 //      println("explanation = $explanation")
 
-      questionList.add(Question(questionText, simpleOptions.toList(), correctOption, explanation))
+      quizList.add(Quiz(questionText, simpleOptions.toList(), correctOption, explanation))
     }
 
-    for (question in questionList) {
+    for (question in quizList) {
       // TODO 明天把这些写入到数据库中
       println("questionText = ${question.question}")
       println("correctOption = ${question.correctOption}")
@@ -242,7 +339,7 @@ class SeleniumTest {
   }
 }
 
-data class Question(
+data class Quiz(
   val question: String,
   val simpleOptions: List<String>,
   val correctOption: String,
