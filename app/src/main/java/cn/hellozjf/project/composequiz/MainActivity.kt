@@ -2,6 +2,7 @@ package cn.hellozjf.project.composequiz
 
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -29,10 +30,20 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cn.hellozjf.project.composequiz.ui.screen.MainScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
+import cn.hellozjf.project.composequiz.util.TextFileManager
+import cn.hellozjf.project.composequiz.util.TextFileUtils
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.MainViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
+  private val TAG = "MainActivity"
+
+  private val mainScope = CoroutineScope(Dispatchers.Main)
+
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     enableEdgeToEdge()
@@ -70,6 +81,81 @@ class MainActivity : ComponentActivity() {
 //          }
 //        }
 //      }
+    }
+
+    setupTextFiles()
+  }
+
+  private fun setupTextFiles() {
+    // 方式1：直接读取assets中的txt文件（适合小文件）
+    val configContent = TextFileUtils.readTextFromAssets(this, "test.txt")
+    configContent?.let {
+      Log.d(TAG, it)
+    }
+
+//    // 方式2：读取已拷贝到本地的txt文件
+//    if (TextFileUtils.isTextFileExists(this, "config.txt")) {
+//      val localContent = TextFileUtils.readTextFromLocal(this, "config.txt")
+//      Log.d("LocalConfig", localContent ?: "文件为空")
+//    }
+//
+//    // 方式3：按行读取
+//    val lines = TextFileUtils.readTextLinesFromAssets(this, "texts/data.txt")
+//    lines.forEachIndexed { index, line ->
+//      Log.d("DataLine", "Line ${index + 1}: $line")
+//    }
+//
+//    // 检查所有本地txt文件
+//    val textFiles = TextFileUtils.getLocalTextFiles(this)
+//    textFiles.forEach { fileName ->
+//      Log.d("TextFile", "本地文件: $fileName")
+//    }
+//
+//    // 如果需要重新拷贝文件
+//    copyTextFilesWithListener()
+  }
+
+  private fun copyTextFilesWithListener() {
+    TextFileManager.copyTextFilesWithProgress(this, object : TextFileManager.TextFileCopyListener {
+      override fun onStart() {
+        Log.d("TextFile", "开始拷贝txt文件")
+      }
+
+      override fun onProgress(fileName: String, current: Int, total: Int) {
+        Log.d("TextFile", "拷贝进度: $fileName ($current/$total)")
+      }
+
+      override fun onComplete(success: Boolean, copiedCount: Int) {
+        mainScope.launch {
+          if (success) {
+            Log.d("TextFile", "成功拷贝 $copiedCount 个文件")
+          } else {
+            Log.e("TextFile", "文件拷贝不完整")
+          }
+        }
+      }
+
+      override fun onError(fileName: String, exception: Exception) {
+        Log.e("TextFile", "拷贝失败: $fileName", exception)
+      }
+    })
+  }
+
+  /**
+   * 使用协程方式（需要在build.gradle中添加协程依赖）
+   */
+  private fun copyTextFilesWithCoroutine() {
+    mainScope.launch {
+      val success =
+        TextFileManager.copyTextFilesWithCoroutine(this@MainActivity) { fileName, current, total ->
+          Log.d("TextFile", "拷贝中: $fileName ($current/$total)")
+        }
+
+      if (success) {
+        Log.d("TextFile", "所有文件拷贝完成")
+      } else {
+        Log.e("TextFile", "文件拷贝失败")
+      }
     }
   }
 }
