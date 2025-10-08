@@ -17,3 +17,5 @@ local.properties
 /other/book/JetpackCompose1.8Essentials/
 /.kotlin/
 /1.txt
+/app/output.xlsx
+/app/~$output.xlsx

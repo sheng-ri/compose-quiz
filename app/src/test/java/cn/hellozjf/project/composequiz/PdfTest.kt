@@ -33,9 +33,25 @@ class PdfTest {
     val bookmarkLevelContentList = convert(bookmarks)
     // List<BookmarkLevelContent> 转换为 List<ChapterInfo>
     val chapterInfoList = convert2(bookmarkLevelContentList)
+    // 把 chapterInfoList 写入到 excel 中
+    val excelTest = ExcelTest()
+    val title = listOf("章节号", "章节标题", "习题网址")
+    val dataList = mutableListOf<List<String>>()
     for (chapterInfo in chapterInfoList) {
-      println(chapterInfo)
+      // println(chapterInfo)
+      if (chapterInfo.number == 1) {
+        // 第一章是所有测试的汇总地址，跳过
+        continue
+      }
+      chapterInfo.url?.let {
+        // 只记录有习题网址的章节
+        // 好像书升级之后，原来1.7版本书中的一些章节在1.8版本没有了，但是在习题网站中依旧有1.7版本书中的章节测试
+        // 这些仅在1.7版本书中的章节我就忽略了
+        val data = listOf(chapterInfo.number.toString(), chapterInfo.title, it)
+        dataList.add(data)
+      }
     }
+    excelTest.writeToExcel(title, dataList)
   }
 
   fun isAnswerTopiaUrl(url: String): Boolean {

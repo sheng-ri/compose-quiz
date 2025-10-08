@@ -70,4 +70,6 @@ dependencies {
   testImplementation(libs.selenium.java)
   testImplementation(libs.pdfbox)
   testImplementation(libs.itext7.core)
+  testImplementation(libs.poi.core)
+  testImplementation(libs.poi.ooxml)
 }
