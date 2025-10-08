@@ -22,14 +22,97 @@ class PdfTest {
     val pdfFile =
       "D:\\hellozjf\\code\\gitee\\ComposeQuiz\\other\\book\\JetpackCompose1.8Essentials\\JetpackCompose1.8Essentials.pdf"
     val bookmarks = extractBookmarksWithContent(pdfFile)
-    bookmarks.forEach { bookmark ->
-      println("标题: ${bookmark.title}")
-      println("层级: ${bookmark.level}")
-      println("页码: ${bookmark.pageNumber}")
-      println("内容: ${bookmark.content}")
-      println("---")
+//    bookmarks.forEach { bookmark ->
+//      println("标题: ${bookmark.title}")
+//      println("层级: ${bookmark.level}")
+//      println("页码: ${bookmark.pageNumber}")
+//      println("内容: ${bookmark.content}")
+//      println("---")
+//    }
+    // 把 bookmarks 整理一下，从 List<BookmarkContent> 变为 List<BookmarkLevelContent>
+    val bookmarkLevelContentList = convert(bookmarks)
+    // List<BookmarkLevelContent> 转换为 List<ChapterInfo>
+    val chapterInfoList = convert2(bookmarkLevelContentList)
+    for (chapterInfo in chapterInfoList) {
+      println(chapterInfo)
     }
   }
+
+  fun isAnswerTopiaUrl(url: String): Boolean {
+    val regex = "^https://www\\.answertopia\\.com/[a-zA-Z0-9]{4}$".toRegex()
+    return url.matches(regex)
+  }
+
+  private fun convert2(bookmarkLevelContentList: List<BookmarkLevelContent>): List<ChapterInfo> {
+    val chapterInfoList = mutableListOf<ChapterInfo>()
+    for (bookmarkLevelContent in bookmarkLevelContentList) {
+      // 把 id 的最后一个 . 去掉，转换为数字
+      val number: Int = bookmarkLevelContent.id.substring(0, bookmarkLevelContent.id.length - 1).toInt()
+      // title 跳过 id，就是标题了
+      val title: String = bookmarkLevelContent.title.substring(bookmarkLevelContent.id.length + 1)
+      var url: String? = null
+      for (child in bookmarkLevelContent.children) {
+        if (child.title.contains("Take the knowledge test")) {
+          // 说明有章节测试
+          val lines = child.content.split("\n")
+          for (line in lines) {
+            val trim = line.trim()
+            if (isAnswerTopiaUrl(trim)) {
+              url = trim
+              break
+            }
+          }
+          break
+        }
+      }
+      chapterInfoList.add(ChapterInfo(number, title, url))
+    }
+    return chapterInfoList
+  }
+
+  private fun convert(bookmarks: List<BookmarkContent>): List<BookmarkLevelContent> {
+    val bookmarkLevelContentList = mutableListOf<BookmarkLevelContent>()
+    for (bookmarkContent in bookmarks) {
+      val id = bookmarkContent.title.split(" ")[0]
+      if (!id.contains(".")) {
+        // 这不是一个有效的书签，跳过它
+        continue
+      }
+      if (bookmarkContent.level == 0) {
+        // 这是顶级书签
+        val bookmarkLevelContent = BookmarkLevelContent(
+          id = id,
+          title = bookmarkContent.title,
+          pageNumber = bookmarkContent.pageNumber,
+          content = bookmarkContent.content,
+          children = mutableListOf()
+        )
+        bookmarkLevelContentList.add(bookmarkLevelContent)
+      } else if (bookmarkContent.level == 1) {
+        // 这是二级书签，遍历 bookmarkLevelContentList 找到顶级书签
+        // 当然这里最好的查找方式是二分查找，我偷懒了，遍历算了
+        for (bookmarkLevelContent in bookmarkLevelContentList) {
+          if (id.indexOf(bookmarkLevelContent.id) == 0) {
+            val newBookmarkLevelContent = BookmarkLevelContent(
+              id = id,
+              title = bookmarkContent.title,
+              pageNumber = bookmarkContent.pageNumber,
+              content = bookmarkContent.content,
+              children = mutableListOf()
+            )
+            bookmarkLevelContent.children.add(newBookmarkLevelContent)
+          }
+        }
+      }
+    }
+    return bookmarkLevelContentList
+  }
+
+  data class ChapterInfo(
+    val number: Int,
+    val title: String,
+    val url: String?
+  )
 
   // 定义数据类，用来存储书签信息
   data class BookmarkContent(
@@ -37,6 +120,14 @@ class PdfTest {
     val level: Int,         // 书签层级
     val pageNumber: Int,    // 页码
     val content: String     // 页面内容
+  )
+
+  data class BookmarkLevelContent(
+    val id: String,
+    val title: String,
+    val pageNumber: Int,
+    val content: String,
+    val children: MutableList<BookmarkLevelContent>
   )
 
   // 主函数：读取PDF书签和内容
@@ -135,6 +226,7 @@ class PdfTest {
 //          -1
 //        }
       }
+
       is PDPageXYZDestination -> {
         // 然后处理具体的子类
         if (destination.page != null) {
@@ -143,6 +235,7 @@ class PdfTest {
           -1
         }
       }
+
       is PDPageFitDestination -> {
         if (destination.page != null) {
           document.pages.indexOf(destination.page) + 1
@@ -150,6 +243,7 @@ class PdfTest {
           -1
         }
       }
+
       is PDPageFitHeightDestination -> {
         if (destination.page != null) {
           document.pages.indexOf(destination.page) + 1
@@ -157,6 +251,7 @@ class PdfTest {
           -1
         }
       }
+
       is PDPageFitWidthDestination -> {
         if (destination.page != null) {
           document.pages.indexOf(destination.page) + 1
@@ -164,6 +259,7 @@ class PdfTest {
           -1
         }
       }
+
       is PDPageDestination -> {
         // 最后处理通用的父类
         destination.pageNumber + 1
