@@ -15,6 +15,8 @@ selenium = "4.36.0"
 roomRuntime = "2.7.2"
 runtimeLivedata = "1.8.3"
 ksp = "2.1.20-2.0.1"
+pdfbox = "2.0.29"
+itext7 = "7.2.5"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,6 +45,8 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "roomRuntime" }
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+pdfbox = { group = "org.apache.pdfbox", name = "pdfbox", version.ref = "pdfbox" }
+itext7-core = { group = "com.itextpdf", name = "itext7-core", version.ref = "itext7" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

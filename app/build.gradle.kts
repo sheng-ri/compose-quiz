@@ -68,4 +68,6 @@ dependencies {
   debugImplementation(libs.androidx.ui.tooling)
   debugImplementation(libs.androidx.ui.test.manifest)
   testImplementation(libs.selenium.java)
+  testImplementation(libs.pdfbox)
+  testImplementation(libs.itext7.core)
 }

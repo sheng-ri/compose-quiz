@@ -14,19 +14,14 @@ import java.time.Duration
 /**
  * 演示如何在 Android 模块的本地单元测试 (JVM) 中使用 Selenium 打开 Google 首页。
  */
-class GooglePageTest {
+class SeleniumTest {
 
   // 声明 WebDriver 变量
   private lateinit var driver: WebDriver
 
-  // !!! 关键步骤：设置 ChromeDriver 的路径 !!!
-  // 请将此路径替换为您 ChromeDriver 可执行文件的实际绝对路径！
-  private val CHROME_DRIVER_PATH =
-    "D:\\hellozjf\\soft\\chromedriver-win64\\141.0.7390.54\\chromedriver.exe"
-
   private val ZIP_RESOURCE_PATH =
-    System.getProperty("user.dir") + "\\..\\other\\driver\\chromedriver.zip"
-  private val TARGET_DIR = System.getProperty("java.io.tmpdir") + "\\.chrome_driver"
+    System.getProperty("user.dir")!! + "\\..\\other\\driver\\chromedriver.zip"
+  private val TARGET_DIR = System.getProperty("java.io.tmpdir")!! + "\\.chrome_driver"
   private val DRIVER_FILE_NAME = "chromedriver.exe"
 
   /**
