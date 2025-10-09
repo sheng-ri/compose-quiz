@@ -72,4 +72,6 @@ dependencies {
   testImplementation(libs.itext7.core)
   testImplementation(libs.poi.core)
   testImplementation(libs.poi.ooxml)
+  implementation(libs.commons.csv)
+  testImplementation(libs.commons.csv)
 }

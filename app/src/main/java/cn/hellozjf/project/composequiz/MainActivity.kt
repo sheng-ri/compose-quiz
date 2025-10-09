@@ -88,10 +88,7 @@ class MainActivity : ComponentActivity() {
 
   private fun setupTextFiles() {
     // 方式1：直接读取assets中的txt文件（适合小文件）
-    val configContent = TextFileUtils.readTextFromAssets(this, "test.txt")
-    configContent?.let {
-      Log.d(TAG, it)
-    }
+    val configContent = TextFileUtils.readTextFromAssets(this, "output.csv")
 
 //    // 方式2：读取已拷贝到本地的txt文件
 //    if (TextFileUtils.isTextFileExists(this, "config.txt")) {

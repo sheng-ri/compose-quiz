@@ -1,10 +1,14 @@
 package cn.hellozjf.project.composequiz.util
 
 import android.content.Context
+import android.util.Log
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+private val TAG = "TextFileUtils"
 
 class TextFileUtils private constructor() {
 
@@ -55,7 +59,15 @@ class TextFileUtils private constructor() {
      */
     fun readTextFromAssets(context: Context, assetPath: String): String? {
       return try {
-        context.assets.open(assetPath).bufferedReader().use { it.readText() }
+        context.assets.open(assetPath).bufferedReader().use { reader ->
+          val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
+
+          for (record in csvParser) {
+            Log.d(TAG, "姓名: ${record.get("姓名")}, 年龄: ${record.get("年龄")}, 城市: ${record.get("城市")}")
+          }
+
+        }
+        null
       } catch (e: IOException) {
         e.printStackTrace()
         null

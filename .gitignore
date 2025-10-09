@@ -19,3 +19,5 @@ local.properties
 /1.txt
 /app/output.xlsx
 /app/~$output.xlsx
+/app/src/main/assets/output.csv
+/app/output.csv

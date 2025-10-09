@@ -104,13 +104,14 @@ class SeleniumTest {
      excelTest.writeToExcel(title, dataList)
   }
 
-  /**
-   * 从 PDF 中获取章节信息，然后用 selenium 打开网页，读取题目列表，并写入数据库中
-   */
   @Test
-  fun readPdfAndWriteToDatabase() {
+  fun readPdfAndWriteCsv() {
 
     val timeoutSeconds = 10L
+
+    // 把 chapterInfoList 写入到 excel 中
+    val title = listOf("章节号", "章节标题", "简化标题", "习题网址", "实际网址")
+    val dataList = mutableListOf<List<String>>()
 
     val pdfTest = PdfTest()
     val chapterInfoList = pdfTest.getAllChapterInfoList()
@@ -121,9 +122,14 @@ class SeleniumTest {
         continue
       }
       chapterInfo.url?.let {
-        driver.get(it)
+        // 只记录有习题网址的章节
+        // 好像书升级之后，原来1.7版本书中的一些章节在1.8版本没有了，但是在习题网站中依旧有1.7版本书中的章节测试
+        // 这些仅在1.7版本书中的章节我就忽略了
+//        val data = listOf(chapterInfo.number.toString(), chapterInfo.title, it)
+//        dataList.add(data)
 
-        // 等待标题出现
+        // 上面的内容还不够，我需要简化的标题和实际的习题网址
+        driver.get(it)
         WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
           ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
         )
@@ -138,8 +144,11 @@ class SeleniumTest {
           it,
           driver.currentUrl ?: ""
         )
+        dataList.add(data)
       }
     }
+     val excelTest = ExcelTest()
+     excelTest.writeToExcel(title, dataList)
   }
 
   private fun getQuizList(
