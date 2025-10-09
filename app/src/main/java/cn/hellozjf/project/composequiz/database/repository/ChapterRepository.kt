@@ -26,14 +26,18 @@ class ChapterRepository(private val chapterDao: ChapterDao) {
     }
   }
 
-  fun findAll() {
+  fun findAllOrderByIndex() {
     coroutineScope.launch(Dispatchers.Main) {
       searchResults.value = asyncFind().await()
     }
   }
 
+  fun getCount(): Int {
+    return chapterDao.getCount()
+  }
+
   private fun asyncFind(): Deferred<List<Chapter>?> =
     coroutineScope.async(Dispatchers.IO) {
-      return@async chapterDao.findAll()
+      return@async chapterDao.findAllOrderByIndex()
     }
 }

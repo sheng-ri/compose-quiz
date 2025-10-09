@@ -14,9 +14,12 @@ interface ChapterDao {
   @Insert
   fun insertChapter(chapter: Chapter)
 
-  @Query("SELECT * FROM chapter")
-  fun findAll(): List<Chapter>
+  @Query("SELECT * FROM chapter order by `index`")
+  fun findAllOrderByIndex(): List<Chapter>
 
   @Query("DELETE FROM chapter")
   fun deleteAll()
+
+  @Query("SELECT count(*) FROM chapter")
+  fun getCount(): Int
 }

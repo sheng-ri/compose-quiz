@@ -23,8 +23,12 @@ class ChapterViewModel(application: Application) : ViewModel() {
     repository.insertChapter(chapter)
   }
 
-  fun findAll() {
-    repository.findAll()
+  fun findAllOrderByIndex() {
+    repository.findAllOrderByIndex()
+  }
+
+  fun getCount(): Int {
+    return repository.getCount()
   }
 
   fun deleteAll() {

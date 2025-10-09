@@ -72,6 +72,7 @@ class MainActivity : ComponentActivity() {
             )
           )
           MainScreen(
+            chapterViewModel = chapterViewModel,
             chapterQuizViewModel = chapterQuizViewModel
           )
 
@@ -86,9 +87,13 @@ class MainActivity : ComponentActivity() {
     chapterQuizViewModel: ChapterQuizViewModel
   ) {
     // 读取章节信息
-    readChapterCsv(chapterViewModel)
-    // 读取题库信息
-    readQuizCsv()
+    mainScope.launch(context = Dispatchers.IO) {
+      if (chapterViewModel.getCount() == 0) {
+        readChapterCsv(chapterViewModel)
+      }
+//      // TODO 读取题库信息
+//      readQuizCsv()
+    }
   }
 
   private fun readChapterCsv(

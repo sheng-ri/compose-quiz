@@ -16,9 +16,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import cn.hellozjf.project.composequiz.nav.DestinationQuiz
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
 @Composable
 fun MainScreen(
+  chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   modifier: Modifier = Modifier
 ) {
@@ -50,7 +52,8 @@ fun MainScreen(
         .fillMaxSize()
     ) {
       when (destination) {
-        DestinationQuiz.CHAPTER_QUIZ -> ChapterQuizScreen(
+        DestinationQuiz.CHAPTER_QUIZ -> ChapterScreen(
+          chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           modifier = modifier
         )
