@@ -14,8 +14,8 @@ class Quiz {
   @ColumnInfo(name = "id")
   var id: Int = 0
 
-  @ColumnInfo(name = "chapter")
-  var chapter: Int = 0
+  @ColumnInfo(name = "chapter_index")
+  var chapterIndex: Int = 0
 
   @ColumnInfo(name = "question")
   var question: String = ""
@@ -23,14 +23,14 @@ class Quiz {
   @ColumnInfo(name = "correct_option")
   var correctOption: String = ""
 
-  @ColumnInfo(name = "other_option1")
-  var otherOption1: String = ""
+  @ColumnInfo(name = "wrong_option1")
+  var wrongOption1: String = ""
 
-  @ColumnInfo(name = "other_option2")
-  var otherOption2: String = ""
+  @ColumnInfo(name = "wrong_option2")
+  var wrongOption2: String = ""
 
-  @ColumnInfo(name = "other_option3")
-  var otherOption3: String = ""
+  @ColumnInfo(name = "wrong_option3")
+  var wrongOption3: String = ""
 
   @ColumnInfo(name = "explanation")
   var explanation: String = ""
@@ -38,19 +38,19 @@ class Quiz {
   constructor()
 
   constructor(
-    chapter: Int,
+    chapterIndex: Int,
     question: String,
     correctOption: String,
-    otherOptions: List<String>,
+    wrongOptions: List<String>,
     explanation: String
   ) {
-    this.chapter = chapter
+    this.chapterIndex = chapterIndex
     this.question = question
     this.correctOption = correctOption
-    if (otherOptions.size == 3) {
-      this.otherOption1 = otherOptions[0]
-      this.otherOption2 = otherOptions[1]
-      this.otherOption3 = otherOptions[2]
+    if (wrongOptions.size == 3) {
+      this.wrongOption1 = wrongOptions[0]
+      this.wrongOption2 = wrongOptions[1]
+      this.wrongOption3 = wrongOptions[2]
     }
     this.explanation = explanation
   }

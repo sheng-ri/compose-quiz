@@ -16,9 +16,9 @@ interface QuizDao {
   @Insert
   fun insertQuiz(quiz: Quiz)
 
-  @Query("SELECT * FROM quiz WHERE chapter = :chapter")
-  fun findByChapter(chapter: Int): List<Quiz>
+  @Query("SELECT * FROM quiz WHERE chapter_index = :chapterIndex")
+  fun findByChapter(chapterIndex: Int): List<Quiz>
 
-  @Query("DELETE FROM quiz WHERE chapter = :chapter")
-  fun deleteByChapter(chapter: Int)
+  @Query("DELETE FROM quiz WHERE chapter_index = :chapterIndex")
+  fun deleteByChapter(chapterIndex: Int)
 }

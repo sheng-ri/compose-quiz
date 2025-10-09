@@ -1,5 +1,8 @@
 package cn.hellozjf.project.composequiz.util
 
+/**
+ * 和章节有关的常量
+ */
 class ChapterConstant {
   companion object {
     val PATH = "csv/chapter.csv"

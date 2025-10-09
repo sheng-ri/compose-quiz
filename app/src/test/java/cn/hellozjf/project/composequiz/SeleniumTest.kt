@@ -1,7 +1,10 @@
 package cn.hellozjf.project.composequiz
 
+import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.util.ChapterConstant
+import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVPrinter
 import org.junit.After
 import org.junit.Before
@@ -12,7 +15,9 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
+import java.io.FileReader
 import java.io.FileWriter
+import java.io.IOException
 import java.time.Duration
 
 /**
@@ -108,6 +113,102 @@ class SeleniumTest {
      excelTest.writeToExcel(title, dataList)
   }
 
+  /**
+   * 读取每章的URL，从URL中提取该章节所有题目，并写入CSV中
+   */
+  @Test
+  fun readChapterAndWriteQuizToCsv() {
+
+    val chapterQuizList: MutableList<List<Quiz>> = mutableListOf()
+
+    // 首先把 ChapterQuizConstant.PATH 文件变成一个章节列表，在这个文件中出现的章节，后面就不用打开URL搜索题库了
+    val chatperSet = mutableSetOf<Int>()
+    FileReader("src/main/assets/${ChapterQuizConstant.PATH}").use { reader ->
+      val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
+
+      val quizList = mutableListOf<Quiz>()
+      for (record in csvParser) {
+        val chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt()
+        val question = record.get(ChapterQuizConstant.QUESTION)
+        val correctOption = record.get(ChapterQuizConstant.CORRECT_OPTION)
+        val wrongOption1 = record.get(ChapterQuizConstant.WRONG_OPTION1)
+        val wrongOption2 = record.get(ChapterQuizConstant.WRONG_OPTION2)
+        val wrongOption3 = record.get(ChapterQuizConstant.WRONG_OPTION3)
+        val explanation = record.get(ChapterQuizConstant.EXPLANATION)
+
+        chatperSet.add(chapterIndex)
+        quizList.add(Quiz(
+          chapterIndex = chapterIndex,
+          question = question,
+          correctOption = correctOption,
+          wrongOptions = listOf(wrongOption1,wrongOption2,wrongOption3),
+          explanation = explanation
+        ))
+      }
+      if (quizList.isNotEmpty()) {
+        chapterQuizList.add(quizList)
+      }
+    }
+
+    // 读取章节 CSV，然后依次打开每章 URL，读取该章下面的题目
+    try {
+      FileReader("src/main/assets/${ChapterConstant.PATH}").use { reader ->
+        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
+
+        for (record in csvParser) {
+          val index = record.get(ChapterConstant.INDEX).toInt()
+          if (chatperSet.contains(index)) {
+            continue
+          }
+          val fullUrl = record.get(ChapterConstant.FULL_URL)
+          driver.get(fullUrl)
+          val quizList = getQuizList(driver, 1, 10, index)
+          chapterQuizList.add(quizList)
+        }
+
+      }
+    } catch (e: IOException) {
+      e.printStackTrace()
+    }
+
+    // 将所有章节下面的所有题目写入到 CSV 中
+    FileWriter("src/main/assets/${ChapterQuizConstant.PATH}").use { writer ->
+      CSVPrinter(writer, CSVFormat.DEFAULT).use { printer ->
+        val title = listOf(
+          ChapterQuizConstant.CHAPTER_INDEX,
+          ChapterQuizConstant.QUESTION,
+          ChapterQuizConstant.CORRECT_OPTION,
+          ChapterQuizConstant.WRONG_OPTION1,
+          ChapterQuizConstant.WRONG_OPTION2,
+          ChapterQuizConstant.WRONG_OPTION3,
+          ChapterQuizConstant.EXPLANATION,
+        )
+        // 写入表头
+        printer.printRecord(title)
+
+        // 写入数据
+        for (quizList in chapterQuizList) {
+          for (quiz in quizList) {
+            val data = listOf(
+              quiz.chapterIndex,
+              quiz.question,
+              quiz.correctOption,
+              quiz.wrongOptions[0],
+              quiz.wrongOptions[1],
+              quiz.wrongOptions[2],
+              quiz.explanation
+            )
+            printer.printRecord(data)
+          }
+        }
+      }
+      println("CSV 文件写入完成！")
+    }
+  }
+
+  /**
+   * 读取 PDF，并且将章节目录写入到 CSV 中
+   */
   @Test
   fun readPdfAndWriteCsv() {
 
@@ -175,13 +276,16 @@ class SeleniumTest {
 
   private fun getQuizList(
     driver: WebDriver,
-    timeoutSeconds: Long
+    shortTimeout: Long,
+    longTimeout: Long,
+    chapterIndex: Int = 0
   ): List<Quiz> {
+    println("正在获取第${chapterIndex}章问答题目")
     // 点击 Start Quiz 按钮
     clickButtonWithMultipleStrategies(
       driver, listOf(
         "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_start"
-      ), timeoutSeconds
+      ), shortTimeout
     )
 
     while (true) {
@@ -189,7 +293,7 @@ class SeleniumTest {
       if (!clickButtonWithMultipleStrategies(
           driver, listOf(
             "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_next"
-          ), timeoutSeconds
+          ), shortTimeout
         )
       ) {
         break
@@ -200,35 +304,46 @@ class SeleniumTest {
     clickButtonWithMultipleStrategies(
       driver, listOf(
         "CSS" to ".qsm-btn.qsm-submit-btn.qmn_btn"
-      ), timeoutSeconds
+      ), shortTimeout
     )
 
     // 等到答案出现
-    WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
-      ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.qsm-results-page"))
-    )
+    try {
 
-    // 记录问题
-    val quizList = mutableListOf<Quiz>()
-    val questions = driver.findElements(By.cssSelector("div.qmn_question_answer"))
-    for (question in questions) {
-      val questionText = question.findElement(By.cssSelector("span.qsm-result-question-title")).text
-      val simpleOptions = mutableListOf<String>()
-      question.findElements(By.cssSelector("span.qsm-text-simple-option")).forEach {
-        simpleOptions.add(it.text)
+      WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(
+        ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.qsm-results-page"))
+      )
+
+      // 记录问题
+      val quizList = mutableListOf<Quiz>()
+      val questions = driver.findElements(By.cssSelector("div.qmn_question_answer"))
+      for (question in questions) {
+        val questionText = question.findElement(By.cssSelector("span.qsm-result-question-title")).text
+        val simpleOptions = mutableListOf<String>()
+        question.findElements(By.cssSelector("span.qsm-text-simple-option")).forEach {
+          simpleOptions.add(it.text)
+        }
+        val correctOption = question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
+        val explanation = question.text.split("\n").last().replace("Explanation: ", "")
+
+        quizList.add(
+          Quiz(
+            chapterIndex,
+            questionText,
+            simpleOptions.toList(),
+            correctOption,
+            explanation
+          )
+        )
       }
-      val correctOption = question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
-      val explanation = question.text.split("\n").last().replace("Explanation: ", "")
+      println("获取第${chapterIndex}章数据成功")
+      return quizList.toList()
 
-//      println("questionText = $questionText")
-//      println("correctOption = $correctOption")
-//      println("simpleOptions = $simpleOptions")
-//      println("explanation = $explanation")
-
-      quizList.add(Quiz(questionText, simpleOptions.toList(), correctOption, explanation))
+    } catch (e: Exception) {
+      println("获取第${chapterIndex}章数据失败!!!!!!!")
+      return listOf()
     }
 
-    return quizList.toList()
   }
 
   /**
@@ -297,14 +412,22 @@ class SeleniumTest {
 //      println("simpleOptions = $simpleOptions")
 //      println("explanation = $explanation")
 
-      quizList.add(Quiz(questionText, simpleOptions.toList(), correctOption, explanation))
+      quizList.add(
+        Quiz(
+          0,
+          questionText,
+          simpleOptions.toList(),
+          correctOption,
+          explanation
+        )
+      )
     }
 
     for (question in quizList) {
       // TODO 明天把这些写入到数据库中
       println("questionText = ${question.question}")
       println("correctOption = ${question.correctOption}")
-      println("simpleOptions = ${question.simpleOptions}")
+      println("simpleOptions = ${question.wrongOptions}")
       println("explanation = ${question.explanation}")
       println()
     }
@@ -324,10 +447,10 @@ class SeleniumTest {
       val wait = WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds))
       val button = wait.until(ExpectedConditions.elementToBeClickable(by))
       button.click()
-      println("成功点击按钮: $by")
+      // println("成功点击按钮: $by")
       true
     } catch (e: Exception) {
-      println("点击按钮失败: ${e.message}")
+      // println("点击按钮失败: ${e.message}, by = $by")
       false
     }
   }
@@ -354,7 +477,7 @@ class SeleniumTest {
         return true
       }
     }
-    println("所有定位策略都失败了")
+    // println("所有定位策略都失败了")
     return false
   }
 
@@ -371,8 +494,9 @@ class SeleniumTest {
 }
 
 data class Quiz(
+  val chapterIndex: Int,
   val question: String,
-  val simpleOptions: List<String>,
+  val wrongOptions: List<String>,
   val correctOption: String,
   val explanation: String
 )
