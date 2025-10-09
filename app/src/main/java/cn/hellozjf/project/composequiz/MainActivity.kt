@@ -28,15 +28,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.ui.screen.MainScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
+import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.TextFileManager
 import cn.hellozjf.project.composequiz.util.TextFileUtils
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.MainViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
+import java.io.IOException
 
 class MainActivity : ComponentActivity() {
 
@@ -58,32 +64,58 @@ class MainActivity : ComponentActivity() {
               LocalContext.current.applicationContext as Application
             )
           )
+          val chapterViewModel: ChapterViewModel = viewModel(
+            viewModelStoreOwner = it,
+            key = "ChapterViewModel",
+            factory = ChapterViewModelFactory(
+              LocalContext.current.applicationContext as Application
+            )
+          )
           MainScreen(
             chapterQuizViewModel = chapterQuizViewModel
           )
+
+          readCsvAndWriteToDB(chapterViewModel, chapterQuizViewModel)
         }
       }
-//      ComposeQuizTheme {
-//        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//          val owner = LocalViewModelStoreOwner.current
-//          owner?.let {
-//            val viewModel: MainViewModel = viewModel(
-//              viewModelStoreOwner = it,
-//              key = "MainViewModel",
-//              factory = MainViewModelFactory(
-//                LocalContext.current.applicationContext as Application
-//              )
-//            )
-//            ScreenSetup(
-//              modifier = Modifier.padding(innerPadding),
-//              viewModel = viewModel
-//            )
-//          }
-//        }
-//      }
     }
+  }
 
-    setupTextFiles()
+  private fun readCsvAndWriteToDB(
+    chapterViewModel: ChapterViewModel,
+    chapterQuizViewModel: ChapterQuizViewModel
+  ) {
+    // 读取章节信息
+    readChapterCsv(chapterViewModel)
+    // 读取题库信息
+    readQuizCsv()
+  }
+
+  private fun readChapterCsv(
+    chapterViewModel: ChapterViewModel
+  ) {
+    try {
+      this.assets.open(ChapterConstant.PATH).bufferedReader().use { reader ->
+        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
+
+        for (record in csvParser) {
+          val chapter = Chapter()
+          chapter.index = record.get(ChapterConstant.INDEX).toInt()
+          chapter.fullTitle = record.get(ChapterConstant.FULL_TITLE)
+          chapter.simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
+          chapter.simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
+          chapter.fullUrl = record.get(ChapterConstant.FULL_URL)
+          chapterViewModel.insertChapter(chapter)
+        }
+
+      }
+    } catch (e: IOException) {
+      e.printStackTrace()
+    }
+  }
+
+  private fun readQuizCsv() {
+
   }
 
   private fun setupTextFiles() {
@@ -378,5 +410,13 @@ class ChapterQuizViewModelFactory(
 ) : ViewModelProvider.Factory {
   override fun <T : ViewModel> create(modelClass: Class<T>): T {
     return ChapterQuizViewModel(application) as T
+  }
+}
+
+class ChapterViewModelFactory(
+  val application: Application
+) : ViewModelProvider.Factory {
+  override fun <T : ViewModel> create(modelClass: Class<T>): T {
+    return ChapterViewModel(application) as T
   }
 }

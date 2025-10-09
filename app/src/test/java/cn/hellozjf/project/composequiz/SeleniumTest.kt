@@ -1,5 +1,8 @@
 package cn.hellozjf.project.composequiz
 
+import cn.hellozjf.project.composequiz.util.ChapterConstant
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVPrinter
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -9,6 +12,7 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
+import java.io.FileWriter
 import java.time.Duration
 
 /**
@@ -110,7 +114,12 @@ class SeleniumTest {
     val timeoutSeconds = 10L
 
     // 把 chapterInfoList 写入到 excel 中
-    val title = listOf("章节号", "章节标题", "简化标题", "习题网址", "实际网址")
+    val title = listOf(
+      ChapterConstant.INDEX,
+      ChapterConstant.FULL_TITLE,
+      ChapterConstant.SIMPLE_TITLE,
+      ChapterConstant.SIMPLE_URL,
+      ChapterConstant.FULL_URL)
     val dataList = mutableListOf<List<String>>()
 
     val pdfTest = PdfTest()
@@ -147,8 +156,21 @@ class SeleniumTest {
         dataList.add(data)
       }
     }
-     val excelTest = ExcelTest()
-     excelTest.writeToExcel(title, dataList)
+//     val excelTest = ExcelTest()
+//     excelTest.writeToExcel(title, dataList)
+
+    FileWriter("src/main/assets/${ChapterConstant.PATH}").use { writer ->
+      CSVPrinter(writer, CSVFormat.DEFAULT).use { printer ->
+        // 写入表头
+        printer.printRecord(title)
+
+        // 写入数据
+        for (data in dataList) {
+          printer.printRecord(data)
+        }
+      }
+      println("CSV 文件写入完成！")
+    }
   }
 
   private fun getQuizList(

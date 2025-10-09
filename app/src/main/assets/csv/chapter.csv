@@ -1,0 +1,58 @@
+章节号,章节标题,简化标题,习题网址,实际网址
+3,A Compose Project Overview,Compose Project Quiz,https://www.answertopia.com/kpq5,https://www.answertopia.com/quizzes/compose-project-quiz/
+5,Creating an Android Virtual Device (AVD) in Android Studio,AVD Creation Quiz,https://www.answertopia.com/2kv9,https://www.answertopia.com/quizzes/avd-creation-quiz/
+6,"Using and Configuring the Android Studio AVD Emulator ",AVD Configuration Quiz,https://www.answertopia.com/lovr,https://www.answertopia.com/quizzes/avd-configuration-quiz/
+7,A Tour of the Android Studio User Interface,Android Studio Tour Quiz,https://www.answertopia.com/5e5m,https://www.answertopia.com/quizzes/android-studio-tour-quiz/
+8,Testing Android Studio Apps on a Physical Android Device,Android Device Testing Quiz,https://www.answertopia.com/0p1s,https://www.answertopia.com/quizzes/android-device-testing-quiz/
+9,The Basics of the Android Studio Code Editor,Android Studio Code Editor Quiz,https://www.answertopia.com/4zkm,https://www.answertopia.com/quizzes/android-studio-code-editor-quiz/
+10,An Overview of the Android Architecture,Android Architecture Quiz,https://www.answertopia.com/dgnz,https://www.answertopia.com/quizzes/android-architecture-quiz/
+12,"Kotlin Data Types, Variables and Nullability",Kotlin Data Types and Variables Quiz,https://www.answertopia.com/r9sf,https://www.answertopia.com/quizzes/kotlin-data-types-and-variables-quiz/
+13,Kotlin Operators and Expressions,Kotlin Operators and Expressions Quiz,https://www.answertopia.com/3xrq,https://www.answertopia.com/quizzes/kotlin-operators-and-expressions-quiz/
+14,Kotlin Control Flow,Kotlin Control Flow Quiz,https://www.answertopia.com/f9n6,https://www.answertopia.com/quizzes/kotlin-control-flow-quiz/
+15,An Overview of Kotlin Functions and Lambdas,Kotlin Functions and Lambdas Quiz,https://www.answertopia.com/hrgr,https://www.answertopia.com/quizzes/kotlin-functions-and-lambdas-quiz/
+16,The Basics of Object-Oriented Programming in Kotlin,Kotlin OOP Quiz,https://www.answertopia.com/f0ke,https://www.answertopia.com/quizzes/kotlin-oop-quiz/
+17,An Introduction to Kotlin Inheritance and Subclassing,Kotlin Inheritance Quiz,https://www.answertopia.com/qzqv,https://www.answertopia.com/quizzes/kotlin-inheritance-quiz/
+19,An Overview of Compose,Jetpack Compose Overview Quiz,https://www.answertopia.com/fit4,https://www.answertopia.com/quizzes/jetpack-compose-overview-quiz/
+20,A Guide to Gradle Version Catalogs,Android Studio Version Catalogs Quiz,https://www.answertopia.com/sjel,https://www.answertopia.com/quizzes/android-studio-version-catalogs-quiz/
+21,Composable Functions Overview,Composable Functions Quiz,https://www.answertopia.com/in2s,https://www.answertopia.com/quizzes/composable-functions-quiz/
+22,An Overview of Compose State and Recomposition,Compose State Quiz,https://www.answertopia.com/c3sb,https://www.answertopia.com/quizzes/compose-state-quiz/
+23,An Introduction to Composition Local,Jetpack CompositionLocal Quiz,https://www.answertopia.com/k0zv,https://www.answertopia.com/quizzes/jetpack-compositionlocal-quiz/
+24,An Overview of Compose Slot APIs,Compose Slot API Quiz,https://www.answertopia.com/dmuz,https://www.answertopia.com/quizzes/compose-slot-api-quiz/
+26,Using Modifiers in Compose,Compose Modifiers Quiz,https://www.answertopia.com/0q87,https://www.answertopia.com/quizzes/compose-modifiers-quiz/
+27,Annotated Strings and Brush Styles,Compose Strings and Brushes Quiz,https://www.answertopia.com/powe,https://www.answertopia.com/quizzes/compose-strings-and-brushes-quiz/
+28,Composing Layouts with Row and Column,Compose Rows and Columns Quiz,https://www.answertopia.com/nip2,https://www.answertopia.com/quizzes/compose-rows-and-columns-quiz/
+29,Box Layouts in Compose,Compose Box Layout Quiz,https://www.answertopia.com/11hw,https://www.answertopia.com/quizzes/compose-box-layout-quiz/
+30,An Introduction to FlowRow and FlowColumn,Compose Flow Layouts Quiz,https://www.answertopia.com/loa2,https://www.answertopia.com/quizzes/compose-flow-layouts-quiz/
+32,Custom Layout Modifiers,Compose Custom Layouts Quiz Pt 1,https://www.answertopia.com/qmc5,https://www.answertopia.com/quizzes/combose-custom-layouts-quiz-pt-1/
+33,Building Custom Layouts,Compose Custom Layouts Quiz Pt 2,https://www.answertopia.com/rlxx,https://www.answertopia.com/quizzes/compose-custom-layouts-quiz-pt-2/
+34,A Guide to ConstraintLayout in Compose,Compose ConstraintLayout Quiz Pt 1,https://www.answertopia.com/l5ja,https://www.answertopia.com/quizzes/compose-constraintlayout-quiz-pt-1/
+35,Working with ConstraintLayout in Compose,"Compose ConstraintLayout Quiz Pt 2 ",https://www.answertopia.com/bo5f,https://www.answertopia.com/quizzes/compose-constraintlayout-quiz-pt-2/
+36,Working with IntrinsicSize in Compose,Compose IntrinsicSize Quiz,https://www.answertopia.com/7zdx,https://www.answertopia.com/quizzes/compose-intrinsicsize-quiz/
+37,Coroutines and LaunchedEffects in Jetpack Compose,Kotlin Coroutines and LaunchedEffects Quiz,https://www.answertopia.com/vro7,https://www.answertopia.com/quizzes/kotlin-coroutines-and-launchedeffects-quiz/
+38,An Overview of Lists and Grids in Compose,Compose Row and Column List Quiz,https://www.answertopia.com/iifq,https://www.answertopia.com/quizzes/compose-row-and-column-list-quiz/
+40,"A Compose Lazy List Tutorial ",Compose Lazy List Quiz,https://www.answertopia.com/ziwi,https://www.answertopia.com/quizzes/compose-lazy-list-quiz/
+41,Designing Adaptable List-Detail Layouts,Compose List-Detail Layouts Quiz,https://www.answertopia.com/of9z,https://www.answertopia.com/quizzes/compose-list-detail-layouts-quiz/
+42,"Lazy List Sticky Headers and Scroll Detection ",Compose Sticky Headers Quiz,https://www.answertopia.com/su6b,https://www.answertopia.com/quizzes/compose-sticky-headers-quiz/
+43,"A Compose Lazy Staggered Grid Tutorial ",Compose Staggered Grid Quiz,https://www.answertopia.com/puyx,https://www.answertopia.com/quizzes/compose-staggered-grid-quiz/
+44,VerticalPager and HorizontalPager in Compose,Compose Pagers Quiz,https://www.answertopia.com/arsi,https://www.answertopia.com/quizzes/compose-pagers-quiz/
+45,Compose Visibility Animation,Compose Visibility Animation Quiz,https://www.answertopia.com/22fd,https://www.answertopia.com/quizzes/compose-visibility-animation-quiz/
+46,Compose State-Driven Animation,Compose State-Driven Animation Quiz,https://www.answertopia.com/u2s6,https://www.answertopia.com/quizzes/compose-state-driven-animation-quiz/
+47,Canvas Graphics Drawing in Compose,Compose Canvas Drawing Quiz,https://www.answertopia.com/syit,https://www.answertopia.com/quizzes/compose-canvas-drawing-quiz/
+48,Working with ViewModels in Compose,Compose ViewModel Quiz,https://www.answertopia.com/dooi,https://www.answertopia.com/quizzes/compose-viewmodel-quiz/
+50,An Overview of Android SQLite Databases,SQLite Databases Quiz,https://www.answertopia.com/hl7q,https://www.answertopia.com/quizzes/sqlite-databases-quiz/
+51,"Room Databases and Compose ",Compose Room Database Quiz Pt 1,https://www.answertopia.com/ay27,https://www.answertopia.com/quizzes/compose-room-database-quiz-pt-1/
+52,A Compose Room Database and Repository Tutorial,Compose Room Database Quiz Pt 2,https://www.answertopia.com/u9zq,https://www.answertopia.com/quizzes/compose-room-database-quiz-pt-2/
+53,Navigation 3 and NavDisplay,Compose Navigation 3 Quiz,https://www.answertopia.com/4bwm,https://www.answertopia.com/quizzes/compose-navigation-3-quiz/
+54,A Navigation 3 NavDisplay Tutorial,Compose Navigation Quiz,https://www.answertopia.com/4ti2,https://www.answertopia.com/quizzes/compose-navigation-quiz/
+55,NavigationSuiteScaffold Bar and Rail Navigation,Compose NavigationSuiteScaffold Quiz,https://www.answertopia.com/to9y,https://www.answertopia.com/quizzes/compose-navigationsuitescaffold-quiz/
+56,Detecting Gestures in Compose,Compose Gesture Detection Quiz,https://www.answertopia.com/bu12,https://www.answertopia.com/quizzes/compose-gesture-detection-quiz/
+57,An Introduction to Kotlin Flow,Kotlin Flow Quiz,https://www.answertopia.com/k7nn,https://www.answertopia.com/quizzes/kotlin-flow-quiz/
+58,A Jetpack Compose SharedFlow Tutorial,Kotlin SharedFlow Quiz,https://www.answertopia.com/ytdi,https://www.answertopia.com/quizzes/kotlin-sharedflow-quiz/
+59,Integrating Gemini AI into Android Apps,Gemini AI Overview Quiz,https://www.answertopia.com/387k,https://www.answertopia.com/quizzes/gemini-ai-overview-quiz/
+60,Preparing the Gemini Firebase AI Logic Project,Gemini Firebase AI Logic Quiz,https://www.answertopia.com/54ex,https://www.answertopia.com/quizzes/gemini-firebase-ai-logic-quiz/
+63,Gemini AI Image Generation,Gemini AI Imagen Quiz,https://www.answertopia.com/lhvy,https://www.answertopia.com/quizzes/gemini-ai-imagen-quiz/
+64,Introducing Glance Widgets,Compose Glance Widget Quiz Pt 1,https://www.answertopia.com/bozf,https://www.answertopia.com/quizzes/compose-glance-widget-quiz-pt-1/
+65,A Glance Widget Tutorial,Compose Glance Widget Quiz Pt 2,https://www.answertopia.com/ueor,https://www.answertopia.com/quizzes/compose-glance-widget-quiz-pt-2/
+66,An Android Biometric Authentication Tutorial,"Compose Biometric Authentication Quiz ",https://www.answertopia.com/omwl,https://www.answertopia.com/quizzes/compose-biometric-authentication-quiz/
+67,Working with Compose Theming,Compose Theme Quiz Pt 1,https://www.answertopia.com/r60u,https://www.answertopia.com/quizzes/compose-theme-quiz-pt-1/
+68,A Material Design 3 Theming Tutorial,Compose Theme Quiz Pt 2,https://www.answertopia.com/0i5i,https://www.answertopia.com/quizzes/compose-theme-quiz-pt-2/

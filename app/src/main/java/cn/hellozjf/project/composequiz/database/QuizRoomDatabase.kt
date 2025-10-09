@@ -4,13 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import cn.hellozjf.project.composequiz.database.dao.ChapterDao
 import cn.hellozjf.project.composequiz.database.dao.QuizDao
+import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 
-@Database(entities = [(Quiz::class)], version = 1, exportSchema = false)
+@Database(entities = [Chapter::class, Quiz::class], version = 2, exportSchema = false)
 abstract class QuizRoomDatabase : RoomDatabase() {
 
   abstract fun quizDao(): QuizDao
+
+  abstract fun chapterDao(): ChapterDao
 
   companion object {
     private var INSTANCE: QuizRoomDatabase? = null
