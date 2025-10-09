@@ -21,4 +21,7 @@ interface QuizDao {
 
   @Query("DELETE FROM quiz WHERE chapter_index = :chapterIndex")
   fun deleteByChapter(chapterIndex: Int)
+
+  @Query("SELECT count(*) FROM quiz")
+  fun getCount(): Int
 }

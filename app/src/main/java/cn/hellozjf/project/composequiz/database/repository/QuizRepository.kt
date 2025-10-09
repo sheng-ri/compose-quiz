@@ -32,6 +32,10 @@ class QuizRepository(private val quizDao: QuizDao) {
     }
   }
 
+  fun getCount(): Int {
+    return quizDao.getCount()
+  }
+
   private fun asyncFind(chapter: Int): Deferred<List<Quiz>?> =
     coroutineScope.async(Dispatchers.IO) {
       return@async quizDao.findByChapter(chapter)

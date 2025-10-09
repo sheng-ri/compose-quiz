@@ -30,4 +30,8 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
   fun deleteQuizByChapter(chapter: Int) {
     repository.deleteQuizByChapter(chapter)
   }
+
+  fun getCount(): Int {
+    return repository.getCount()
+  }
 }

@@ -29,9 +29,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.ui.screen.MainScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import cn.hellozjf.project.composequiz.util.ChapterConstant
+import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
 import cn.hellozjf.project.composequiz.util.TextFileManager
 import cn.hellozjf.project.composequiz.util.TextFileUtils
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
@@ -91,8 +93,9 @@ class MainActivity : ComponentActivity() {
       if (chapterViewModel.getCount() == 0) {
         readChapterCsv(chapterViewModel)
       }
-//      // TODO 读取题库信息
-//      readQuizCsv()
+      if (chapterQuizViewModel.getCount() == 0) {
+        readQuizCsv(chapterQuizViewModel)
+      }
     }
   }
 
@@ -119,8 +122,29 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  private fun readQuizCsv() {
+  private fun readQuizCsv(
+    chapterQuizViewModel: ChapterQuizViewModel
+  ) {
+    try {
+      this.assets.open(ChapterQuizConstant.PATH).bufferedReader().use { reader ->
+        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
+        for (record in csvParser) {
+          val quiz = Quiz()
+          quiz.chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt()
+          quiz.question = record.get(ChapterQuizConstant.QUESTION)
+          quiz.correctOption = record.get(ChapterQuizConstant.CORRECT_OPTION)
+          quiz.wrongOption1 = record.get(ChapterQuizConstant.WRONG_OPTION1)
+          quiz.wrongOption2 = record.get(ChapterQuizConstant.WRONG_OPTION2)
+          quiz.wrongOption3 = record.get(ChapterQuizConstant.WRONG_OPTION3)
+          quiz.explanation = record.get(ChapterQuizConstant.EXPLANATION)
+          chapterQuizViewModel.insertQuiz(quiz)
+        }
+
+      }
+    } catch (e: IOException) {
+      e.printStackTrace()
+    }
   }
 
   private fun setupTextFiles() {
