@@ -3,11 +3,17 @@ package cn.hellozjf.project.composequiz.nav
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-@Serializable
-data object HomeScreen : NavKey
+//@Serializable
+//data object HomeScreen : NavKey
+//
+//@Serializable
+//data class WelcomeScreen(val name: String) : NavKey
+//
+//@Serializable
+//data object ProfileScreen : NavKey
 
 @Serializable
-data class WelcomeScreen(val name: String) : NavKey
+data object MainScreenKey: NavKey
 
 @Serializable
-data object ProfileScreen : NavKey
+data class QuizScreenKey(val chapterIndex: Int): NavKey

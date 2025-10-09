@@ -31,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.ui.screen.MainScreen
+import cn.hellozjf.project.composequiz.ui.screen.NavDisplayScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
@@ -73,7 +74,11 @@ class MainActivity : ComponentActivity() {
               LocalContext.current.applicationContext as Application
             )
           )
-          MainScreen(
+//          MainScreen(
+//            chapterViewModel = chapterViewModel,
+//            chapterQuizViewModel = chapterQuizViewModel
+//          )
+          NavDisplayScreen(
             chapterViewModel = chapterViewModel,
             chapterQuizViewModel = chapterQuizViewModel
           )

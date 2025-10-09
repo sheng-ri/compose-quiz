@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.nav.DestinationQuiz
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
@@ -22,6 +23,7 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 fun MainScreen(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
+  onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
   var destination by rememberSaveable { mutableStateOf(DestinationQuiz.DAILY_QUIZ) }

@@ -6,15 +6,18 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import cn.hellozjf.project.composequiz.nav.HomeScreen
-import cn.hellozjf.project.composequiz.nav.ProfileScreen
-import cn.hellozjf.project.composequiz.nav.WelcomeScreen
+import cn.hellozjf.project.composequiz.nav.MainScreenKey
+import cn.hellozjf.project.composequiz.nav.QuizScreenKey
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
 @Composable
 fun NavDisplayScreen(
+  chapterViewModel: ChapterViewModel,
+  chapterQuizViewModel: ChapterQuizViewModel,
   modifier: Modifier = Modifier
 ) {
-  val backStack = rememberNavBackStack(HomeScreen)
+  val backStack = rememberNavBackStack(MainScreenKey)
   val onNavigation: (NavKey) -> Unit = {
     backStack.add(it)
   }
@@ -29,16 +32,23 @@ fun NavDisplayScreen(
       backStack.removeLastOrNull()
     },
     entryProvider = entryProvider {
-      entry<HomeScreen> {
-        Home(onNavigation)
+      entry<MainScreenKey> {
+        MainScreen(
+          chapterViewModel = chapterViewModel,
+          chapterQuizViewModel = chapterQuizViewModel,
+          onNavigation = onNavigation
+        )
       }
-      entry<WelcomeScreen>(
+      entry<QuizScreenKey>(
         metadata = mapOf("extraDataKey" to "extraDataValue")
-      ) { key ->
-        Welcome(onNavigation, key.name)
-      }
-      entry<ProfileScreen> {
-        Profile(onClearBackStack)
+      ) { key: QuizScreenKey ->
+        val chapterIndex = key.chapterIndex
+        ChapterQuizScreen(
+          chapterIndex = chapterIndex,
+          chapterViewModel = chapterViewModel,
+          chapterQuizViewModel = chapterQuizViewModel,
+          onNavigation = onNavigation
+        )
       }
     }
   )
