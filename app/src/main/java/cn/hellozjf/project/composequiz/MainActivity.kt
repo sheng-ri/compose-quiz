@@ -30,7 +30,6 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.Quiz
-import cn.hellozjf.project.composequiz.ui.screen.MainScreen
 import cn.hellozjf.project.composequiz.ui.screen.NavDisplayScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import cn.hellozjf.project.composequiz.util.ChapterConstant
@@ -58,6 +57,7 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       ComposeQuizTheme {
+
         val owner = LocalViewModelStoreOwner.current
         owner?.let {
           val chapterQuizViewModel: ChapterQuizViewModel = viewModel(
@@ -74,10 +74,6 @@ class MainActivity : ComponentActivity() {
               LocalContext.current.applicationContext as Application
             )
           )
-//          MainScreen(
-//            chapterViewModel = chapterViewModel,
-//            chapterQuizViewModel = chapterQuizViewModel
-//          )
           NavDisplayScreen(
             chapterViewModel = chapterViewModel,
             chapterQuizViewModel = chapterQuizViewModel

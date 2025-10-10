@@ -23,8 +23,7 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 fun MainScreen(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
-  onNavigation: (NavKey) -> Unit,
-  modifier: Modifier = Modifier
+  onNavigation: (NavKey) -> Unit
 ) {
   var destination by rememberSaveable { mutableStateOf(DestinationQuiz.DAILY_QUIZ) }
 
@@ -50,13 +49,14 @@ fun MainScreen(
         // 确保内容不会被系统UI（状态栏、系统导航栏）遮挡
         .windowInsetsPadding(WindowInsets.systemBars)
         // 或者使用 .safeDrawingPadding()，它包含了系统栏和刘海屏/打孔屏的安全区域
-        // .safeDrawingPadding()
+//         .safeDrawingPadding()
         .fillMaxSize()
     ) {
       when (destination) {
         DestinationQuiz.CHAPTER_QUIZ -> ChapterScreen(
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
+          onNavigation = onNavigation,
           modifier = modifier
         )
 

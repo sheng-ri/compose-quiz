@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,14 +21,19 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import kotlinx.coroutines.launch
+
+private val TAG = "ChapterScreen"
 
 @Composable
 fun ChapterScreen(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
+  onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
 
@@ -52,6 +58,8 @@ fun ChapterScreen(
           simpleTitle = chapter.simpleTitle,
           onItemClick = { index ->
             // TODO 点击进入章节测试题
+            Log.d(TAG, "index = $index")
+            onNavigation(QuizScreenKey(index))
           }
         )
       }

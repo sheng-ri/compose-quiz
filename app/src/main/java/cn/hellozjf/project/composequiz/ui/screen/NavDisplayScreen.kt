@@ -14,8 +14,7 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 @Composable
 fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
-  modifier: Modifier = Modifier
+  chapterQuizViewModel: ChapterQuizViewModel
 ) {
   val backStack = rememberNavBackStack(MainScreenKey)
   val onNavigation: (NavKey) -> Unit = {
@@ -39,9 +38,7 @@ fun NavDisplayScreen(
           onNavigation = onNavigation
         )
       }
-      entry<QuizScreenKey>(
-        metadata = mapOf("extraDataKey" to "extraDataValue")
-      ) { key: QuizScreenKey ->
+      entry<QuizScreenKey> { key: QuizScreenKey ->
         val chapterIndex = key.chapterIndex
         ChapterQuizScreen(
           chapterIndex = chapterIndex,

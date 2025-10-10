@@ -1,5 +1,9 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,13 +19,18 @@ fun ChapterQuizScreen(
   chapterIndex: Int,
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
-  onNavigation: (NavKey) -> Unit,
-  modifier: Modifier = Modifier
+  onNavigation: (NavKey) -> Unit
 ) {
 
-  Text(
-    text = "第 $chapterIndex 章"
-  )
+  Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Box(
+      modifier = Modifier.padding(innerPadding)
+    ) {
+      Text(
+        text = "第 $chapterIndex 章"
+      )
+    }
+  }
 
 //  // TODO 这里要从 chapterQuizViewModel 获取所有的章节，显示在列表中
 //  // TODO 点击章节的时候，使用 chapterQuizViewModel 查询该章节下面所有的题目，进行问答测试
