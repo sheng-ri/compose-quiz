@@ -44,6 +44,8 @@ fun ChapterQuizAnswerScreen(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   chooseOptionMap: Map<Int, String>,
+  quizOrderList: List<Int>,
+  optionOrderList: List<List<Int>>,
   onNavigation: (NavKey) -> Unit,
   onClearBackStack: () -> Unit
 ) {
@@ -55,6 +57,7 @@ fun ChapterQuizAnswerScreen(
   var totalQuestionCount by remember { mutableStateOf(0) }
   var totalCorrectCount by remember { mutableStateOf(0) }
 
+  // TODO 我不知道这个是否一直会重复进入？？？
   LaunchedEffect(key1 = quizList) {
     // 题目更新了，所以要计算一下正确和总的的题目数量
     totalQuestionCount = quizList.size
@@ -83,16 +86,21 @@ fun ChapterQuizAnswerScreen(
         modifier = Modifier.weight(1f),
         state = listState
       ) {
-        quizList.forEachIndexed { index, quiz ->
-          item(key = quiz.id) {
-            val selectOption = chooseOptionMap[quiz.id] ?: ""
-            QuizAnswerListItem(
-              chapterQuizViewModel = chapterQuizViewModel,
-              id = quiz.id,
-              index = index,
-              quiz = quiz,
-              selectOption = selectOption
-            )
+        if (quizList.isNotEmpty()) {
+          quizOrderList.forEachIndexed { index, order ->
+            val quiz = quizList[order]
+            val optionOrder = optionOrderList[order]
+            item(key = quiz.id) {
+              val selectOption = chooseOptionMap[quiz.id] ?: ""
+              QuizAnswerListItem(
+                chapterQuizViewModel = chapterQuizViewModel,
+                id = quiz.id,
+                index = index,
+                quiz = quiz,
+                selectOption = selectOption,
+                optionOrder = optionOrder
+              )
+            }
           }
         }
       }
@@ -113,6 +121,7 @@ fun QuizAnswerListItem(
   index: Int,
   quiz: Quiz,
   selectOption: String,
+  optionOrder: List<Int>,
   modifier: Modifier = Modifier
 ) {
   Card(
@@ -144,26 +153,14 @@ fun QuizAnswerListItem(
             }
         )
       }
-      QuizOption(
-        option = quiz.correctOption,
-        selectOption = selectOption,
-        correctOption = quiz.correctOption
-      )
-      QuizOption(
-        option = quiz.wrongOption1,
-        selectOption = selectOption,
-        correctOption = quiz.correctOption
-      )
-      QuizOption(
-        option = quiz.wrongOption2,
-        selectOption = selectOption,
-        correctOption = quiz.correctOption
-      )
-      QuizOption(
-        option = quiz.wrongOption3,
-        selectOption = selectOption,
-        correctOption = quiz.correctOption
-      )
+      val optionList = listOf(quiz.correctOption, quiz.wrongOption1, quiz.wrongOption2, quiz.wrongOption3)
+      for (order in optionOrder) {
+        QuizOption(
+          option = optionList[order],
+          selectOption = selectOption,
+          correctOption = quiz.correctOption
+        )
+      }
       Text(
         text = "解释：${quiz.explanation}"
       )

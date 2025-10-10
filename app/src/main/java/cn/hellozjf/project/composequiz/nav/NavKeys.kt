@@ -19,4 +19,9 @@ data object MainScreenKey: NavKey
 data class QuizScreenKey(val chapterIndex: Int): NavKey
 
 @Serializable
-data class QuizAnswerScreenKey(val chapterIndex: Int, val chooseOptionMap: Map<Int, String>): NavKey
+data class QuizAnswerScreenKey(
+  val chapterIndex: Int,
+  val chooseOptionMap: Map<Int, String>,
+  val quizOrderList: List<Int>,
+  val optionOrderList: List<List<Int>>
+): NavKey

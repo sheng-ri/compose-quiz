@@ -56,11 +56,15 @@ fun NavDisplayScreen(
       entry<QuizAnswerScreenKey> { key: QuizAnswerScreenKey ->
         val chapterIndex = key.chapterIndex
         val chooseOptionMap = key.chooseOptionMap
+        val quizOrderList = key.quizOrderList
+        val optionOrderList = key.optionOrderList
         ChapterQuizAnswerScreen(
           chapterIndex = chapterIndex,
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           chooseOptionMap = chooseOptionMap,
+          quizOrderList = quizOrderList,
+          optionOrderList= optionOrderList,
           onNavigation = onNavigation,
           onClearBackStack = onClearBackStack
         )

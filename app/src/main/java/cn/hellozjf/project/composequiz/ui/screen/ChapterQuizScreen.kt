@@ -41,6 +41,16 @@ fun ChapterQuizScreen(
 
   // 这是所有的题目
   val quizList by chapterQuizViewModel.findQuizByChapter(chapterIndex).collectAsState(listOf())
+  // 这是题目的顺序
+  val quizOrderList = remember(quizList.size) {
+    List(quizList.size) { it }.shuffled()
+  }
+  // 这是各个题目选项的顺序
+  val optionOrderList = remember(quizList.size) {
+    List(quizList.size) {
+      List(4) { it }.shuffled()
+    }
+  }
   val listState = rememberLazyListState()
   // 问题ID选择的答案
   val quizSelectOption = remember { mutableStateMapOf<Int, String>() }
@@ -57,23 +67,27 @@ fun ChapterQuizScreen(
         modifier = Modifier.weight(1f),
         state = listState
       ) {
-        quizList.forEachIndexed { index, quiz ->
-          item(key = quiz.id) {
-            val selectOption = quizSelectOption[quiz.id] ?: ""
-            val onSelectOptionChange: (String) -> Unit = { newSelectOption ->
-              quizSelectOption[quiz.id] = newSelectOption
+        if (quizList.isNotEmpty()) {
+          quizOrderList.forEachIndexed { index, order ->
+            val quiz = quizList[order]
+            item(key = quiz.id) {
+              val selectOption = quizSelectOption[quiz.id] ?: ""
+              val onSelectOptionChange: (String) -> Unit = { newSelectOption ->
+                quizSelectOption[quiz.id] = newSelectOption
+              }
+              QuizListItem(
+                id = quiz.id,
+                index = index,
+                question = quiz.question,
+                correctOption = quiz.correctOption,
+                wrongOption1 = quiz.wrongOption1,
+                wrongOption2 = quiz.wrongOption2,
+                wrongOption3 = quiz.wrongOption3,
+                selectOption = selectOption,
+                onSelectOptionChange = onSelectOptionChange,
+                optionOrder = optionOrderList[order]
+              )
             }
-            QuizListItem(
-              id = quiz.id,
-              index = index,
-              question = quiz.question,
-              correctOption = quiz.correctOption,
-              wrongOption1 = quiz.wrongOption1,
-              wrongOption2 = quiz.wrongOption2,
-              wrongOption3 = quiz.wrongOption3,
-              selectOption = selectOption,
-              onSelectOptionChange = onSelectOptionChange
-            )
           }
         }
       }
@@ -83,7 +97,9 @@ fun ChapterQuizScreen(
           onNavigation(
             QuizAnswerScreenKey(
               chapterIndex = chapterIndex,
-              chooseOptionMap = quizSelectOption.toMap()
+              chooseOptionMap = quizSelectOption.toMap(),
+              quizOrderList = quizOrderList,
+              optionOrderList = optionOrderList
             )
           )
         }
@@ -105,6 +121,7 @@ fun QuizListItem(
   wrongOption3: String,
   selectOption: String,
   onSelectOptionChange: (String) -> Unit,
+  optionOrder: List<Int>,
   modifier: Modifier = Modifier
 ) {
   Card(
@@ -120,26 +137,14 @@ fun QuizListItem(
       Text(
         text = "${index + 1}. $question"
       )
-      MyRadioButton(
-        option = correctOption,
-        selectOption = selectOption,
-        onSelectOptionChange = onSelectOptionChange
-      )
-      MyRadioButton(
-        option = wrongOption1,
-        selectOption = selectOption,
-        onSelectOptionChange = onSelectOptionChange
-      )
-      MyRadioButton(
-        option = wrongOption2,
-        selectOption = selectOption,
-        onSelectOptionChange = onSelectOptionChange
-      )
-      MyRadioButton(
-        option = wrongOption3,
-        selectOption = selectOption,
-        onSelectOptionChange = onSelectOptionChange
-      )
+      val options = listOf(correctOption, wrongOption1, wrongOption2, wrongOption3)
+      for (order in optionOrder) {
+        MyRadioButton(
+          option = options[order],
+          selectOption = selectOption,
+          onSelectOptionChange = onSelectOptionChange
+        )
+      }
     }
   }
 }
