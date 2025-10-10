@@ -1,12 +1,12 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import cn.hellozjf.project.composequiz.nav.MainScreenKey
+import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
@@ -28,7 +28,13 @@ fun NavDisplayScreen(
   NavDisplay(
     backStack = backStack,
     onBack = {
-      backStack.removeLastOrNull()
+      if (backStack.last() is QuizAnswerScreenKey) {
+        // 从 QuizAnswerScreenKey 屏幕按回退按钮，返回主界面
+        onClearBackStack()
+      } else {
+        // 其它屏幕按回退按钮，只返回上层
+        backStack.removeLastOrNull()
+      }
     },
     entryProvider = entryProvider {
       entry<MainScreenKey> {
@@ -45,6 +51,18 @@ fun NavDisplayScreen(
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           onNavigation = onNavigation
+        )
+      }
+      entry<QuizAnswerScreenKey> { key: QuizAnswerScreenKey ->
+        val chapterIndex = key.chapterIndex
+        val chooseOptionMap = key.chooseOptionMap
+        ChapterQuizAnswerScreen(
+          chapterIndex = chapterIndex,
+          chapterViewModel = chapterViewModel,
+          chapterQuizViewModel = chapterQuizViewModel,
+          chooseOptionMap = chooseOptionMap,
+          onNavigation = onNavigation,
+          onClearBackStack = onClearBackStack
         )
       }
     }
