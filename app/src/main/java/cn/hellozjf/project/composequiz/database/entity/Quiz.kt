@@ -35,6 +35,9 @@ class Quiz {
   @ColumnInfo(name = "explanation")
   var explanation: String = ""
 
+  @ColumnInfo(name = "favorite")
+  var favorite: Boolean = false
+
   constructor()
 
   constructor(

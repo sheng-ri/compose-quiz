@@ -40,4 +40,8 @@ class QuizRepository(private val quizDao: QuizDao) {
     coroutineScope.async(Dispatchers.IO) {
       return@async quizDao.findByChapter(chapter)
     }
+
+  fun setFavorite(id: Int, favorite: Boolean) {
+    return quizDao.setFavorite(id, favorite)
+  }
 }

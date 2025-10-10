@@ -24,4 +24,7 @@ interface QuizDao {
 
   @Query("SELECT count(*) FROM quiz")
   fun getCount(): Int
+
+  @Query("UPDATE quiz SET favorite = :favorite WHERE id = :id")
+  fun setFavorite(id: Int, favorite: Boolean)
 }

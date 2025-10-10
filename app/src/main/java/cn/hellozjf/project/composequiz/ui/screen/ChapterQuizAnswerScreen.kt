@@ -91,12 +91,7 @@ fun ChapterQuizAnswerScreen(
             QuizAnswerListItem(
               id = quiz.id,
               index = index,
-              question = quiz.question,
-              correctOption = quiz.correctOption,
-              wrongOption1 = quiz.wrongOption1,
-              wrongOption2 = quiz.wrongOption2,
-              wrongOption3 = quiz.wrongOption3,
-              explanation = quiz.explanation,
+              quiz = quiz,
               selectOption = selectOption
             )
           }
@@ -116,12 +111,7 @@ fun ChapterQuizAnswerScreen(
 fun QuizAnswerListItem(
   id: Int,
   index: Int,
-  question: String,
-  correctOption: String,
-  wrongOption1: String,
-  wrongOption2: String,
-  wrongOption3: String,
-  explanation: String,
+  quiz: Quiz,
   selectOption: String,
   modifier: Modifier = Modifier
 ) {
@@ -135,31 +125,47 @@ fun QuizAnswerListItem(
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
     Column {
+      Row {
+        Text(
+          text = "${index + 1}. ${quiz.question}",
+          modifier = Modifier.weight(1f)
+        )
+        if (quiz.favorite) {
+          Image(
+            painter = painterResource(R.drawable.baseline_favorite_24),
+            contentDescription = "已收藏", // 无障碍功能必需
+            modifier = Modifier.size(32.dp)
+          )
+        } else {
+          Image(
+            painter = painterResource(R.drawable.baseline_favorite_border_24),
+            contentDescription = "未收藏", // 无障碍功能必需
+            modifier = Modifier.size(32.dp)
+          )
+        }
+      }
+      QuizOption(
+        option = quiz.correctOption,
+        selectOption = selectOption,
+        correctOption = quiz.correctOption
+      )
+      QuizOption(
+        option = quiz.wrongOption1,
+        selectOption = selectOption,
+        correctOption = quiz.correctOption
+      )
+      QuizOption(
+        option = quiz.wrongOption2,
+        selectOption = selectOption,
+        correctOption = quiz.correctOption
+      )
+      QuizOption(
+        option = quiz.wrongOption3,
+        selectOption = selectOption,
+        correctOption = quiz.correctOption
+      )
       Text(
-        text = "${index + 1}. $question"
-      )
-      QuizOption(
-        option = correctOption,
-        selectOption = selectOption,
-        correctOption = correctOption
-      )
-      QuizOption(
-        option = wrongOption1,
-        selectOption = selectOption,
-        correctOption = correctOption
-      )
-      QuizOption(
-        option = wrongOption2,
-        selectOption = selectOption,
-        correctOption = correctOption
-      )
-      QuizOption(
-        option = wrongOption3,
-        selectOption = selectOption,
-        correctOption = correctOption
-      )
-      Text(
-        text = "解释：$explanation"
+        text = "解释：${quiz.explanation}"
       )
     }
   }
