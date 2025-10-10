@@ -1,6 +1,7 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -89,6 +90,7 @@ fun ChapterQuizAnswerScreen(
           item(key = quiz.id) {
             val selectOption = chooseOptionMap[quiz.id] ?: ""
             QuizAnswerListItem(
+              chapterQuizViewModel = chapterQuizViewModel,
               id = quiz.id,
               index = index,
               quiz = quiz,
@@ -109,6 +111,7 @@ fun ChapterQuizAnswerScreen(
 
 @Composable
 fun QuizAnswerListItem(
+  chapterQuizViewModel: ChapterQuizViewModel,
   id: Int,
   index: Int,
   quiz: Quiz,
@@ -130,19 +133,19 @@ fun QuizAnswerListItem(
           text = "${index + 1}. ${quiz.question}",
           modifier = Modifier.weight(1f)
         )
-        if (quiz.favorite) {
-          Image(
-            painter = painterResource(R.drawable.baseline_favorite_24),
-            contentDescription = "已收藏", // 无障碍功能必需
-            modifier = Modifier.size(32.dp)
-          )
-        } else {
-          Image(
-            painter = painterResource(R.drawable.baseline_favorite_border_24),
-            contentDescription = "未收藏", // 无障碍功能必需
-            modifier = Modifier.size(32.dp)
-          )
-        }
+        Image(
+          painter = if (quiz.favorite) {
+            painterResource(R.drawable.baseline_favorite_24)
+          } else {
+            painterResource(R.drawable.baseline_favorite_border_24)
+          },
+          contentDescription = if (quiz.favorite) "已收藏" else "未收藏", // 无障碍功能必需
+          modifier = Modifier
+            .size(32.dp)
+            .clickable {
+              chapterQuizViewModel.setFavorite(id, !quiz.favorite)
+            }
+        )
       }
       QuizOption(
         option = quiz.correctOption,
