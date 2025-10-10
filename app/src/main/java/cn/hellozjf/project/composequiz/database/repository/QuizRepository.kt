@@ -37,4 +37,10 @@ class QuizRepository(private val quizDao: QuizDao) {
       quizDao.setFavorite(id, favorite, favoriteTime)
     }
   }
+
+  fun incWrongAnswerCount(id: Int) {
+    coroutineScope.launch(Dispatchers.IO) {
+      quizDao.incWrongAnswerCount(id)
+    }
+  }
 }

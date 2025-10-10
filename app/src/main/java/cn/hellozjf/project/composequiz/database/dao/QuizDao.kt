@@ -26,4 +26,7 @@ interface QuizDao {
 
   @Query("UPDATE quiz SET favorite = :favorite, favorite_time = :favoriteTime WHERE id = :id")
   fun setFavorite(id: Int, favorite: Boolean, favoriteTime: Long)
+
+  @Query("UPDATE quiz SET wrong_answer_count = wrong_answer_count + 1 WHERE id = :id")
+  fun incWrongAnswerCount(id: Int)
 }

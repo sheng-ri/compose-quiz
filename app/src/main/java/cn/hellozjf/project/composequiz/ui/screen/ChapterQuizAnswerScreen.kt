@@ -62,14 +62,15 @@ fun ChapterQuizAnswerScreen(
     // 题目更新了，所以要计算一下正确和总的的题目数量
     totalQuestionCount = quizList.size
 
-    val map = mutableMapOf<Int, Quiz>()
-    for (quiz in quizList) {
-      map[quiz.id] = quiz
-    }
     totalCorrectCount = 0
-    for ((key, value) in chooseOptionMap) {
-      if (value == map[key]?.correctOption) {
+    for (quiz in quizList) {
+      if (quiz.correctOption == chooseOptionMap[quiz.id]) {
+        // 这题答对了
         totalCorrectCount++
+      } else {
+        // 这题答错了，需要记录答错次数
+        // TODO 我在这里修改了 wrongAnswerCount，会导致 quizList 刷新，然后再次进入 LaunchedEffect，导致死循环
+        chapterQuizViewModel.incWrongAnswerCount(quiz.id)
       }
     }
   }

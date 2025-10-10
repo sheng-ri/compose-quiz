@@ -35,4 +35,8 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
   fun setFavorite(id: Int, favorite: Boolean, favoriteTime: Long) {
     repository.setFavorite(id, favorite, favoriteTime)
   }
+
+  fun incWrongAnswerCount(id: Int) {
+    repository.incWrongAnswerCount(id)
+  }
 }
