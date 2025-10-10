@@ -32,7 +32,7 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     return repository.getCount()
   }
 
-  fun setFavorite(id: Int, favorite: Boolean) {
-    repository.setFavorite(id, favorite)
+  fun setFavorite(id: Int, favorite: Boolean, favoriteTime: Long) {
+    repository.setFavorite(id, favorite, favoriteTime)
   }
 }

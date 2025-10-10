@@ -38,6 +38,12 @@ class Quiz {
   @ColumnInfo(name = "favorite")
   var favorite: Boolean = false
 
+  @ColumnInfo(name = "favorite_time")
+  var favoriteTime: Long = -1L
+
+  @ColumnInfo(name = "wrong_answer_count")
+  var wrongAnswerCount: Int = 0
+
   constructor()
 
   constructor(

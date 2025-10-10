@@ -32,9 +32,9 @@ class QuizRepository(private val quizDao: QuizDao) {
     return quizDao.getCount()
   }
 
-  fun setFavorite(id: Int, favorite: Boolean) {
+  fun setFavorite(id: Int, favorite: Boolean, favoriteTime: Long) {
     coroutineScope.launch(Dispatchers.IO) {
-      quizDao.setFavorite(id, favorite)
+      quizDao.setFavorite(id, favorite, favoriteTime)
     }
   }
 }

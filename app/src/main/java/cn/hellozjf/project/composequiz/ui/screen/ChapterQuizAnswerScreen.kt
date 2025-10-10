@@ -149,7 +149,7 @@ fun QuizAnswerListItem(
           modifier = Modifier
             .size(32.dp)
             .clickable {
-              chapterQuizViewModel.setFavorite(id, !quiz.favorite)
+              chapterQuizViewModel.setFavorite(id, !quiz.favorite, System.currentTimeMillis())
             }
         )
       }
