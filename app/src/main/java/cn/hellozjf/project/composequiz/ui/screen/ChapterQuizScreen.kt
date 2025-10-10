@@ -19,9 +19,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -43,6 +42,8 @@ fun ChapterQuizScreen(
   // 这是所有的题目
   val quizList by chapterQuizViewModel.searchResults.observeAsState(listOf())
   val listState = rememberLazyListState()
+  // 问题ID选择的答案
+  val quizSelectOption = remember { mutableStateMapOf<Int, String>() }
 
   LaunchedEffect(key1 = Unit) {
     // 搜索 chapterIndex 章节下面的题目
@@ -62,7 +63,11 @@ fun ChapterQuizScreen(
         state = listState
       ) {
         quizList.forEachIndexed { index, quiz ->
-          item {
+          item(key = quiz.id) {
+            val selectOption = quizSelectOption[quiz.id] ?: ""
+            val onSelectOptionChange: (String) -> Unit = { newSelectOption ->
+              quizSelectOption[quiz.id] = newSelectOption
+            }
             QuizListItem(
               id = quiz.id,
               index = index,
@@ -70,7 +75,9 @@ fun ChapterQuizScreen(
               correctOption = quiz.correctOption,
               wrongOption1 = quiz.wrongOption1,
               wrongOption2 = quiz.wrongOption2,
-              wrongOption3 = quiz.wrongOption3
+              wrongOption3 = quiz.wrongOption3,
+              selectOption = selectOption,
+              onSelectOptionChange = onSelectOptionChange
             )
           }
         }
@@ -94,9 +101,10 @@ fun QuizListItem(
   wrongOption1: String,
   wrongOption2: String,
   wrongOption3: String,
+  selectOption: String,
+  onSelectOptionChange: (String) -> Unit,
   modifier: Modifier = Modifier
 ) {
-  var selectedOption by remember { mutableStateOf("") }
   Card(
     colors = CardDefaults.cardColors(
       containerColor = MaterialTheme.colorScheme.onPrimary
@@ -112,31 +120,23 @@ fun QuizListItem(
       )
       MyRadioButton(
         option = correctOption,
-        selectedOption = selectedOption,
-        onSelectedOptionChange = { newSelectOption ->
-          selectedOption = newSelectOption
-        }
+        selectOption = selectOption,
+        onSelectOptionChange = onSelectOptionChange
       )
       MyRadioButton(
         option = wrongOption1,
-        selectedOption = selectedOption,
-        onSelectedOptionChange = { newSelectOption ->
-          selectedOption = newSelectOption
-        }
+        selectOption = selectOption,
+        onSelectOptionChange = onSelectOptionChange
       )
       MyRadioButton(
         option = wrongOption2,
-        selectedOption = selectedOption,
-        onSelectedOptionChange = { newSelectOption ->
-          selectedOption = newSelectOption
-        }
+        selectOption = selectOption,
+        onSelectOptionChange = onSelectOptionChange
       )
       MyRadioButton(
         option = wrongOption3,
-        selectedOption = selectedOption,
-        onSelectedOptionChange = { newSelectOption ->
-          selectedOption = newSelectOption
-        }
+        selectOption = selectOption,
+        onSelectOptionChange = onSelectOptionChange
       )
     }
   }
@@ -145,18 +145,18 @@ fun QuizListItem(
 @Composable
 fun MyRadioButton(
   option: String,
-  selectedOption: String,
-  onSelectedOptionChange: (String) -> Unit,
+  selectOption: String,
+  onSelectOptionChange: (String) -> Unit,
 ) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .clickable { onSelectedOptionChange(option) },
+      .clickable { onSelectOptionChange(option) },
     verticalAlignment = Alignment.CenterVertically
   ) {
     RadioButton(
-      selected = selectedOption == option,
-      onClick = { onSelectedOptionChange(option) }
+      selected = selectOption == option,
+      onClick = { onSelectOptionChange(option) }
     )
     Text(
       text = option,
