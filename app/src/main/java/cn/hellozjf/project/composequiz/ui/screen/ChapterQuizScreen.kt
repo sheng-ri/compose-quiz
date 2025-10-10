@@ -1,12 +1,30 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
@@ -22,76 +40,127 @@ fun ChapterQuizScreen(
   onNavigation: (NavKey) -> Unit
 ) {
 
+  // 这是所有的题目
+  val quizList by chapterQuizViewModel.searchResults.observeAsState(listOf())
+  val listState = rememberLazyListState()
+
+  LaunchedEffect(key1 = Unit) {
+    // 搜索 chapterIndex 章节下面的题目
+    chapterQuizViewModel.findQuizByChapter(chapterIndex)
+  }
+
   Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-    Box(
+    Column(
       modifier = Modifier.padding(innerPadding)
     ) {
       Text(
         text = "第 $chapterIndex 章"
       )
+
+      LazyColumn(
+        modifier = Modifier.weight(1f),
+        state = listState
+      ) {
+        quizList.forEachIndexed { index, quiz ->
+          item {
+            QuizListItem(
+              id = quiz.id,
+              index = index,
+              question = quiz.question,
+              correctOption = quiz.correctOption,
+              wrongOption1 = quiz.wrongOption1,
+              wrongOption2 = quiz.wrongOption2,
+              wrongOption3 = quiz.wrongOption3
+            )
+          }
+        }
+      }
+
+      Button(
+        onClick = {}
+      ) {
+        Text("提交")
+      }
     }
   }
-
-//  // TODO 这里要从 chapterQuizViewModel 获取所有的章节，显示在列表中
-//  // TODO 点击章节的时候，使用 chapterQuizViewModel 查询该章节下面所有的题目，进行问答测试
-//
-//  val searchResults by chapterViewModel.searchResults.observeAsState(listOf())
-//  val listState = rememberLazyListState()
-//
-//  LaunchedEffect(key1 = Unit) {
-//    chapterViewModel.findAllOrderByIndex()
-//  }
-//
-//  LazyColumn(
-//    modifier = modifier.fillMaxSize(),
-//    state = listState
-//  ) {
-//    searchResults.forEach { chapter ->
-//      item {
-//        ChapterListItem(
-//          index = chapter.index,
-//          simpleTitle = chapter.simpleTitle,
-//          onItemClick = { index ->
-//            // TODO 点击进入章节测试题
-//          }
-//        )
-//      }
-//    }
-//  }
 }
 
-//@Composable
-//fun ChapterListItem(
-//  index: Int,
-//  simpleTitle: String,
-//  onItemClick: (Int) -> Unit,
-//  modifier: Modifier = Modifier
-//) {
-//  Card(
-//    colors = CardDefaults.cardColors(
-//      containerColor = MaterialTheme.colorScheme.onPrimary
-//    ),
-//    modifier = modifier
-//      .padding(3.dp)
-//      .fillMaxWidth()
-//      .clickable {
-//        onItemClick(index)
-//      },
-//    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-//  ) {
-//    Row(
-//      verticalAlignment = Alignment.CenterVertically
-//    ) {
-//      Text(
-//        text = "第 $index 章",
-//        modifier = Modifier.width(75.dp)
-//      )
-//      Spacer(modifier = Modifier.width(8.dp))
-//      Text(
-//        text = simpleTitle,
-//        style = MaterialTheme.typography.headlineSmall,
-//        modifier = Modifier.padding(8.dp)
-//      )
-//    }
-//  }
-//}
+@Composable
+fun QuizListItem(
+  id: Int,
+  index: Int,
+  question: String,
+  correctOption: String,
+  wrongOption1: String,
+  wrongOption2: String,
+  wrongOption3: String,
+  modifier: Modifier = Modifier
+) {
+  var selectedOption by remember { mutableStateOf("") }
+  Card(
+    colors = CardDefaults.cardColors(
+      containerColor = MaterialTheme.colorScheme.onPrimary
+    ),
+    modifier = modifier
+      .padding(3.dp)
+      .fillMaxWidth(),
+    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+  ) {
+    Column {
+      Text(
+        text = "${index + 1}. $question"
+      )
+      MyRadioButton(
+        option = correctOption,
+        selectedOption = selectedOption,
+        onSelectedOptionChange = { newSelectOption ->
+          selectedOption = newSelectOption
+        }
+      )
+      MyRadioButton(
+        option = wrongOption1,
+        selectedOption = selectedOption,
+        onSelectedOptionChange = { newSelectOption ->
+          selectedOption = newSelectOption
+        }
+      )
+      MyRadioButton(
+        option = wrongOption2,
+        selectedOption = selectedOption,
+        onSelectedOptionChange = { newSelectOption ->
+          selectedOption = newSelectOption
+        }
+      )
+      MyRadioButton(
+        option = wrongOption3,
+        selectedOption = selectedOption,
+        onSelectedOptionChange = { newSelectOption ->
+          selectedOption = newSelectOption
+        }
+      )
+    }
+  }
+}
+
+@Composable
+fun MyRadioButton(
+  option: String,
+  selectedOption: String,
+  onSelectedOptionChange: (String) -> Unit,
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth()
+      .clickable { onSelectedOptionChange(option) },
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    RadioButton(
+      selected = selectedOption == option,
+      onClick = { onSelectedOptionChange(option) }
+    )
+    Text(
+      text = option,
+      modifier = Modifier.padding(start = 8.dp)
+    )
+  }
+}
