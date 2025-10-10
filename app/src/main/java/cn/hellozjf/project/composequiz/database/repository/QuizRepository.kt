@@ -1,17 +1,15 @@
 package cn.hellozjf.project.composequiz.database.repository
 
-import androidx.lifecycle.MutableLiveData
 import cn.hellozjf.project.composequiz.database.dao.QuizDao
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class QuizRepository(private val quizDao: QuizDao) {
-  //  val allProducts: LiveData<List<Product>> = productDao.getAllProducts()
-  val searchResults = MutableLiveData<List<Quiz>>()
+
+  // TODO 后面把协程作用域改为 viewModelScope
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
   fun insertQuiz(quiz: Quiz) {
@@ -26,20 +24,13 @@ class QuizRepository(private val quizDao: QuizDao) {
     }
   }
 
-  fun findQuizByChapter(chapter: Int) {
-    coroutineScope.launch(Dispatchers.Main) {
-      searchResults.value = asyncFind(chapter).await()
-    }
+  fun findQuizByChapter(chapter: Int): Flow<List<Quiz>> {
+    return quizDao.findByChapter(chapter)
   }
 
   fun getCount(): Int {
     return quizDao.getCount()
   }
-
-  private fun asyncFind(chapter: Int): Deferred<List<Quiz>?> =
-    coroutineScope.async(Dispatchers.IO) {
-      return@async quizDao.findByChapter(chapter)
-    }
 
   fun setFavorite(id: Int, favorite: Boolean) {
     coroutineScope.launch(Dispatchers.IO) {

@@ -16,9 +16,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -41,15 +40,10 @@ fun ChapterQuizScreen(
 ) {
 
   // 这是所有的题目
-  val quizList by chapterQuizViewModel.searchResults.observeAsState(listOf())
+  val quizList by chapterQuizViewModel.findQuizByChapter(chapterIndex).collectAsState(listOf())
   val listState = rememberLazyListState()
   // 问题ID选择的答案
   val quizSelectOption = remember { mutableStateMapOf<Int, String>() }
-
-  LaunchedEffect(key1 = Unit) {
-    // 搜索 chapterIndex 章节下面的题目
-    chapterQuizViewModel.findQuizByChapter(chapterIndex)
-  }
 
   Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
     Column(
@@ -86,10 +80,12 @@ fun ChapterQuizScreen(
 
       Button(
         onClick = {
-          onNavigation(QuizAnswerScreenKey(
-            chapterIndex = chapterIndex,
-            chooseOptionMap = quizSelectOption.toMap()
-          ))
+          onNavigation(
+            QuizAnswerScreenKey(
+              chapterIndex = chapterIndex,
+              chooseOptionMap = quizSelectOption.toMap()
+            )
+          )
         }
       ) {
         Text("提交")

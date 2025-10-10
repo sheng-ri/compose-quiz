@@ -18,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -48,15 +49,11 @@ fun ChapterQuizAnswerScreen(
 ) {
 
   // 这是所有的题目
-  val quizList by chapterQuizViewModel.searchResults.observeAsState(listOf())
+  // TODO collectAsState 不知道是不是要改成 collectAsStateWithLifecycle
+  val quizList by chapterQuizViewModel.findQuizByChapter(chapterIndex).collectAsState(listOf())
   val listState = rememberLazyListState()
   var totalQuestionCount by remember { mutableStateOf(0) }
   var totalCorrectCount by remember { mutableStateOf(0) }
-
-  LaunchedEffect(key1 = Unit) {
-    // 搜索 chapterIndex 章节下面的题目
-    chapterQuizViewModel.findQuizByChapter(chapterIndex)
-  }
 
   LaunchedEffect(key1 = quizList) {
     // 题目更新了，所以要计算一下正确和总的的题目数量
@@ -66,7 +63,7 @@ fun ChapterQuizAnswerScreen(
     for (quiz in quizList) {
       map[quiz.id] = quiz
     }
-
+    totalCorrectCount = 0
     for ((key, value) in chooseOptionMap) {
       if (value == map[key]?.correctOption) {
         totalCorrectCount++
