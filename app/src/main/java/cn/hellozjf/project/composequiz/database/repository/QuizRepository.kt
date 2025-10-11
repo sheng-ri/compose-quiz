@@ -2,6 +2,7 @@ package cn.hellozjf.project.composequiz.database.repository
 
 import cn.hellozjf.project.composequiz.database.dao.QuizDao
 import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

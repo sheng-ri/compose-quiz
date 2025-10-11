@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
@@ -53,23 +54,38 @@ fun ChapterQuizAnswerScreen(
   // 这是所有的题目
   // TODO collectAsState 不知道是不是要改成 collectAsStateWithLifecycle
   val quizList by chapterQuizViewModel.findQuizByChapter(chapterIndex).collectAsState(listOf())
+  val quizDTOList = remember(quizList) {
+    quizList.map {
+      QuizDTO(
+        id = it.id,
+        chapterIndex = it.chapterIndex,
+        question = it.question,
+        correctOption = it.correctOption,
+        wrongOption1 = it.wrongOption1,
+        wrongOption2 = it.wrongOption2,
+        wrongOption3 = it.wrongOption3,
+        explanation = it.explanation,
+        favorite = it.favorite,
+        favoriteTime = it.favoriteTime
+      )
+    }
+  }
   val listState = rememberLazyListState()
   var totalQuestionCount by remember { mutableStateOf(0) }
   var totalCorrectCount by remember { mutableStateOf(0) }
 
-  // TODO 我不知道这个是否一直会重复进入？？？
-  LaunchedEffect(key1 = quizList) {
+  // 下面这句话只会检查 quizDTOList 的内容，当内容不变时就不会重复执行
+  LaunchedEffect(key1 = quizDTOList.hashCode()) {
     // 题目更新了，所以要计算一下正确和总的的题目数量
-    totalQuestionCount = quizList.size
+    totalQuestionCount = quizDTOList.size
 
     totalCorrectCount = 0
-    for (quiz in quizList) {
+    for (quiz in quizDTOList) {
       if (quiz.correctOption == chooseOptionMap[quiz.id]) {
         // 这题答对了
         totalCorrectCount++
       } else {
         // 这题答错了，需要记录答错次数
-        // TODO 我在这里修改了 wrongAnswerCount，会导致 quizList 刷新，然后再次进入 LaunchedEffect，导致死循环
         chapterQuizViewModel.incWrongAnswerCount(quiz.id)
       }
     }

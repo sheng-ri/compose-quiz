@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import cn.hellozjf.project.composequiz.database.QuizRoomDatabase
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.database.repository.QuizRepository
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import kotlinx.coroutines.flow.Flow
 
 class ChapterQuizViewModel(application: Application) : ViewModel() {
