@@ -178,11 +178,16 @@ fun QuizAnswerListItem(
           correctOption = quiz.correctOption
         )
       }
-      Text(
-        text = "解释：${quiz.explanation}"
-      )
+      Explanation(quiz.explanation)
     }
   }
+}
+
+@Composable
+fun Explanation(explanation: String) {
+  Text(
+    text = "解释：$explanation"
+  )
 }
 
 @Composable

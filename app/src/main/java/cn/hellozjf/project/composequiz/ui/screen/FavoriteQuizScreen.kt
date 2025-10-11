@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -31,6 +32,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
@@ -95,24 +97,79 @@ fun FavoriteQuizScreen(
         quizList.forEachIndexed { index, quiz ->
           item(key = quiz.id) {
             val expand = questionExpandMap[quiz.id] ?: false
-            Row(
-              verticalAlignment = Alignment.CenterVertically
-            ) {
-              Text(
-                text = quiz.question,
-                modifier = Modifier.weight(1f)
-              )
-              Icon(
-                imageVector = Icons.Filled.ArrowDropDown,
-                contentDescription = null,
-                modifier.rotate(if (expand) 180f else 0f)
-              )
+            val onExpandChange: (Boolean) -> Unit = {
+              questionExpandMap[quiz.id] = it
             }
+            Question(
+              expand = expand,
+              onExpandChange = onExpandChange,
+              quiz = quiz
+            )
           }
         }
       }
     }
   }
+}
+
+@Composable
+fun Question(
+  expand: Boolean,
+  onExpandChange: (Boolean) -> Unit,
+  quiz: Quiz,
+  modifier: Modifier = Modifier
+) {
+  Column {
+    Row(
+      modifier = Modifier.clickable { onExpandChange(!expand) },
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Text(
+        text = quiz.question,
+        modifier = Modifier
+          .weight(1f)
+      )
+      Icon(
+        imageVector = Icons.Filled.ArrowDropDown,
+        contentDescription = null,
+        modifier.rotate(if (expand) 180f else 0f)
+      )
+    }
+    if (expand) {
+      // 显示这题的所有选项，正确选项，解释，打错次数
+      Column {
+        QuizOption(
+          option = quiz.correctOption,
+          selectOption = quiz.correctOption,
+          correctOption = quiz.correctOption
+        )
+        QuizOption(
+          option = quiz.wrongOption1,
+          selectOption = quiz.correctOption,
+          correctOption = quiz.correctOption
+        )
+        QuizOption(
+          option = quiz.wrongOption2,
+          selectOption = quiz.correctOption,
+          correctOption = quiz.correctOption
+        )
+        QuizOption(
+          option = quiz.wrongOption3,
+          selectOption = quiz.correctOption,
+          correctOption = quiz.correctOption
+        )
+        Explanation(quiz.explanation)
+        WrongAnswerCount(quiz.wrongAnswerCount)
+      }
+    }
+  }
+}
+
+@Composable
+fun WrongAnswerCount(wrongAnswerCount: Int) {
+  Text(
+    text = "打错次数：$wrongAnswerCount"
+  )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
