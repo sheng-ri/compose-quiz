@@ -45,9 +45,11 @@ fun NavDisplayScreen(
         )
       }
       entry<QuizScreenKey> { key: QuizScreenKey ->
-        val chapterIndex = key.chapterIndex
-        ChapterQuizScreen(
-          chapterIndex = chapterIndex,
+        val title = key.title
+        val quizList = key.quizList
+        QuizScreen(
+          title = title,
+          quizList = quizList,
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           onNavigation = onNavigation

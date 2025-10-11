@@ -17,7 +17,10 @@ import kotlinx.serialization.Serializable
 data object MainScreenKey: NavKey
 
 @Serializable
-data class QuizScreenKey(val chapterIndex: Int): NavKey
+data class QuizScreenKey(
+  val title: String,
+  val quizList: List<Quiz>
+): NavKey
 
 @Serializable
 data class QuizAnswerScreenKey(

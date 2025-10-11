@@ -1,6 +1,5 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,7 +14,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -44,13 +42,19 @@ fun ChapterScreen(
     state = listState
   ) {
     chapterList.forEach { chapter ->
-      item {
+      item(key = chapter.id) {
+        val quizList by chapterQuizViewModel.findQuizByChapter(chapter.index)
+          .collectAsState(listOf())
         ChapterListItem(
           index = chapter.index,
           simpleTitle = chapter.simpleTitle,
           onItemClick = { index ->
-            Log.d(TAG, "index = $index")
-            onNavigation(QuizScreenKey(index))
+            onNavigation(
+              QuizScreenKey(
+                title = chapter.simpleTitle,
+                quizList = quizList
+              )
+            )
           }
         )
       }

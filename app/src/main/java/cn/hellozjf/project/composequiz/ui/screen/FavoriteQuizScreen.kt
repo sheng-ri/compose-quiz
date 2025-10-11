@@ -42,12 +42,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.util.OrderConstant
 import cn.hellozjf.project.composequiz.util.TestCountConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
-
+/**
+ * TODO
+ * 在 Button 的 onClick 里调用 scope.launch 方法，来执行 viewModel 的 suspend 数据库查询方法，获取题目信息，然后 onNavigation 跳转是传递题目信息
+ * 这个操作在 FavoriteQuizScreen 和 ChapterScreen 都要这样处理！！！！
+ *
+ */
 @Composable
 fun FavoriteQuizScreen(
   chapterViewModel: ChapterViewModel,
@@ -124,6 +130,7 @@ fun QuestionList(
   selectText: String,
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
+  onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
   val listState = rememberLazyListState()
@@ -177,6 +184,7 @@ fun Question(
   onExpandChange: (Boolean) -> Unit,
   quiz: Quiz,
   chapterViewModel: ChapterViewModel,
+  onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
   Card(
@@ -321,6 +329,7 @@ fun TestCountRow(
   items: List<String>,
   selectText: String,
   onSelectTextChange: (String) -> Unit,
+  onNavigation: (NavKey) -> Unit,
 ) {
 
   var customTestCount by remember { mutableStateOf(selectText) }
@@ -389,7 +398,13 @@ fun TestCountRow(
     Spacer(modifier = Modifier.weight(1f))
     Button(
       onClick = {
-        // TODO 跳转到测试页面，需要 toNavigation 回调
+        // 触发数据库查询
+        onNavigation(
+          QuizScreenKey(
+            title = "收藏测试",
+            quizList = quiz
+          )
+        )
       }
     ) {
       Text("进行测试")
