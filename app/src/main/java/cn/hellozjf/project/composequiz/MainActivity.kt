@@ -131,14 +131,15 @@ class MainActivity : ComponentActivity() {
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         for (record in csvParser) {
-          val quiz = Quiz()
-          quiz.chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt()
-          quiz.question = record.get(ChapterQuizConstant.QUESTION)
-          quiz.correctOption = record.get(ChapterQuizConstant.CORRECT_OPTION)
-          quiz.wrongOption1 = record.get(ChapterQuizConstant.WRONG_OPTION1)
-          quiz.wrongOption2 = record.get(ChapterQuizConstant.WRONG_OPTION2)
-          quiz.wrongOption3 = record.get(ChapterQuizConstant.WRONG_OPTION3)
-          quiz.explanation = record.get(ChapterQuizConstant.EXPLANATION)
+          val quiz = Quiz(
+            chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt(),
+            question = record.get(ChapterQuizConstant.QUESTION),
+            correctOption = record.get(ChapterQuizConstant.CORRECT_OPTION),
+            wrongOption1 = record.get(ChapterQuizConstant.WRONG_OPTION1),
+            wrongOption2 = record.get(ChapterQuizConstant.WRONG_OPTION2),
+            wrongOption3 = record.get(ChapterQuizConstant.WRONG_OPTION3),
+            explanation = record.get(ChapterQuizConstant.EXPLANATION)
+          )
           chapterQuizViewModel.insertQuiz(quiz)
         }
 

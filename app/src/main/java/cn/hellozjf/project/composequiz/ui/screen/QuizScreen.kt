@@ -1,8 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,37 +10,33 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
 /**
- * 章节题目
+ * 题目
  */
 @Composable
-fun ChapterQuizScreen(
-  chapterIndex: Int,
+fun QuizScreen(
+  title: String,
+  quizList: List<Quiz>,
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
 
-  // 这是所有的题目
-  val quizList by chapterQuizViewModel.findQuizByChapter(chapterIndex).collectAsState(listOf())
   // 这是题目的顺序
-  val quizOrderList = remember(quizList.size) {
+  val quizOrder = remember(quizList.size) {
     List(quizList.size) { it }.shuffled()
   }
   // 这是各个题目选项的顺序
@@ -60,7 +54,7 @@ fun ChapterQuizScreen(
       modifier = Modifier.padding(innerPadding)
     ) {
       Text(
-        text = "第 $chapterIndex 章"
+        text = title
       )
 
       LazyColumn(
@@ -68,21 +62,16 @@ fun ChapterQuizScreen(
         state = listState
       ) {
         if (quizList.isNotEmpty()) {
-          quizOrderList.forEachIndexed { index, order ->
+          quizOrder.forEachIndexed { index, order ->
             val quiz = quizList[order]
             item(key = quiz.id) {
               val selectOption = quizSelectOption[quiz.id] ?: ""
               val onSelectOptionChange: (String) -> Unit = { newSelectOption ->
                 quizSelectOption[quiz.id] = newSelectOption
               }
-              QuizListItem(
-                id = quiz.id,
+              QuizItem(
                 index = index,
-                question = quiz.question,
-                correctOption = quiz.correctOption,
-                wrongOption1 = quiz.wrongOption1,
-                wrongOption2 = quiz.wrongOption2,
-                wrongOption3 = quiz.wrongOption3,
+                quiz = quiz,
                 selectOption = selectOption,
                 onSelectOptionChange = onSelectOptionChange,
                 optionOrder = optionOrderList[order]
@@ -96,11 +85,10 @@ fun ChapterQuizScreen(
         onClick = {
           onNavigation(
             QuizAnswerScreenKey(
-              // chapterIndex = chapterIndex,
-              title = "xxx",
+              title = title,
               quizList = quizList,
               chooseOptionMap = quizSelectOption.toMap(),
-              quizOrderList = quizOrderList,
+              quizOrderList = quizOrder,
               optionOrderList = optionOrderList
             )
           )
@@ -113,14 +101,9 @@ fun ChapterQuizScreen(
 }
 
 @Composable
-fun QuizListItem(
-  id: Int,
+fun QuizItem(
   index: Int,
-  question: String,
-  correctOption: String,
-  wrongOption1: String,
-  wrongOption2: String,
-  wrongOption3: String,
+  quiz: Quiz,
   selectOption: String,
   onSelectOptionChange: (String) -> Unit,
   optionOrder: List<Int>,
@@ -137,9 +120,14 @@ fun QuizListItem(
   ) {
     Column {
       Text(
-        text = "${index + 1}. $question"
+        text = "${index + 1}. ${quiz.question}"
       )
-      val options = listOf(correctOption, wrongOption1, wrongOption2, wrongOption3)
+      val options = listOf(
+        quiz.correctOption,
+        quiz.wrongOption1,
+        quiz.wrongOption2,
+        quiz.wrongOption3
+      )
       for (order in optionOrder) {
         MyRadioButton(
           option = options[order],
@@ -148,28 +136,5 @@ fun QuizListItem(
         )
       }
     }
-  }
-}
-
-@Composable
-fun MyRadioButton(
-  option: String,
-  selectOption: String,
-  onSelectOptionChange: (String) -> Unit,
-) {
-  Row(
-    modifier = Modifier
-      .fillMaxWidth()
-      .clickable { onSelectOptionChange(option) },
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    RadioButton(
-      selected = selectOption == option,
-      onClick = { onSelectOptionChange(option) }
-    )
-    Text(
-      text = option,
-      modifier = Modifier.padding(start = 8.dp)
-    )
   }
 }
