@@ -11,7 +11,5 @@ data class QuizDTO(
   val wrongOption1: String,
   val wrongOption2: String,
   val wrongOption3: String,
-  val explanation: String,
-  val favorite: Boolean,
-  val favoriteTime: Long,
+  val explanation: String
 )

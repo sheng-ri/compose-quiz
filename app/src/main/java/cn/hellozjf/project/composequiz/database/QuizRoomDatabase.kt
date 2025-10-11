@@ -9,7 +9,7 @@ import cn.hellozjf.project.composequiz.database.dao.QuizDao
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 
-@Database(entities = [Chapter::class, Quiz::class], version = 8, exportSchema = false)
+@Database(entities = [Chapter::class, Quiz::class], version = 9, exportSchema = false)
 abstract class QuizRoomDatabase : RoomDatabase() {
 
   abstract fun quizDao(): QuizDao

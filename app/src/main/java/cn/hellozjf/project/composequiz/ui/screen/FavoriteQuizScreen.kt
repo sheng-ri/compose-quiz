@@ -77,7 +77,7 @@ fun FavoriteQuizScreen(
     }
   }
   val listState = rememberLazyListState()
-  var questionExpandMap = remember { mutableStateMapOf<Int, Boolean>() }
+  val questionExpandMap = remember { mutableStateMapOf<Int, Boolean>() }
 
   Column(
     modifier = modifier.fillMaxSize()
@@ -178,6 +178,13 @@ fun Question(
       }
     }
   }
+}
+
+@Composable
+fun FromChapterIndex(chapterIndex: Int) {
+  Text(
+    text = "来自：第 $chapterIndex 章"
+  )
 }
 
 @Composable

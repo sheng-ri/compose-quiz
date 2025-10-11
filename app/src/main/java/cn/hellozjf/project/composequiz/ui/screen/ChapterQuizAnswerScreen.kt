@@ -64,9 +64,7 @@ fun ChapterQuizAnswerScreen(
         wrongOption1 = it.wrongOption1,
         wrongOption2 = it.wrongOption2,
         wrongOption3 = it.wrongOption3,
-        explanation = it.explanation,
-        favorite = it.favorite,
-        favoriteTime = it.favoriteTime
+        explanation = it.explanation
       )
     }
   }
