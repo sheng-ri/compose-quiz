@@ -8,10 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -21,6 +24,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -33,13 +37,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.util.OrderConstant
+import cn.hellozjf.project.composequiz.util.TestCountConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
+
 
 @Composable
 fun FavoriteQuizScreen(
@@ -49,19 +56,37 @@ fun FavoriteQuizScreen(
   modifier: Modifier = Modifier,
 ) {
 
-  var expand by remember { mutableStateOf(false) }
-  val onExpandChange: (Boolean) -> Unit = {
-    expand = it
+  // 跟排序方式有关的状态
+  var orderMethodExpand by remember { mutableStateOf(false) }
+  val onOrderMethodExpandChange: (Boolean) -> Unit = {
+    orderMethodExpand = it
   }
   // 默认先升序
-  val items = listOf(
+  // TODO 后续增加一下升序降序？
+  val orderMethodItems = listOf(
     OrderConstant.CHAPTER,
     OrderConstant.FAVORITE_TIME,
     OrderConstant.WRONG_ANSWER_COUNT
   )
-  var selectText by remember { mutableStateOf(items[0]) }
-  val onSelectTextChange: (String) -> Unit = {
-    selectText = it
+  var orderMethodSelectText by remember { mutableStateOf(orderMethodItems[0]) }
+  val onOrderMethodSelectTextChange: (String) -> Unit = {
+    orderMethodSelectText = it
+  }
+
+  // 跟测试数量有关的状态
+  var testCountExpand by remember { mutableStateOf(false) }
+  val onTestCountExpandChange: (Boolean) -> Unit = {
+    testCountExpand = it
+  }
+  val testCountItems = listOf(
+    TestCountConstant.FIVE,
+    TestCountConstant.TEN,
+    TestCountConstant.TWENTY,
+    TestCountConstant.CUSTOM,
+  )
+  var testCountSelectText by remember { mutableStateOf(testCountItems[0]) }
+  val onTestCountSelectTextChange: (String) -> Unit = {
+    testCountSelectText = it
   }
 
   Column(
@@ -72,17 +97,24 @@ fun FavoriteQuizScreen(
       fontSize = 32.sp
     )
     OrderMethodRow(
-      expand = expand,
-      onExpandChange = onExpandChange,
-      items = items,
-      selectText = selectText,
-      onSelectTextChange = onSelectTextChange
+      expand = orderMethodExpand,
+      onExpandChange = onOrderMethodExpandChange,
+      items = orderMethodItems,
+      selectText = orderMethodSelectText,
+      onSelectTextChange = onOrderMethodSelectTextChange
     )
     QuestionList(
-      selectText = selectText,
+      selectText = orderMethodSelectText,
       chapterViewModel = chapterViewModel,
       chapterQuizViewModel = chapterQuizViewModel,
       modifier = Modifier.weight(1f)
+    )
+    TestCountRow(
+      expand = testCountExpand,
+      onExpandChange = onTestCountExpandChange,
+      items = testCountItems,
+      selectText = testCountSelectText,
+      onSelectTextChange = onTestCountSelectTextChange
     )
   }
 }
@@ -277,6 +309,90 @@ fun OrderMethodRow(
           )
         }
       }
+    }
+  }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TestCountRow(
+  expand: Boolean,
+  onExpandChange: (Boolean) -> Unit,
+  items: List<String>,
+  selectText: String,
+  onSelectTextChange: (String) -> Unit,
+) {
+
+  var customTestCount by remember { mutableStateOf(selectText) }
+  val minValue = 0
+  val maxValue = 999
+
+  Row(
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Text("测试数量")
+    ExposedDropdownMenuBox(
+      expanded = expand,
+      onExpandedChange = onExpandChange,
+      modifier = Modifier.width(128.dp)
+    ) {
+      TextField(
+        value = selectText,
+        onValueChange = {},
+        modifier = Modifier
+          .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
+        readOnly = true,
+        trailingIcon = {
+          ExposedDropdownMenuDefaults.TrailingIcon(expanded = expand)
+        }
+      )
+      ExposedDropdownMenu(
+        expanded = expand,
+        onDismissRequest = { onExpandChange(false) }
+      ) {
+        items.forEach { item ->
+          DropdownMenuItem(
+            text = { Text(text = item) },
+            onClick = {
+              onSelectTextChange(item)
+              if (item != TestCountConstant.CUSTOM) {
+                customTestCount = item
+              }
+              onExpandChange(false)
+            }
+          )
+        }
+      }
+    }
+    if (selectText == TestCountConstant.CUSTOM) {
+      OutlinedTextField(
+        value = customTestCount,
+        onValueChange = { newText ->
+          val filtered = newText.filter { it.isDigit() }
+          if (filtered.isNotEmpty()) {
+            val num = filtered.toInt()
+            if (num in minValue..maxValue) {
+              customTestCount = num.toString()
+            } else if (num < minValue) {
+              customTestCount = minValue.toString()
+            } else {
+              customTestCount = maxValue.toString()
+            }
+          } else {
+            customTestCount = minValue.toString()
+          }
+        },
+        modifier = Modifier.width(64.dp),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+      )
+    }
+    Spacer(modifier = Modifier.weight(1f))
+    Button(
+      onClick = {
+        // TODO 跳转到测试页面，需要 toNavigation 回调
+      }
+    ) {
+      Text("进行测试")
     }
   }
 }

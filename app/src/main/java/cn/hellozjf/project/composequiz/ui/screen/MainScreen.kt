@@ -1,10 +1,8 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
@@ -46,10 +44,8 @@ fun MainScreen(
   ) {
     Box(
       modifier = Modifier
-        // 确保内容不会被系统UI（状态栏、系统导航栏）遮挡
-        .windowInsetsPadding(WindowInsets.systemBars)
         // 或者使用 .safeDrawingPadding()，它包含了系统栏和刘海屏/打孔屏的安全区域
-//         .safeDrawingPadding()
+        .safeDrawingPadding()
         .fillMaxSize()
     ) {
       when (destination) {
