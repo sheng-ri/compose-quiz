@@ -6,17 +6,21 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -119,47 +123,58 @@ fun Question(
   quiz: Quiz,
   modifier: Modifier = Modifier
 ) {
-  Column {
-    Row(
-      modifier = Modifier.clickable { onExpandChange(!expand) },
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Text(
-        text = quiz.question,
-        modifier = Modifier
-          .weight(1f)
-      )
-      Icon(
-        imageVector = Icons.Filled.ArrowDropDown,
-        contentDescription = null,
-        modifier.rotate(if (expand) 180f else 0f)
-      )
-    }
-    if (expand) {
-      // 显示这题的所有选项，正确选项，解释，打错次数
-      Column {
-        QuizOption(
-          option = quiz.correctOption,
-          selectOption = quiz.correctOption,
-          correctOption = quiz.correctOption
+  Card(
+    colors = CardDefaults.cardColors(
+      containerColor = MaterialTheme.colorScheme.onPrimary
+    ),
+    modifier = modifier
+      .padding(3.dp)
+      .fillMaxWidth(),
+    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
+  ) {
+
+    Column {
+      Row(
+        modifier = Modifier.clickable { onExpandChange(!expand) },
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Text(
+          text = quiz.question,
+          modifier = Modifier
+            .weight(1f)
         )
-        QuizOption(
-          option = quiz.wrongOption1,
-          selectOption = quiz.correctOption,
-          correctOption = quiz.correctOption
+        Icon(
+          imageVector = Icons.Filled.ArrowDropDown,
+          contentDescription = null,
+          modifier.rotate(if (expand) 180f else 0f)
         )
-        QuizOption(
-          option = quiz.wrongOption2,
-          selectOption = quiz.correctOption,
-          correctOption = quiz.correctOption
-        )
-        QuizOption(
-          option = quiz.wrongOption3,
-          selectOption = quiz.correctOption,
-          correctOption = quiz.correctOption
-        )
-        Explanation(quiz.explanation)
-        WrongAnswerCount(quiz.wrongAnswerCount)
+      }
+      if (expand) {
+        // 显示这题的所有选项，正确选项，解释，打错次数
+        Column {
+          QuizOption(
+            option = quiz.correctOption,
+            selectOption = quiz.correctOption,
+            correctOption = quiz.correctOption
+          )
+          QuizOption(
+            option = quiz.wrongOption1,
+            selectOption = quiz.correctOption,
+            correctOption = quiz.correctOption
+          )
+          QuizOption(
+            option = quiz.wrongOption2,
+            selectOption = quiz.correctOption,
+            correctOption = quiz.correctOption
+          )
+          QuizOption(
+            option = quiz.wrongOption3,
+            selectOption = quiz.correctOption,
+            correctOption = quiz.correctOption
+          )
+          Explanation(quiz.explanation)
+          WrongAnswerCount(quiz.wrongAnswerCount)
+        }
       }
     }
   }
