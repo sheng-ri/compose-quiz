@@ -60,8 +60,9 @@ fun MainScreen(
         )
 
         DestinationQuiz.FAVORITE_QUIZ -> FavoriteQuizScreen(
-          icon = destination.icon,
-          contentDescription = destination.contentDescription
+          chapterViewModel = chapterViewModel,
+          chapterQuizViewModel = chapterQuizViewModel,
+          onNavigation = onNavigation
         )
 
         DestinationQuiz.DAILY_QUIZ -> DialyQuizScreen(

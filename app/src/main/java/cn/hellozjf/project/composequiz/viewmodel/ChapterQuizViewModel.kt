@@ -25,6 +25,18 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     return repository.findQuizByChapter(chapter)
   }
 
+  fun findByFavoriteOrderByChapterIndex(): Flow<List<Quiz>> {
+    return repository.findByFavoriteOrderByChapterIndex()
+  }
+
+  fun findByFavoriteOrderByFavoriteTime(): Flow<List<Quiz>> {
+    return repository.findByFavoriteOrderByFavoriteTime()
+  }
+
+  fun findByFavoriteOrderByWrongAnswerCount(): Flow<List<Quiz>> {
+    return repository.findByFavoriteOrderByWrongAnswerCount()
+  }
+
   fun deleteQuizByChapter(chapter: Int) {
     repository.deleteQuizByChapter(chapter)
   }

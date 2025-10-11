@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import cn.hellozjf.project.composequiz.database.entity.Quiz
-import cn.hellozjf.project.composequiz.dto.QuizDTO
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -18,6 +17,15 @@ interface QuizDao {
 
   @Query("SELECT * FROM quiz WHERE chapter_index = :chapterIndex")
   fun findByChapter(chapterIndex: Int): Flow<List<Quiz>>
+
+  @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY chapter_index")
+  fun findByFavoriteOrderByChapterIndex(): Flow<List<Quiz>>
+
+  @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY favorite_time")
+  fun findByFavoriteOrderByFavoriteTime(): Flow<List<Quiz>>
+
+  @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY wrong_answer_count")
+  fun findByFavoriteOrderByWrongAnswerCount(): Flow<List<Quiz>>
 
   @Query("DELETE FROM quiz WHERE chapter_index = :chapterIndex")
   fun deleteByChapter(chapterIndex: Int)
