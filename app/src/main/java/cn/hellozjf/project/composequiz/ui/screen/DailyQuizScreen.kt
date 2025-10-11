@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DialyQuizScreen(
   modifier: Modifier = Modifier,
@@ -32,10 +31,16 @@ fun DialyQuizScreen(
   contentDescription: String
 ) {
 
-  var expanded by remember { mutableStateOf(false) }
+  var expand by remember { mutableStateOf(false) }
+  val onExpandChange: (Boolean) -> Unit = {
+    expand = it
+  }
   // 默认先升序
   val items = listOf("章节", "收藏时间", "答错次数")
-  var selectedText by remember { mutableStateOf(items[0]) }
+  var selectText by remember { mutableStateOf(items[0]) }
+  val onSelectTextChange: (String) -> Unit = {
+    selectText = it
+  }
 
   Column(
     modifier = modifier.fillMaxSize()
@@ -44,45 +49,63 @@ fun DialyQuizScreen(
       text = "每日测试",
       fontSize = 32.sp
     )
-    Row(
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Spacer(
-        modifier = Modifier.size(16.dp)
-      )
-      Text("排序方式")
-      Spacer(
-        modifier = Modifier.size(16.dp)
-      )
-      ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = it }
-      ) {
-        TextField(
-          value = selectedText,
-          onValueChange = {},
-          modifier = Modifier
-            .fillMaxWidth()
-            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
-          readOnly = true,
-          trailingIcon = {
-            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-          }
-        )
+    OrderMethodRow(
+      expand = expand,
+      onExpandChange = onExpandChange,
+      items = items,
+      selectText = selectText,
+      onSelectTextChange = onSelectTextChange
+    )
+  }
+}
 
-        ExposedDropdownMenu(
-          expanded = expanded,
-          onDismissRequest = { expanded = false }
-        ) {
-          items.forEach { item ->
-            DropdownMenuItem(
-              text = { Text(text = item) },
-              onClick = {
-                selectedText = item
-                expanded = false
-              }
-            )
-          }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun OrderMethodRow(
+  expand: Boolean,
+  onExpandChange: (Boolean) -> Unit,
+  items: List<String>,
+  selectText: String,
+  onSelectTextChange: (String) -> Unit,
+) {
+  Row(
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Spacer(
+      modifier = Modifier.size(16.dp)
+    )
+    Text("排序方式")
+    Spacer(
+      modifier = Modifier.size(16.dp)
+    )
+    ExposedDropdownMenuBox(
+      expanded = expand,
+      onExpandedChange = onExpandChange
+    ) {
+      TextField(
+        value = selectText,
+        onValueChange = {},
+        modifier = Modifier
+          .fillMaxWidth()
+          .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
+        readOnly = true,
+        trailingIcon = {
+          ExposedDropdownMenuDefaults.TrailingIcon(expanded = expand)
+        }
+      )
+
+      ExposedDropdownMenu(
+        expanded = expand,
+        onDismissRequest = { onExpandChange(false) }
+      ) {
+        items.forEach { item ->
+          DropdownMenuItem(
+            text = { Text(text = item) },
+            onClick = {
+              onSelectTextChange(item)
+              onExpandChange(false)
+            }
+          )
         }
       }
     }
