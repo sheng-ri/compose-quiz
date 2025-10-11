@@ -16,8 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -25,7 +25,6 @@ import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
-import kotlinx.coroutines.launch
 
 private val TAG = "ChapterScreen"
 
@@ -37,28 +36,19 @@ fun ChapterScreen(
   modifier: Modifier = Modifier
 ) {
 
-  // TODO 这里要从 chapterQuizViewModel 获取所有的章节，显示在列表中
-  // TODO 点击章节的时候，使用 chapterQuizViewModel 查询该章节下面所有的题目，进行问答测试
-
-  // TODO 这个改掉，用 flow
-  val searchResults by chapterViewModel.searchResults.observeAsState(listOf())
+  val chapterList by chapterViewModel.findAllOrderByIndex().collectAsState(listOf())
   val listState = rememberLazyListState()
-
-  LaunchedEffect(key1 = Unit) {
-    chapterViewModel.findAllOrderByIndex()
-  }
 
   LazyColumn(
     modifier = modifier.fillMaxSize(),
     state = listState
   ) {
-    searchResults.forEach { chapter ->
+    chapterList.forEach { chapter ->
       item {
         ChapterListItem(
           index = chapter.index,
           simpleTitle = chapter.simpleTitle,
           onItemClick = { index ->
-            // TODO 点击进入章节测试题
             Log.d(TAG, "index = $index")
             onNavigation(QuizScreenKey(index))
           }

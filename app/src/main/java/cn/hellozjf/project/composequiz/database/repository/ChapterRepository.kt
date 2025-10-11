@@ -4,9 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import cn.hellozjf.project.composequiz.database.dao.ChapterDao
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class ChapterRepository(private val chapterDao: ChapterDao) {
@@ -26,18 +25,11 @@ class ChapterRepository(private val chapterDao: ChapterDao) {
     }
   }
 
-  fun findAllOrderByIndex() {
-    coroutineScope.launch(Dispatchers.Main) {
-      searchResults.value = asyncFind().await()
-    }
+  fun findAllOrderByIndex(): Flow<List<Chapter>> {
+    return chapterDao.findAllOrderByIndex()
   }
 
   fun getCount(): Int {
     return chapterDao.getCount()
   }
-
-  private fun asyncFind(): Deferred<List<Chapter>?> =
-    coroutineScope.async(Dispatchers.IO) {
-      return@async chapterDao.findAllOrderByIndex()
-    }
 }

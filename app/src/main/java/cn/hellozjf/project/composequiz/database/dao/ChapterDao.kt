@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import cn.hellozjf.project.composequiz.database.entity.Chapter
+import kotlinx.coroutines.flow.Flow
 
 /**
  * 章节实体数据库操作
@@ -15,7 +16,7 @@ interface ChapterDao {
   fun insertChapter(chapter: Chapter)
 
   @Query("SELECT * FROM chapter order by `index`")
-  fun findAllOrderByIndex(): List<Chapter>
+  fun findAllOrderByIndex(): Flow<List<Chapter>>
 
   @Query("DELETE FROM chapter")
   fun deleteAll()
