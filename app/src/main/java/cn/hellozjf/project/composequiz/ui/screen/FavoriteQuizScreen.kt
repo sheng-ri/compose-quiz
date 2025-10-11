@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.util.OrderConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
@@ -53,31 +54,15 @@ fun FavoriteQuizScreen(
     expand = it
   }
   // 默认先升序
-  val items = listOf("章节", "收藏时间", "答错次数")
+  val items = listOf(
+    OrderConstant.CHAPTER,
+    OrderConstant.FAVORITE_TIME,
+    OrderConstant.WRONG_ANSWER_COUNT
+  )
   var selectText by remember { mutableStateOf(items[0]) }
   val onSelectTextChange: (String) -> Unit = {
     selectText = it
   }
-  // TODO collectAsState 不知道是不是要改成 collectAsStateWithLifecycle
-  val quizList by when (selectText) {
-    "章节" -> {
-      chapterQuizViewModel.findByFavoriteOrderByChapterIndex().collectAsState(listOf())
-    }
-
-    "收藏时间" -> {
-      chapterQuizViewModel.findByFavoriteOrderByFavoriteTime().collectAsState(listOf())
-    }
-
-    "答错次数" -> {
-      chapterQuizViewModel.findByFavoriteOrderByWrongAnswerCount().collectAsState(listOf())
-    }
-
-    else -> {
-      chapterQuizViewModel.findByFavoriteOrderByChapterIndex().collectAsState(listOf())
-    }
-  }
-  val listState = rememberLazyListState()
-  val questionExpandMap = remember { mutableStateMapOf<Int, Boolean>() }
 
   Column(
     modifier = modifier.fillMaxSize()
@@ -93,24 +78,61 @@ fun FavoriteQuizScreen(
       selectText = selectText,
       onSelectTextChange = onSelectTextChange
     )
-    LazyColumn(
-      modifier = Modifier.weight(1f),
-      state = listState
-    ) {
-      if (quizList.isNotEmpty()) {
-        quizList.forEachIndexed { index, quiz ->
-          item(key = quiz.id) {
-            val expand = questionExpandMap[quiz.id] ?: false
-            val onExpandChange: (Boolean) -> Unit = {
-              questionExpandMap[quiz.id] = it
-            }
-            Question(
-              expand = expand,
-              onExpandChange = onExpandChange,
-              quiz = quiz,
-              chapterViewModel = chapterViewModel
-            )
+    QuestionList(
+      selectText = selectText,
+      chapterViewModel = chapterViewModel,
+      chapterQuizViewModel = chapterQuizViewModel,
+      modifier = Modifier.weight(1f)
+    )
+  }
+}
+
+@Composable
+fun QuestionList(
+  selectText: String,
+  chapterViewModel: ChapterViewModel,
+  chapterQuizViewModel: ChapterQuizViewModel,
+  modifier: Modifier = Modifier
+) {
+  val listState = rememberLazyListState()
+  val questionExpandMap = remember { mutableStateMapOf<Int, Boolean>() }
+
+  // TODO collectAsState 不知道是不是要改成 collectAsStateWithLifecycle
+  val quizList by when (selectText) {
+    OrderConstant.CHAPTER -> {
+      chapterQuizViewModel.findByFavoriteOrderByChapterIndex().collectAsState(listOf())
+    }
+
+    OrderConstant.FAVORITE_TIME -> {
+      chapterQuizViewModel.findByFavoriteOrderByFavoriteTime().collectAsState(listOf())
+    }
+
+    OrderConstant.WRONG_ANSWER_COUNT -> {
+      chapterQuizViewModel.findByFavoriteOrderByWrongAnswerCount().collectAsState(listOf())
+    }
+
+    else -> {
+      chapterQuizViewModel.findByFavoriteOrderByChapterIndex().collectAsState(listOf())
+    }
+  }
+
+  LazyColumn(
+    modifier = modifier,
+    state = listState
+  ) {
+    if (quizList.isNotEmpty()) {
+      quizList.forEachIndexed { index, quiz ->
+        item(key = quiz.id) {
+          val expand = questionExpandMap[quiz.id] ?: false
+          val onExpandChange: (Boolean) -> Unit = {
+            questionExpandMap[quiz.id] = it
           }
+          Question(
+            expand = expand,
+            onExpandChange = onExpandChange,
+            quiz = quiz,
+            chapterViewModel = chapterViewModel
+          )
         }
       }
     }
@@ -202,7 +224,7 @@ fun FromChapter(
 @Composable
 fun WrongAnswerCount(wrongAnswerCount: Int) {
   Text(
-    text = "打错次数：$wrongAnswerCount"
+    text = "答错次数：$wrongAnswerCount"
   )
 }
 
