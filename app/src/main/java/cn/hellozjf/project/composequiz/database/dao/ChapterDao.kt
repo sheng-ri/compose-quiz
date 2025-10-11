@@ -18,6 +18,9 @@ interface ChapterDao {
   @Query("SELECT * FROM chapter order by `index`")
   fun findAllOrderByIndex(): Flow<List<Chapter>>
 
+  @Query("SELECT * FROM chapter where `index` = :index")
+  fun findByIndex(index: Int): Flow<List<Chapter>>
+
   @Query("DELETE FROM chapter")
   fun deleteAll()
 

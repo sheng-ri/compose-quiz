@@ -25,6 +25,10 @@ class ChapterViewModel(application: Application) : ViewModel() {
     return repository.findAllOrderByIndex()
   }
 
+  fun findByIndex(index: Int): Flow<List<Chapter>> {
+    return repository.findByIndex(index)
+  }
+
   fun getCount(): Int {
     return repository.getCount()
   }

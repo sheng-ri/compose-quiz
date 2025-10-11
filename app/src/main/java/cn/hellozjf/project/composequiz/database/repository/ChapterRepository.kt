@@ -29,6 +29,10 @@ class ChapterRepository(private val chapterDao: ChapterDao) {
     return chapterDao.findAllOrderByIndex()
   }
 
+  fun findByIndex(index: Int): Flow<List<Chapter>> {
+    return chapterDao.findByIndex(index)
+  }
+
   fun getCount(): Int {
     return chapterDao.getCount()
   }

@@ -107,7 +107,8 @@ fun FavoriteQuizScreen(
             Question(
               expand = expand,
               onExpandChange = onExpandChange,
-              quiz = quiz
+              quiz = quiz,
+              chapterViewModel = chapterViewModel
             )
           }
         }
@@ -121,6 +122,7 @@ fun Question(
   expand: Boolean,
   onExpandChange: (Boolean) -> Unit,
   quiz: Quiz,
+  chapterViewModel: ChapterViewModel,
   modifier: Modifier = Modifier
 ) {
   Card(
@@ -173,6 +175,10 @@ fun Question(
             correctOption = quiz.correctOption
           )
           Explanation(quiz.explanation)
+          FromChapter(
+            chapterIndex = quiz.chapterIndex,
+            chapterViewModel = chapterViewModel
+          )
           WrongAnswerCount(quiz.wrongAnswerCount)
         }
       }
@@ -181,10 +187,16 @@ fun Question(
 }
 
 @Composable
-fun FromChapterIndex(chapterIndex: Int) {
-  Text(
-    text = "来自：第 $chapterIndex 章"
-  )
+fun FromChapter(
+  chapterIndex: Int,
+  chapterViewModel: ChapterViewModel
+) {
+  val chapterList by chapterViewModel.findByIndex(chapterIndex).collectAsState(listOf())
+  if (chapterList.isNotEmpty()) {
+    Text(
+      text = "来自：第${chapterIndex}章（${chapterList[0].simpleTitle}）"
+    )
+  }
 }
 
 @Composable

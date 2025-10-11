@@ -2,12 +2,15 @@ package cn.hellozjf.project.composequiz.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
  * 章节实体
  */
-@Entity(tableName = "chapter")
+@Entity(
+  tableName = "chapter"
+)
 class Chapter {
 
   @PrimaryKey(autoGenerate = true)
