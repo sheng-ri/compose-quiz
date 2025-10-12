@@ -6,6 +6,9 @@ import androidx.room.Insert
 import androidx.room.Query
 import cn.hellozjf.project.composequiz.database.entity.Product
 
+/**
+ * TODO 增删改都要改成 suspend fun
+ */
 @Dao
 interface ProductDao {
 

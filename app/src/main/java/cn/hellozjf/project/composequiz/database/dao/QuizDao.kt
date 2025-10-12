@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * 问答实体数据库操作
+ * TODO 增删改都要改成 suspend fun
  */
 @Dao
 interface QuizDao {
