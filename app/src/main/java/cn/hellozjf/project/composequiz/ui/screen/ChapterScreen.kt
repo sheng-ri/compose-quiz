@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,9 +24,15 @@ import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 private val TAG = "ChapterScreen"
 
+/**
+ * 这是所有章节标题的列表
+ */
 @Composable
 fun ChapterScreen(
   chapterViewModel: ChapterViewModel,
@@ -35,6 +42,7 @@ fun ChapterScreen(
 ) {
 
   val chapterList by chapterViewModel.findAllOrderByIndex().collectAsState(listOf())
+  val coroutineScope = rememberCoroutineScope()
   val listState = rememberLazyListState()
 
   LazyColumn(
@@ -43,18 +51,22 @@ fun ChapterScreen(
   ) {
     chapterList.forEach { chapter ->
       item(key = chapter.id) {
-        val quizList by chapterQuizViewModel.findQuizByChapter(chapter.index)
-          .collectAsState(listOf())
         ChapterListItem(
           index = chapter.index,
           simpleTitle = chapter.simpleTitle,
           onItemClick = { index ->
-            onNavigation(
-              QuizScreenKey(
-                title = chapter.simpleTitle,
-                quizList = quizList
+            coroutineScope.launch {
+              // 在 IO 线程执行数据库查询
+              val quizList = withContext(Dispatchers.IO) {
+                chapterQuizViewModel.findQuizByChapter(chapter.index)
+              }
+              onNavigation(
+                QuizScreenKey(
+                  title = chapter.simpleTitle,
+                  quizList = quizList
+                )
               )
-            )
+            }
           }
         )
       }

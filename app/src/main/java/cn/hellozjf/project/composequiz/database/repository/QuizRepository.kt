@@ -1,9 +1,7 @@
 package cn.hellozjf.project.composequiz.database.repository
 
-import androidx.room.Query
 import cn.hellozjf.project.composequiz.database.dao.QuizDao
 import cn.hellozjf.project.composequiz.database.entity.Quiz
-import cn.hellozjf.project.composequiz.dto.QuizDTO
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -26,8 +24,16 @@ class QuizRepository(private val quizDao: QuizDao) {
     }
   }
 
-  fun findQuizByChapter(chapter: Int): Flow<List<Quiz>> {
+  fun findQuizFlowByChapter(chapter: Int): Flow<List<Quiz>> {
+    return quizDao.findFlowByChapter(chapter)
+  }
+
+  suspend fun findQuizByChapter(chapter: Int): List<Quiz> {
     return quizDao.findByChapter(chapter)
+  }
+
+  suspend fun findQuizByFavorite(): List<Quiz> {
+    return quizDao.findByFavorite()
   }
 
   fun findByFavoriteOrderByChapterIndex(): Flow<List<Quiz>> {

@@ -40,7 +40,7 @@ fun ChapterQuizScreen(
 ) {
 
   // 这是所有的题目
-  val quizList by chapterQuizViewModel.findQuizByChapter(chapterIndex).collectAsState(listOf())
+  val quizList by chapterQuizViewModel.findQuizFlowByChapter(chapterIndex).collectAsState(listOf())
   // 这是题目的顺序
   val quizOrderList = remember(quizList.size) {
     List(quizList.size) { it }.shuffled()

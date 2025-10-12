@@ -33,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,12 +48,14 @@ import cn.hellozjf.project.composequiz.util.OrderConstant
 import cn.hellozjf.project.composequiz.util.TestCountConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * TODO
  * 在 Button 的 onClick 里调用 scope.launch 方法，来执行 viewModel 的 suspend 数据库查询方法，获取题目信息，然后 onNavigation 跳转是传递题目信息
- * 这个操作在 FavoriteQuizScreen 和 ChapterScreen 都要这样处理！！！！
- *
+ * 这个操作在 FavoriteQuizScreen 和 都要这样处理！！！！
  */
 @Composable
 fun FavoriteQuizScreen(
@@ -113,6 +116,7 @@ fun FavoriteQuizScreen(
       selectText = orderMethodSelectText,
       chapterViewModel = chapterViewModel,
       chapterQuizViewModel = chapterQuizViewModel,
+      onNavigation = onNavigation,
       modifier = Modifier.weight(1f)
     )
     TestCountRow(
@@ -120,7 +124,9 @@ fun FavoriteQuizScreen(
       onExpandChange = onTestCountExpandChange,
       items = testCountItems,
       selectText = testCountSelectText,
-      onSelectTextChange = onTestCountSelectTextChange
+      onSelectTextChange = onTestCountSelectTextChange,
+      onNavigation = onNavigation,
+      chapterQuizViewModel = chapterQuizViewModel
     )
   }
 }
@@ -170,7 +176,8 @@ fun QuestionList(
             expand = expand,
             onExpandChange = onExpandChange,
             quiz = quiz,
-            chapterViewModel = chapterViewModel
+            chapterViewModel = chapterViewModel,
+            onNavigation = onNavigation
           )
         }
       }
@@ -327,14 +334,17 @@ fun TestCountRow(
   expand: Boolean,
   onExpandChange: (Boolean) -> Unit,
   items: List<String>,
-  selectText: String,
+  selectText: String,       // 这个是下拉框选中的文本
   onSelectTextChange: (String) -> Unit,
   onNavigation: (NavKey) -> Unit,
+  chapterQuizViewModel: ChapterQuizViewModel,
 ) {
 
+  // 这个是下拉框选中自定义时的搜索数量
   var customTestCount by remember { mutableStateOf(selectText) }
   val minValue = 0
   val maxValue = 999
+  val coroutineScope = rememberCoroutineScope()
 
   Row(
     verticalAlignment = Alignment.CenterVertically
@@ -398,13 +408,25 @@ fun TestCountRow(
     Spacer(modifier = Modifier.weight(1f))
     Button(
       onClick = {
-        // 触发数据库查询
-        onNavigation(
-          QuizScreenKey(
-            title = "收藏测试",
-            quizList = quiz
+        coroutineScope.launch {
+          val quizList = withContext(Dispatchers.IO) {
+            val testCount = if (selectText == TestCountConstant.CUSTOM) {
+              customTestCount
+            } else {
+              selectText
+            }
+            val favoriteQuizList = chapterQuizViewModel.findQuizByFavorite()
+            val quizList = favoriteQuizList.shuffled().take(testCount.toInt())
+            quizList
+          }
+          // 触发数据库查询
+          onNavigation(
+            QuizScreenKey(
+              title = "收藏测试",
+              quizList = quizList
+            )
           )
-        )
+        }
       }
     ) {
       Text("进行测试")

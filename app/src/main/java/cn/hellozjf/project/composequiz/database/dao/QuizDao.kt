@@ -16,7 +16,13 @@ interface QuizDao {
   fun insertQuiz(quiz: Quiz)
 
   @Query("SELECT * FROM quiz WHERE chapter_index = :chapterIndex")
-  fun findByChapter(chapterIndex: Int): Flow<List<Quiz>>
+  fun findFlowByChapter(chapterIndex: Int): Flow<List<Quiz>>
+
+  @Query("SELECT * FROM quiz WHERE chapter_index = :chapterIndex")
+  suspend fun findByChapter(chapterIndex: Int): List<Quiz>
+
+  @Query("SELECT * FROM quiz WHERE favorite = 1")
+  suspend fun findByFavorite(): List<Quiz>
 
   @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY chapter_index")
   fun findByFavoriteOrderByChapterIndex(): Flow<List<Quiz>>

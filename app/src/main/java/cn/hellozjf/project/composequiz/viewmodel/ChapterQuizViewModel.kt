@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import cn.hellozjf.project.composequiz.database.QuizRoomDatabase
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.database.repository.QuizRepository
-import cn.hellozjf.project.composequiz.dto.QuizDTO
 import kotlinx.coroutines.flow.Flow
 
 class ChapterQuizViewModel(application: Application) : ViewModel() {
@@ -21,8 +20,16 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     repository.insertQuiz(quiz)
   }
 
-  fun findQuizByChapter(chapter: Int): Flow<List<Quiz>> {
+  fun findQuizFlowByChapter(chapter: Int): Flow<List<Quiz>> {
+    return repository.findQuizFlowByChapter(chapter)
+  }
+
+  suspend fun findQuizByChapter(chapter: Int): List<Quiz> {
     return repository.findQuizByChapter(chapter)
+  }
+
+  suspend fun findQuizByFavorite(): List<Quiz> {
+    return repository.findQuizByFavorite()
   }
 
   fun findByFavoriteOrderByChapterIndex(): Flow<List<Quiz>> {

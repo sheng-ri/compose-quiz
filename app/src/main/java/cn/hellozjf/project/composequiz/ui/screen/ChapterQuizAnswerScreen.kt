@@ -20,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -53,7 +52,7 @@ fun ChapterQuizAnswerScreen(
 
   // 这是所有的题目
   // TODO collectAsState 不知道是不是要改成 collectAsStateWithLifecycle
-  val quizList by chapterQuizViewModel.findQuizByChapter(chapterIndex).collectAsState(listOf())
+  val quizList by chapterQuizViewModel.findQuizFlowByChapter(chapterIndex).collectAsState(listOf())
   val quizDTOList = remember(quizList) {
     quizList.map {
       QuizDTO(
