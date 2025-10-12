@@ -11,7 +11,7 @@ enum class DestinationQuiz(
   val contentDescription: String,
   val icon: ImageVector
 ) {
-  CHAPTER_QUIZ("章节测试", "Chapter Quiz Screen", Icons.Default.Book),
+  CHAPTER_LIST("章节测试", "Chapter Quiz Screen", Icons.Default.Book),
   DAILY_QUIZ("每日测试", "Daily Quiz Screen", Icons.Default.Today),
   FAVORITE_QUIZ("收藏测试", "Favorite Quiz Screen", Icons.Default.Favorite),
 }

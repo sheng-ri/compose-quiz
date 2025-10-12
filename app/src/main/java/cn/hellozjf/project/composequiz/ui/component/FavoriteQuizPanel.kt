@@ -20,7 +20,7 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
  * 这是收藏的问答列表、排序方式、测试 组件
  */
 @Composable
-fun FavoriteQuizCompose(
+fun FavoriteQuizPanel(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   onNavigation: (NavKey) -> Unit,

@@ -24,7 +24,7 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     return repository.findQuizFlowByChapter(chapter)
   }
 
-  suspend fun findQuizByChapter(chapter: Int): List<Quiz> {
+  suspend fun findQuizByChapterIndex(chapter: Int): List<Quiz> {
     return repository.findQuizByChapter(chapter)
   }
 

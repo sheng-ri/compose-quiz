@@ -4,11 +4,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
@@ -23,39 +22,22 @@ private val TAG = "ChapterList"
  */
 @Composable
 fun ChapterList(
-  chapterViewModel: ChapterViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
-  onNavigation: (NavKey) -> Unit,
+  chapterList: List<Chapter>,
+  onItemClick: (Chapter) -> Unit,
   modifier: Modifier = Modifier
 ) {
 
-  val chapterList by chapterViewModel.findAllOrderByIndex().collectAsState(listOf())
-  val coroutineScope = rememberCoroutineScope()
-  val listState = rememberLazyListState()
+  val lazyListState = rememberLazyListState()
 
   LazyColumn(
     modifier = modifier.fillMaxSize(),
-    state = listState
+    state = lazyListState
   ) {
     chapterList.forEach { chapter ->
       item(key = chapter.id) {
         ChapterListItem(
-          index = chapter.index,
-          simpleTitle = chapter.simpleTitle,
-          onItemClick = { index ->
-            coroutineScope.launch {
-              // 在 IO 线程执行数据库查询
-              val quizList = withContext(Dispatchers.IO) {
-                chapterQuizViewModel.findQuizByChapter(chapter.index)
-              }
-              onNavigation(
-                QuizScreenKey(
-                  title = chapter.simpleTitle,
-                  quizList = quizList
-                )
-              )
-            }
-          }
+          chapter = chapter,
+          onItemClick = onItemClick
         )
       }
     }

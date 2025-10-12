@@ -14,15 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cn.hellozjf.project.composequiz.database.entity.Chapter
 
 /**
  * 这是所有章节列表项目 组件
  */
 @Composable
 fun ChapterListItem(
-  index: Int,
-  simpleTitle: String,
-  onItemClick: (Int) -> Unit,
+  chapter: Chapter,
+  onItemClick: (Chapter) -> Unit,
   modifier: Modifier = Modifier
 ) {
   Card(
@@ -33,7 +33,7 @@ fun ChapterListItem(
       .padding(3.dp)
       .fillMaxWidth()
       .clickable {
-        onItemClick(index)
+        onItemClick(chapter)
       },
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
@@ -41,12 +41,12 @@ fun ChapterListItem(
       verticalAlignment = Alignment.CenterVertically
     ) {
       Text(
-        text = "第 $index 章",
+        text = "第 ${chapter.index} 章",
         modifier = Modifier.width(75.dp)
       )
       Spacer(modifier = Modifier.width(8.dp))
       Text(
-        text = simpleTitle,
+        text = chapter.simpleTitle,
         style = MaterialTheme.typography.headlineSmall,
         modifier = Modifier.padding(8.dp)
       )
