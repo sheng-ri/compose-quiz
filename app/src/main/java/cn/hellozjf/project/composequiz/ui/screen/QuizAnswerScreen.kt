@@ -20,13 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
@@ -42,7 +39,7 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 @Composable
 fun QuizAnswerScreen(
   title: String,
-  quizList: List<Quiz>,
+  oldQuizList: List<Quiz>,
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   chooseOptionMap: Map<Int, String>,
@@ -51,6 +48,12 @@ fun QuizAnswerScreen(
   onNavigation: (NavKey) -> Unit,
   onClearBackStack: () -> Unit
 ) {
+
+  val idList = remember(oldQuizList) {
+    oldQuizList.map { it.id }
+  }
+
+  val quizList by chapterQuizViewModel.findByIdList(idList).collectAsState(listOf())
 
   // 这是所有的题目
   val quizDTOList = remember(quizList) {
@@ -108,7 +111,6 @@ fun QuizAnswerScreen(
               val selectOption = chooseOptionMap[quiz.id] ?: ""
               QuizAnswerItem(
                 chapterQuizViewModel = chapterQuizViewModel,
-                id = quiz.id,
                 index = index,
                 quiz = quiz,
                 selectOption = selectOption,
@@ -131,7 +133,6 @@ fun QuizAnswerScreen(
 @Composable
 fun QuizAnswerItem(
   chapterQuizViewModel: ChapterQuizViewModel,
-  id: Int,
   index: Int,
   quiz: Quiz,
   selectOption: String,
@@ -148,26 +149,13 @@ fun QuizAnswerItem(
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
     Column {
-      Row {
-        Text(
-          text = "${index + 1}. ${quiz.question}",
-          modifier = Modifier.weight(1f)
-        )
-        Image(
-          painter = if (quiz.favorite) {
-            painterResource(R.drawable.baseline_favorite_24)
-          } else {
-            painterResource(R.drawable.baseline_favorite_border_24)
-          },
-          contentDescription = if (quiz.favorite) "已收藏" else "未收藏", // 无障碍功能必需
-          modifier = Modifier
-            .size(32.dp)
-            .clickable {
-              chapterQuizViewModel.setFavorite(id, !quiz.favorite, System.currentTimeMillis())
-            }
-        )
-      }
-      val optionList = listOf(quiz.correctOption, quiz.wrongOption1, quiz.wrongOption2, quiz.wrongOption3)
+      QuestionAndFavoriteRow(
+        index = index,
+        quiz = quiz,
+        chapterQuizViewModel = chapterQuizViewModel
+      )
+      val optionList =
+        listOf(quiz.correctOption, quiz.wrongOption1, quiz.wrongOption2, quiz.wrongOption3)
       for (order in optionOrder) {
         QuizOption(
           option = optionList[order],
@@ -177,5 +165,32 @@ fun QuizAnswerItem(
       }
       Explanation(quiz.explanation)
     }
+  }
+}
+
+@Composable
+fun QuestionAndFavoriteRow(
+  index: Int,
+  quiz: Quiz,
+  chapterQuizViewModel: ChapterQuizViewModel
+) {
+  Row {
+    Text(
+      text = "${index + 1}. ${quiz.question}",
+      modifier = Modifier.weight(1f)
+    )
+    Image(
+      painter = if (quiz.favorite) {
+        painterResource(R.drawable.baseline_favorite_24)
+      } else {
+        painterResource(R.drawable.baseline_favorite_border_24)
+      },
+      contentDescription = if (quiz.favorite) "已收藏" else "未收藏", // 无障碍功能必需
+      modifier = Modifier
+        .size(32.dp)
+        .clickable {
+          chapterQuizViewModel.setFavorite(quiz.id, !quiz.favorite, System.currentTimeMillis())
+        }
+    )
   }
 }

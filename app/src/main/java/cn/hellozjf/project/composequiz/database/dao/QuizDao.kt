@@ -24,6 +24,9 @@ interface QuizDao {
   @Query("SELECT * FROM quiz WHERE favorite = 1")
   suspend fun findByFavorite(): List<Quiz>
 
+  @Query("SELECT * FROM quiz WHERE id IN (:idList)")
+  fun findByIdListFlow(idList: List<Int>): Flow<List<Quiz>>
+
   @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY chapter_index")
   fun findByFavoriteOrderByChapterIndex(): Flow<List<Quiz>>
 

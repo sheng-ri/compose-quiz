@@ -36,6 +36,10 @@ class QuizRepository(private val quizDao: QuizDao) {
     return quizDao.findByFavorite()
   }
 
+  fun findByIdListFlow(idList: List<Int>): Flow<List<Quiz>> {
+    return quizDao.findByIdListFlow(idList)
+  }
+
   fun findByFavoriteOrderByChapterIndex(): Flow<List<Quiz>> {
     return quizDao.findByFavoriteOrderByChapterIndex()
   }
