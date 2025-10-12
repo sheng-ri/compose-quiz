@@ -14,9 +14,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.nav.DestinationQuiz
+import cn.hellozjf.project.composequiz.ui.component.ChapterList
+import cn.hellozjf.project.composequiz.ui.component.DailyQuiz
+import cn.hellozjf.project.composequiz.ui.component.FavoriteQuizCompose
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
+/**
+ * NavDisplayScreen 默认显示的 Screen
+ * 它下面有 ChapterScreen、FavoriteQuizScreen、DailyQuizScreen 这三个 Screen
+ * 通过 NavigationSuiteScaffold 最底部的 Icon 进行切换
+ * TODO 找一下为什么 NavigationSuiteScaffold 无法通过滑动进行切换
+ */
 @Composable
 fun MainScreen(
   chapterViewModel: ChapterViewModel,
@@ -49,19 +58,19 @@ fun MainScreen(
         .fillMaxSize()
     ) {
       when (destination) {
-        DestinationQuiz.CHAPTER_QUIZ -> ChapterScreen(
+        DestinationQuiz.CHAPTER_QUIZ -> ChapterList(
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           onNavigation = onNavigation
         )
 
-        DestinationQuiz.FAVORITE_QUIZ -> FavoriteQuizScreen(
+        DestinationQuiz.FAVORITE_QUIZ -> FavoriteQuizCompose(
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           onNavigation = onNavigation
         )
 
-        DestinationQuiz.DAILY_QUIZ -> DialyQuizScreen(
+        DestinationQuiz.DAILY_QUIZ -> DailyQuiz(
           icon = destination.icon,
           contentDescription = destination.contentDescription
         )

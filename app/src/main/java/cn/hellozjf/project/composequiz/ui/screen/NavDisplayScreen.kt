@@ -11,6 +11,9 @@ import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
+/**
+ * 这个是最顶层的 Screen，它会根据 NavKey 显示具体的 Screen
+ */
 @Composable
 fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
@@ -56,20 +59,19 @@ fun NavDisplayScreen(
         )
       }
       entry<QuizAnswerScreenKey> { key: QuizAnswerScreenKey ->
-        // val chapterIndex = key.chapterIndex
         val title = key.title
         val quizList = key.quizList
         val chooseOptionMap = key.chooseOptionMap
         val quizOrderList = key.quizOrderList
         val optionOrderList = key.optionOrderList
-        QuizAnswerScreen(
+        AnswerScreen(
           title = title,
           oldQuizList = quizList,
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           chooseOptionMap = chooseOptionMap,
           quizOrderList = quizOrderList,
-          optionOrderList= optionOrderList,
+          optionOrderList = optionOrderList,
           onNavigation = onNavigation,
           onClearBackStack = onClearBackStack
         )

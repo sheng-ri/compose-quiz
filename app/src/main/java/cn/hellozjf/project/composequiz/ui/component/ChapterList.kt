@@ -1,25 +1,13 @@
-package cn.hellozjf.project.composequiz.ui.screen
+package cn.hellozjf.project.composequiz.ui.component
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
@@ -28,13 +16,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private val TAG = "ChapterScreen"
+private val TAG = "ChapterList"
 
 /**
- * 这是所有章节标题的列表
+ * 这是所有章节列表 组件
  */
 @Composable
-fun ChapterScreen(
+fun ChapterList(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   onNavigation: (NavKey) -> Unit,
@@ -70,42 +58,6 @@ fun ChapterScreen(
           }
         )
       }
-    }
-  }
-}
-
-@Composable
-fun ChapterListItem(
-  index: Int,
-  simpleTitle: String,
-  onItemClick: (Int) -> Unit,
-  modifier: Modifier = Modifier
-) {
-  Card(
-    colors = CardDefaults.cardColors(
-      containerColor = MaterialTheme.colorScheme.onPrimary
-    ),
-    modifier = modifier
-      .padding(3.dp)
-      .fillMaxWidth()
-      .clickable {
-        onItemClick(index)
-      },
-    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-  ) {
-    Row(
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Text(
-        text = "第 $index 章",
-        modifier = Modifier.width(75.dp)
-      )
-      Spacer(modifier = Modifier.width(8.dp))
-      Text(
-        text = simpleTitle,
-        style = MaterialTheme.typography.headlineSmall,
-        modifier = Modifier.padding(8.dp)
-      )
     }
   }
 }

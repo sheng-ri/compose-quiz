@@ -1,19 +1,11 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,20 +16,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
 /**
- * 章节题目答案
+ * 答案列表屏幕
+ * TODO 这里需要优化一下，oldQuizList 改成 idList
  */
 @Composable
-fun QuizAnswerScreen(
+fun AnswerScreen(
   title: String,
   oldQuizList: List<Quiz>,
   chapterViewModel: ChapterViewModel,
@@ -127,70 +118,5 @@ fun QuizAnswerScreen(
         Text("返回")
       }
     }
-  }
-}
-
-@Composable
-fun QuizAnswerItem(
-  chapterQuizViewModel: ChapterQuizViewModel,
-  index: Int,
-  quiz: Quiz,
-  selectOption: String,
-  optionOrder: List<Int>,
-  modifier: Modifier = Modifier
-) {
-  Card(
-    colors = CardDefaults.cardColors(
-      containerColor = MaterialTheme.colorScheme.onPrimary
-    ),
-    modifier = modifier
-      .padding(3.dp)
-      .fillMaxWidth(),
-    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-  ) {
-    Column {
-      QuestionAndFavoriteRow(
-        index = index,
-        quiz = quiz,
-        chapterQuizViewModel = chapterQuizViewModel
-      )
-      val optionList =
-        listOf(quiz.correctOption, quiz.wrongOption1, quiz.wrongOption2, quiz.wrongOption3)
-      for (order in optionOrder) {
-        QuizOption(
-          option = optionList[order],
-          selectOption = selectOption,
-          correctOption = quiz.correctOption
-        )
-      }
-      Explanation(quiz.explanation)
-    }
-  }
-}
-
-@Composable
-fun QuestionAndFavoriteRow(
-  index: Int,
-  quiz: Quiz,
-  chapterQuizViewModel: ChapterQuizViewModel
-) {
-  Row {
-    Text(
-      text = "${index + 1}. ${quiz.question}",
-      modifier = Modifier.weight(1f)
-    )
-    Image(
-      painter = if (quiz.favorite) {
-        painterResource(R.drawable.baseline_favorite_24)
-      } else {
-        painterResource(R.drawable.baseline_favorite_border_24)
-      },
-      contentDescription = if (quiz.favorite) "已收藏" else "未收藏", // 无障碍功能必需
-      modifier = Modifier
-        .size(32.dp)
-        .clickable {
-          chapterQuizViewModel.setFavorite(quiz.id, !quiz.favorite, System.currentTimeMillis())
-        }
-    )
   }
 }
