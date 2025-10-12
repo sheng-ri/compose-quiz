@@ -16,11 +16,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.nav.DestinationQuiz
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.ui.component.ChapterList
 import cn.hellozjf.project.composequiz.ui.component.DailyQuiz
 import cn.hellozjf.project.composequiz.ui.component.FavoriteQuizPanel
+import cn.hellozjf.project.composequiz.util.OrderConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import kotlinx.coroutines.Dispatchers
@@ -91,8 +93,11 @@ fun MainScreen(
 
         DestinationQuiz.FAVORITE_QUIZ -> {
           FavoriteQuizPanel(
-            chapterViewModel = chapterViewModel,
-            chapterQuizViewModel = chapterQuizViewModel,
+            getChapterByIndex = chapterViewModel::findByIndex,
+            findByFavoriteOrderByChapterIndex = chapterQuizViewModel::findByFavoriteOrderByChapterIndex,
+            findByFavoriteOrderByFavoriteTime = chapterQuizViewModel::findByFavoriteOrderByFavoriteTime,
+            findByFavoriteOrderByWrongAnswerCount = chapterQuizViewModel::findByFavoriteOrderByWrongAnswerCount,
+            findQuizByFavorite = chapterQuizViewModel::findQuizByFavorite,
             onNavigation = onNavigation
           )
         }

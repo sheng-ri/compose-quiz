@@ -36,15 +36,27 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     return repository.findByIdListFlow(idList)
   }
 
-  fun findByFavoriteOrderByChapterIndex(): Flow<List<Quiz>> {
+  fun findByFavoriteOrderByChapterIndexFlow(): Flow<List<Quiz>> {
+    return repository.findByFavoriteOrderByChapterIndexFlow()
+  }
+
+  fun findByFavoriteOrderByFavoriteTimeFlow(): Flow<List<Quiz>> {
+    return repository.findByFavoriteOrderByFavoriteTimeFlow()
+  }
+
+  fun findByFavoriteOrderByWrongAnswerCountFlow(): Flow<List<Quiz>> {
+    return repository.findByFavoriteOrderByWrongAnswerCountFlow()
+  }
+
+  suspend fun findByFavoriteOrderByChapterIndex(): List<Quiz> {
     return repository.findByFavoriteOrderByChapterIndex()
   }
 
-  fun findByFavoriteOrderByFavoriteTime(): Flow<List<Quiz>> {
+  suspend fun findByFavoriteOrderByFavoriteTime(): List<Quiz> {
     return repository.findByFavoriteOrderByFavoriteTime()
   }
 
-  fun findByFavoriteOrderByWrongAnswerCount(): Flow<List<Quiz>> {
+  suspend fun findByFavoriteOrderByWrongAnswerCount(): List<Quiz> {
     return repository.findByFavoriteOrderByWrongAnswerCount()
   }
 

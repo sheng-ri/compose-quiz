@@ -29,7 +29,11 @@ class ChapterRepository(private val chapterDao: ChapterDao) {
     return chapterDao.findAllOrderByIndex()
   }
 
-  fun findByIndex(index: Int): Flow<List<Chapter>> {
+  fun findByIndexFlow(index: Int): Flow<List<Chapter>> {
+    return chapterDao.findByIndexFlow(index)
+  }
+
+  suspend fun findByIndex(index: Int): Chapter? {
     return chapterDao.findByIndex(index)
   }
 

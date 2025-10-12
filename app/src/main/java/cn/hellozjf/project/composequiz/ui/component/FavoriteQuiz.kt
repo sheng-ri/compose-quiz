@@ -7,11 +7,16 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.Quiz
-import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
 /**
  * 这是收藏的问答
@@ -21,10 +26,17 @@ fun FavoriteQuiz(
   expand: Boolean,
   onExpandChange: (Boolean) -> Unit,
   quiz: Quiz,
-  chapterViewModel: ChapterViewModel,
+  getChapterByIndex: suspend (Int) -> Chapter?,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
+
+  var chapter: Chapter? by remember { mutableStateOf(null) }
+
+  LaunchedEffect(key1 = quiz) {
+    chapter = getChapterByIndex(quiz.id)
+  }
+
   Card(
     colors = CardDefaults.cardColors(
       containerColor = MaterialTheme.colorScheme.onPrimary
@@ -66,10 +78,11 @@ fun FavoriteQuiz(
             correctOption = quiz.correctOption
           )
           Explanation(quiz.explanation)
-          QuizFromChapter(
-            chapterIndex = quiz.chapterIndex,
-            chapterViewModel = chapterViewModel
-          )
+          chapter?.let {
+            QuizFromChapter(
+              chapter = it
+            )
+          }
           WrongAnswerCount(quiz.wrongAnswerCount)
         }
       }

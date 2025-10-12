@@ -11,18 +11,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.util.OrderConstant
 import cn.hellozjf.project.composequiz.util.TestCountConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 
 /**
  * 这是收藏的问答列表、排序方式、测试 组件
  */
 @Composable
 fun FavoriteQuizPanel(
-  chapterViewModel: ChapterViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  getChapterByIndex: suspend (Int) -> Chapter?,
+  findByFavoriteOrderByChapterIndex: suspend () -> List<Quiz>,
+  findByFavoriteOrderByFavoriteTime: suspend () -> List<Quiz>,
+  findByFavoriteOrderByWrongAnswerCount: suspend () -> List<Quiz>,
+  findQuizByFavorite: suspend () -> List<Quiz>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -76,8 +79,10 @@ fun FavoriteQuizPanel(
     )
     FavoriteQuizList(
       selectText = orderMethodSelectText,
-      chapterViewModel = chapterViewModel,
-      chapterQuizViewModel = chapterQuizViewModel,
+      getChapterByIndex = getChapterByIndex,
+      findByFavoriteOrderByChapterIndex = findByFavoriteOrderByChapterIndex,
+      findByFavoriteOrderByFavoriteTime = findByFavoriteOrderByFavoriteTime,
+      findByFavoriteOrderByWrongAnswerCount = findByFavoriteOrderByWrongAnswerCount,
       onNavigation = onNavigation,
       modifier = Modifier.weight(1f)
     )
@@ -87,8 +92,8 @@ fun FavoriteQuizPanel(
       items = testCountItems,
       selectText = testCountSelectText,
       onSelectTextChange = onTestCountSelectTextChange,
+      findQuizByFavorite = findQuizByFavorite,
       onNavigation = onNavigation,
-      chapterQuizViewModel = chapterQuizViewModel
     )
   }
 }

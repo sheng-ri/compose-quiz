@@ -1,7 +1,6 @@
 package cn.hellozjf.project.composequiz.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cn.hellozjf.project.composequiz.database.QuizRoomDatabase
 import cn.hellozjf.project.composequiz.database.entity.Chapter
@@ -25,7 +24,11 @@ class ChapterViewModel(application: Application) : ViewModel() {
     return repository.findAllOrderByIndex()
   }
 
-  fun findByIndex(index: Int): Flow<List<Chapter>> {
+  fun findByIndexFlow(index: Int): Flow<List<Chapter>> {
+    return repository.findByIndexFlow(index)
+  }
+
+  suspend fun findByIndex(index: Int): Chapter? {
     return repository.findByIndex(index)
   }
 

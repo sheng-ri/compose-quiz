@@ -24,9 +24,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.util.TestCountConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,8 +42,8 @@ fun FavoriteTestCount(
   items: List<String>,
   selectText: String,       // 这个是下拉框选中的文本
   onSelectTextChange: (String) -> Unit,
-  onNavigation: (NavKey) -> Unit,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  findQuizByFavorite: suspend () -> List<Quiz>,
+  onNavigation: (NavKey) -> Unit
 ) {
 
   // 这个是下拉框选中自定义时的搜索数量
@@ -125,7 +125,7 @@ fun FavoriteTestCount(
             } else {
               selectText
             }
-            val favoriteQuizList = chapterQuizViewModel.findQuizByFavorite()
+            val favoriteQuizList = findQuizByFavorite()
             val quizList = favoriteQuizList.shuffled().take(testCount.toInt())
             quizList
           }

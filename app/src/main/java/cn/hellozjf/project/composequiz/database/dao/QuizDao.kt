@@ -28,13 +28,22 @@ interface QuizDao {
   fun findByIdListFlow(idList: List<Int>): Flow<List<Quiz>>
 
   @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY chapter_index")
-  fun findByFavoriteOrderByChapterIndex(): Flow<List<Quiz>>
+  fun findByFavoriteOrderByChapterIndexFlow(): Flow<List<Quiz>>
+
+  @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY chapter_index")
+  suspend fun findByFavoriteOrderByChapterIndex(): List<Quiz>
 
   @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY favorite_time")
-  fun findByFavoriteOrderByFavoriteTime(): Flow<List<Quiz>>
+  fun findByFavoriteOrderByFavoriteTimeFlow(): Flow<List<Quiz>>
+
+  @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY favorite_time")
+  suspend fun findByFavoriteOrderByFavoriteTime(): List<Quiz>
 
   @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY wrong_answer_count")
-  fun findByFavoriteOrderByWrongAnswerCount(): Flow<List<Quiz>>
+  fun findByFavoriteOrderByWrongAnswerCountFlow(): Flow<List<Quiz>>
+
+  @Query("SELECT * FROM quiz WHERE favorite = 1 ORDER BY wrong_answer_count")
+  suspend fun findByFavoriteOrderByWrongAnswerCount(): List<Quiz>
 
   @Query("DELETE FROM quiz WHERE chapter_index = :chapterIndex")
   fun deleteByChapter(chapterIndex: Int)
