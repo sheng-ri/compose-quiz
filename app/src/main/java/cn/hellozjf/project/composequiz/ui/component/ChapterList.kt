@@ -8,6 +8,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
@@ -23,7 +24,8 @@ private val TAG = "ChapterList"
 @Composable
 fun ChapterList(
   chapterList: List<Chapter>,
-  onItemClick: (Chapter) -> Unit,
+  findQuizByChapterIndex: suspend (Int) -> List<Quiz>,
+  onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
 
@@ -37,7 +39,8 @@ fun ChapterList(
       item(key = chapter.id) {
         ChapterListItem(
           chapter = chapter,
-          onItemClick = onItemClick
+          findQuizByChapterIndex = findQuizByChapterIndex,
+          onNavigation = onNavigation
         )
       }
     }

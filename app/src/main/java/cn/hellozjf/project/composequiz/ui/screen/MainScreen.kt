@@ -71,23 +71,10 @@ fun MainScreen(
         DestinationQuiz.CHAPTER_LIST -> {
           // 按章节号排序，查出所有的章节
           val chapterList by chapterViewModel.findAllOrderByIndex().collectAsState(listOf())
-          val onItemClick: (Chapter) -> Unit = { chapter ->
-            coroutineScope.launch {
-              // 在 IO 线程执行数据库查询
-              val quizList = withContext(Dispatchers.IO) {
-                chapterQuizViewModel.findQuizByChapterIndex(chapter.index)
-              }
-              onNavigation(
-                QuizScreenKey(
-                  title = chapter.simpleTitle,
-                  quizList = quizList
-                )
-              )
-            }
-          }
           ChapterList(
             chapterList = chapterList,
-            onItemClick = onItemClick
+            findQuizByChapterIndex = chapterQuizViewModel::findQuizByChapterIndex,
+            onNavigation = onNavigation
           )
         }
 
