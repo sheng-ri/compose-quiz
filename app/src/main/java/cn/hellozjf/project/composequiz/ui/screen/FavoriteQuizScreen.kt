@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,10 +39,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.util.OrderConstant
@@ -53,9 +57,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
- * TODO
- * 在 Button 的 onClick 里调用 scope.launch 方法，来执行 viewModel 的 suspend 数据库查询方法，获取题目信息，然后 onNavigation 跳转是传递题目信息
- * 这个操作在 FavoriteQuizScreen 和 都要这样处理！！！！
+ *
  */
 @Composable
 fun FavoriteQuizScreen(
@@ -256,6 +258,13 @@ fun Question(
 }
 
 @Composable
+fun Explanation(explanation: String) {
+  Text(
+    text = "解释：$explanation"
+  )
+}
+
+@Composable
 fun FromChapter(
   chapterIndex: Int,
   chapterViewModel: ChapterViewModel
@@ -431,5 +440,49 @@ fun TestCountRow(
     ) {
       Text("进行测试")
     }
+  }
+}
+
+@Composable
+fun QuizOption(
+  option: String,
+  selectOption: String,
+  correctOption: String
+) {
+  Row(
+    modifier = Modifier
+      .fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    if (option == selectOption) {
+      Image(
+        painter = painterResource(R.drawable.baseline_check_circle_24),
+        contentDescription = "已选中", // 无障碍功能必需
+        modifier = Modifier.size(32.dp)
+      )
+    } else {
+      Image(
+        painter = painterResource(R.drawable.baseline_circle_24),
+        contentDescription = "未选中", // 无障碍功能必需
+        modifier = Modifier.size(32.dp)
+      )
+    }
+    Text(
+      text = option,
+      modifier = Modifier.padding(start = 8.dp),
+      color = when (option) {
+        correctOption -> {
+          Color.Green
+        }
+
+        selectOption -> {
+          Color.Red
+        }
+
+        else -> {
+          Color.Black
+        }
+      }
+    )
   }
 }
