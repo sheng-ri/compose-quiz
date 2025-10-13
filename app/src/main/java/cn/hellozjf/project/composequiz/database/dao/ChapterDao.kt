@@ -8,13 +8,12 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * 章节实体数据库操作
- * TODO 增删改都要改成 suspend fun
  */
 @Dao
 interface ChapterDao {
 
   @Insert
-  fun insertChapter(chapter: Chapter)
+  suspend fun insertChapter(chapter: Chapter)
 
   @Query("SELECT * FROM chapter order by `index`")
   fun findAllOrderByIndex(): Flow<List<Chapter>>
@@ -26,7 +25,7 @@ interface ChapterDao {
   suspend fun findByIndex(index: Int): Chapter?
 
   @Query("DELETE FROM chapter")
-  fun deleteAll()
+  suspend fun deleteAll()
 
   @Query("SELECT count(*) FROM chapter")
   fun getCount(): Int
