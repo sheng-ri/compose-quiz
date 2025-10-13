@@ -22,13 +22,13 @@ import cn.hellozjf.project.composequiz.database.entity.Quiz
  */
 @Composable
 fun FavoriteQuizQuestion(
-  onExpandChange: (Boolean) -> Unit,
-  expand: Boolean,
+  expanded: Boolean,
+  onExpandedChange: (Boolean) -> Unit,
   quiz: Quiz,
   modifier: Modifier = Modifier
 ) {
   Row(
-    modifier = Modifier.clickable { onExpandChange(!expand) },
+    modifier = Modifier.clickable { onExpandedChange(!expanded) },
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(
@@ -39,7 +39,7 @@ fun FavoriteQuizQuestion(
     Icon(
       imageVector = Icons.Filled.ArrowDropDown,
       contentDescription = null,
-      modifier.rotate(if (expand) 180f else 0f)
+      modifier.rotate(if (expanded) 180f else 0f)
     )
   }
 }
@@ -51,10 +51,10 @@ fun FavoriteQuizQuestion(
 fun FavoriteQuizQuestionPreview() {
   var expand by remember { mutableStateOf(false) }
   FavoriteQuizQuestion(
-    onExpandChange = {
+    onExpandedChange = {
       expand = it
     },
-    expand = expand,
+    expanded = expand,
     quiz = Quiz(
       chapterIndex = 0,
       question = "第0章题目的标题",

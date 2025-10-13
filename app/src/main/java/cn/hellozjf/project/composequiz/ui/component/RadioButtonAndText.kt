@@ -22,18 +22,18 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun RadioButtonAndText(
   option: String,
-  selectOption: String,
-  onSelectOptionChange: (String) -> Unit,
+  selectedOption: String,
+  onSelectedOptionChange: (String) -> Unit,
 ) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .clickable { onSelectOptionChange(option) },
+      .clickable { onSelectedOptionChange(option) },
     verticalAlignment = Alignment.CenterVertically
   ) {
     RadioButton(
-      selected = selectOption == option,
-      onClick = { onSelectOptionChange(option) }
+      selected = selectedOption == option,
+      onClick = { onSelectedOptionChange(option) }
     )
     Text(
       text = option,
@@ -51,8 +51,8 @@ fun RadioButtonAndTextPreview1() {
   var selectOption by remember { mutableStateOf("错误答案") }
   RadioButtonAndText(
     option = "正确答案",
-    selectOption = selectOption,
-    onSelectOptionChange = {
+    selectedOption = selectOption,
+    onSelectedOptionChange = {
       selectOption = it
     }
   )
@@ -67,8 +67,8 @@ fun RadioButtonAndTextPreview2() {
   var selectOption by remember { mutableStateOf("正确答案") }
   RadioButtonAndText(
     option = "正确答案",
-    selectOption = selectOption,
-    onSelectOptionChange = {
+    selectedOption = selectOption,
+    onSelectedOptionChange = {
       selectOption = it
     }
   )

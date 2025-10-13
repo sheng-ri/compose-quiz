@@ -36,8 +36,8 @@ fun FavoriteQuizList(
             questionExpandMap[quiz.id] = it
           }
           FavoriteQuiz(
-            expand = expand,
-            onExpandChange = onExpandChange,
+            expanded = expand,
+            onExpandedChange = onExpandChange,
             quiz = quiz,
             getChapterByIndex = getChapterByIndex,
             onNavigation = onNavigation

@@ -22,8 +22,8 @@ fun OrderMethod(
   dropdownExpand: Boolean,
   onDropdownExpandChange: (Boolean) -> Unit,
   orderMethods: List<String>,
-  selectOrderMethod: String,
-  onSelectOrderMethodChange: (String) -> Unit,
+  selectedOrderMethod: String,
+  onSelectedOrderMethodChange: (String) -> Unit,
 ) {
   Row(
     verticalAlignment = Alignment.CenterVertically
@@ -36,11 +36,11 @@ fun OrderMethod(
       modifier = Modifier.size(16.dp)
     )
     CommonDropdown(
-      expand = dropdownExpand,
-      onExpandChange = onDropdownExpandChange,
+      expanded = dropdownExpand,
+      onExpandedChange = onDropdownExpandChange,
       items = orderMethods,
-      selectItem = selectOrderMethod,
-      onSelectItemChange = onSelectOrderMethodChange
+      selectedItem = selectedOrderMethod,
+      onSelectedItemChange = onSelectedOrderMethodChange
     )
   }
 }
@@ -68,7 +68,7 @@ fun OrderMethodPreview() {
     dropdownExpand = dropdownMenuExpand,
     onDropdownExpandChange = onDropdownMenuExpandChange,
     orderMethods = dropdownMenuItems,
-    selectOrderMethod = selectOrderMethod,
-    onSelectOrderMethodChange = onSelectOrderMethodChange
+    selectedOrderMethod = selectOrderMethod,
+    onSelectedOrderMethodChange = onSelectOrderMethodChange
   )
 }

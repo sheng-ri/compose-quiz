@@ -54,8 +54,8 @@ fun QuizScreen(
       QuizList(
         quizList = quizList,
         quizOrder = quizOrder,
-        quizSelectOptionMap = quizSelectOption.toMap(),
-        onQuizSelectOptionChange = { id, selectOption ->
+        quizSelectedOptionMap = quizSelectOption.toMap(),
+        onQuizSelectedOptionChange = { id, selectOption ->
           quizSelectOption[id] = selectOption
         },
         optionOrderList = optionOrderList,

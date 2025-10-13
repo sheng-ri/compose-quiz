@@ -24,8 +24,8 @@ import cn.hellozjf.project.composequiz.database.entity.Quiz
  */
 @Composable
 fun FavoriteQuiz(
-  expand: Boolean,
-  onExpandChange: (Boolean) -> Unit,
+  expanded: Boolean,
+  onExpandedChange: (Boolean) -> Unit,
   quiz: Quiz,
   getChapterByIndex: suspend (Int) -> Chapter?,
   onNavigation: (NavKey) -> Unit,
@@ -50,32 +50,32 @@ fun FavoriteQuiz(
 
     Column {
       FavoriteQuizQuestion(
-        onExpandChange = onExpandChange,
-        expand = expand,
+        onExpandedChange = onExpandedChange,
+        expanded = expanded,
         quiz = quiz,
         modifier = Modifier
       )
-      if (expand) {
+      if (expanded) {
         // 显示这题的所有选项，正确选项，解释，打错次数
         Column {
           FavoriteQuizOption(
             option = quiz.correctOption,
-            selectOption = quiz.correctOption,
+            selectedOption = quiz.correctOption,
             correctOption = quiz.correctOption
           )
           FavoriteQuizOption(
             option = quiz.wrongOption1,
-            selectOption = quiz.correctOption,
+            selectedOption = quiz.correctOption,
             correctOption = quiz.correctOption
           )
           FavoriteQuizOption(
             option = quiz.wrongOption2,
-            selectOption = quiz.correctOption,
+            selectedOption = quiz.correctOption,
             correctOption = quiz.correctOption
           )
           FavoriteQuizOption(
             option = quiz.wrongOption3,
-            selectOption = quiz.correctOption,
+            selectedOption = quiz.correctOption,
             correctOption = quiz.correctOption
           )
           Explanation(quiz.explanation)
@@ -119,8 +119,8 @@ fun FavoriteQuizPreview() {
     )
   }
   FavoriteQuiz(
-    expand = expand,
-    onExpandChange = onExpandChange,
+    expanded = expand,
+    onExpandedChange = onExpandChange,
     quiz = quiz,
     getChapterByIndex = getChapterByIndex,
     onNavigation = {}

@@ -74,8 +74,8 @@ fun FavoriteQuizPanel(
       dropdownExpand = orderMethodExpand,
       onDropdownExpandChange = onOrderMethodExpandChange,
       orderMethods = orderMethodItems,
-      selectOrderMethod = orderMethodSelectText,
-      onSelectOrderMethodChange = onOrderMethodSelectTextChange
+      selectedOrderMethod = orderMethodSelectText,
+      onSelectedOrderMethodChange = onOrderMethodSelectTextChange
     )
     FavoriteQuizList(
       quizList = quizList,

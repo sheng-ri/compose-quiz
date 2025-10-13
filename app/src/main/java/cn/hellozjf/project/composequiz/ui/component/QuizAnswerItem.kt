@@ -21,7 +21,7 @@ fun QuizAnswerItem(
   setFavorite: suspend (Int, Boolean, Long) -> Unit,
   index: Int,
   quiz: Quiz,
-  selectOption: String,
+  selectedOption: String,
   optionOrder: List<Int>,
   modifier: Modifier = Modifier
 ) {
@@ -45,7 +45,7 @@ fun QuizAnswerItem(
       for (order in optionOrder) {
         FavoriteQuizOption(
           option = optionList[order],
-          selectOption = selectOption,
+          selectedOption = selectedOption,
           correctOption = quiz.correctOption
         )
       }
@@ -76,7 +76,7 @@ fun QuizAnswerItemPreview() {
   QuizAnswerItem(
     index = 0,
     quiz = quiz,
-    selectOption = "错误答案1",
+    selectedOption = "错误答案1",
     optionOrder = listOf(3, 1, 2, 0),
     setFavorite = { index, favorite, favoriteTime ->
       if (index == 0) {

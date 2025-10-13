@@ -21,7 +21,7 @@ import cn.hellozjf.project.composequiz.R
 @Composable
 fun FavoriteQuizOption(
   option: String,
-  selectOption: String,
+  selectedOption: String,
   correctOption: String
 ) {
   Row(
@@ -29,7 +29,7 @@ fun FavoriteQuizOption(
       .fillMaxWidth(),
     verticalAlignment = Alignment.CenterVertically
   ) {
-    if (option == selectOption) {
+    if (option == selectedOption) {
       Image(
         painter = painterResource(R.drawable.baseline_check_circle_24),
         contentDescription = "已选中", // 无障碍功能必需
@@ -50,7 +50,7 @@ fun FavoriteQuizOption(
           Color.Green
         }
 
-        selectOption -> {
+        selectedOption -> {
           Color.Red
         }
 
@@ -70,7 +70,7 @@ fun FavoriteQuizOption(
 fun FavoriteQuizOptionPreview() {
   FavoriteQuizOption(
     option = "选项1",
-    selectOption = "选项1",
+    selectedOption = "选项1",
     correctOption = "选项1"
   )
 }
@@ -83,7 +83,7 @@ fun FavoriteQuizOptionPreview() {
 fun FavoriteQuizOptionPreview3() {
   FavoriteQuizOption(
     option = "选项1",
-    selectOption = "",
+    selectedOption = "",
     correctOption = "选项2"
   )
 }

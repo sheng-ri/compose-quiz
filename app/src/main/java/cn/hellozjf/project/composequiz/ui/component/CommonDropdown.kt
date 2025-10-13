@@ -15,43 +15,42 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import cn.hellozjf.project.composequiz.util.OrderMethodConstant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CommonDropdown(
-  expand: Boolean,
-  onExpandChange: (Boolean) -> Unit,
+  expanded: Boolean,
+  onExpandedChange: (Boolean) -> Unit,
   items: List<String>,
-  selectItem: String,
-  onSelectItemChange: (String) -> Unit,
+  selectedItem: String,
+  onSelectedItemChange: (String) -> Unit,
 ) {
   ExposedDropdownMenuBox(
-    expanded = expand,
-    onExpandedChange = onExpandChange
+    expanded = expanded,
+    onExpandedChange = onExpandedChange
   ) {
     TextField(
-      value = selectItem,
+      value = selectedItem,
       onValueChange = {},
       modifier = Modifier
         .fillMaxWidth()
         .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
       readOnly = true,
       trailingIcon = {
-        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expand)
+        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
       }
     )
 
     ExposedDropdownMenu(
-      expanded = expand,
-      onDismissRequest = { onExpandChange(false) }
+      expanded = expanded,
+      onDismissRequest = { onExpandedChange(false) }
     ) {
       items.forEach { item ->
         DropdownMenuItem(
           text = { Text(text = item) },
           onClick = {
-            onSelectItemChange(item)
-            onExpandChange(false)
+            onSelectedItemChange(item)
+            onExpandedChange(false)
           }
         )
       }
@@ -64,20 +63,20 @@ fun CommonDropdown(
 )
 @Composable
 fun CommonDropdownPreview() {
-  var expand by remember { mutableStateOf(false) }
+  var expanded by remember { mutableStateOf(false) }
   val items: List<String> = listOf(
     "0", "1", "2", "3", "4"
   )
-  var selectItem by remember { mutableStateOf("0") }
+  var selectedItem by remember { mutableStateOf("0") }
   CommonDropdown(
-    expand = expand,
-    onExpandChange = {
-      expand = it
+    expanded = expanded,
+    onExpandedChange = {
+      expanded = it
     },
     items = items,
-    selectItem = selectItem,
-    onSelectItemChange = {
-      selectItem = it
+    selectedItem = selectedItem,
+    onSelectedItemChange = {
+      selectedItem = it
     }
   )
 }

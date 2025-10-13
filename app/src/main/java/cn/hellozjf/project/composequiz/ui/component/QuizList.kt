@@ -16,8 +16,8 @@ import cn.hellozjf.project.composequiz.database.entity.Quiz
 fun QuizList(
   quizList: List<Quiz>,
   quizOrder: List<Int>,
-  quizSelectOptionMap: Map<Int, String>,
-  onQuizSelectOptionChange: (Int, String) -> Unit,
+  quizSelectedOptionMap: Map<Int, String>,
+  onQuizSelectedOptionChange: (Int, String) -> Unit,
   optionOrderList: List<List<Int>>,
   modifier: Modifier = Modifier
 ) {
@@ -31,15 +31,15 @@ fun QuizList(
       quizOrder.forEachIndexed { index, order ->
         val quiz = quizList[order]
         item(key = quiz.id) {
-          val selectOption = quizSelectOptionMap[quiz.id] ?: ""
+          val selectOption = quizSelectedOptionMap[quiz.id] ?: ""
           val onSelectOptionChange: (String) -> Unit = { newSelectOption ->
-            onQuizSelectOptionChange(quiz.id, newSelectOption)
+            onQuizSelectedOptionChange(quiz.id, newSelectOption)
           }
           QuizListItem(
             index = index,
             quiz = quiz,
-            selectOption = selectOption,
-            onSelectOptionChange = onSelectOptionChange,
+            selectedOption = selectOption,
+            onSelectedOptionChange = onSelectOptionChange,
             optionOrder = optionOrderList[order]
           )
         }
@@ -102,8 +102,8 @@ fun QuizListPreview() {
   QuizList(
     quizList = quizList,
     quizOrder = quizOrder,
-    quizSelectOptionMap = quizSelectOptionMap,
-    onQuizSelectOptionChange = onQuizSelectOptionChange,
+    quizSelectedOptionMap = quizSelectOptionMap,
+    onQuizSelectedOptionChange = onQuizSelectOptionChange,
     optionOrderList = optionOrderList
   )
 }

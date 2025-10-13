@@ -24,8 +24,8 @@ import cn.hellozjf.project.composequiz.database.entity.Quiz
 fun QuizListItem(
   index: Int,
   quiz: Quiz,
-  selectOption: String,
-  onSelectOptionChange: (String) -> Unit,
+  selectedOption: String,
+  onSelectedOptionChange: (String) -> Unit,
   optionOrder: List<Int>,
   modifier: Modifier = Modifier
 ) {
@@ -53,8 +53,8 @@ fun QuizListItem(
       for (order in optionOrder) {
         RadioButtonAndText(
           option = options[order],
-          selectOption = selectOption,
-          onSelectOptionChange = onSelectOptionChange
+          selectedOption = selectedOption,
+          onSelectedOptionChange = onSelectedOptionChange
         )
       }
     }
@@ -79,8 +79,8 @@ fun QuizListItemPreview() {
       wrongOption3 = "错误选项3",
       explanation = "问题0解释"
     ),
-    selectOption = selectOption,
-    onSelectOptionChange = {
+    selectedOption = selectOption,
+    onSelectedOptionChange = {
       selectOption = it
     },
     optionOrder = listOf(1, 0, 3, 2)

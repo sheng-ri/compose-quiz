@@ -104,7 +104,7 @@ fun AnswerScreen(
                 setFavorite = chapterQuizViewModel::setFavorite,
                 index = index,
                 quiz = quiz,
-                selectOption = selectOption,
+                selectedOption = selectOption,
                 optionOrder = optionOrder
               )
             }
