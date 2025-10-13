@@ -6,9 +6,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Quiz
@@ -23,7 +29,9 @@ fun QuestionAndFavoriteRow(
 
   val coroutineScope = rememberCoroutineScope()
 
-  Row {
+  Row(
+    verticalAlignment = Alignment.CenterVertically
+  ) {
     Text(
       text = "${index + 1}. ${quiz.question}",
       modifier = Modifier.weight(1f)
@@ -44,4 +52,39 @@ fun QuestionAndFavoriteRow(
         }
     )
   }
+}
+
+@Preview(
+  showBackground = true
+)
+@Composable
+fun QuestionAndFavoriteRowPreview() {
+  var quiz by remember {
+    mutableStateOf(
+      Quiz(
+        id = 0,
+        chapterIndex = 0,
+        question = "问题0",
+        correctOption = "正确答案",
+        wrongOption1 = "错误答案1",
+        wrongOption2 = "错误答案2",
+        wrongOption3 = "错误答案3",
+        explanation = "问题0解释",
+        favorite = false,
+        favoriteTime = 0L
+      )
+    )
+  }
+  QuestionAndFavoriteRow(
+    index = 0,
+    quiz = quiz,
+    setFavorite = { index, favorite, favoriteTime ->
+      if (index == 0) {
+        quiz = quiz.copy(
+          favorite = favorite,
+          favoriteTime = favoriteTime
+        )
+      }
+    }
+  )
 }

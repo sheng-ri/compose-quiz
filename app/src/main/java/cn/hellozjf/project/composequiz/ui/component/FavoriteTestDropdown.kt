@@ -1,7 +1,5 @@
 package cn.hellozjf.project.composequiz.ui.component
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -77,19 +75,15 @@ fun FavoriteTestDropdownPreview() {
   )
   var expand by remember { mutableStateOf(false) }
   var selectText by remember { mutableStateOf(items[0]) }
-  Box(
-    modifier = Modifier.fillMaxSize()
-  ) {
-    FavoriteTestDropdown(
-      expand = expand,
-      onExpandChange = {
-        expand = it
-      },
-      items = items,
-      selectText = selectText,
-      onSelectTextChange = {
-        selectText = it
-      }
-    )
-  }
+  FavoriteTestDropdown(
+    expand = expand,
+    onExpandChange = {
+      expand = it
+    },
+    items = items,
+    selectText = selectText,
+    onSelectTextChange = {
+      selectText = it
+    }
+  )
 }

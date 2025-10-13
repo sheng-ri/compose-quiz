@@ -41,7 +41,9 @@ fun ChapterList(
   }
 }
 
-@Preview
+@Preview(
+  showBackground = true
+)
 @Composable
 fun ChapterListPreview() {
   val chapterList = run {
