@@ -61,14 +61,14 @@ fun FavoriteTestRow(
     // 下拉框左边的文本
     Text("测试数量")
     // 下拉框本体
-    FavoriteTestDropdown(
+    CommonDropdown(
       expand = testCountExpand,
       onExpandChange = {
         testCountExpand = it
       },
       items = testCountItems,
-      selectText = testCountSelectText,
-      onSelectTextChange = {
+      selectItem = testCountSelectText,
+      onSelectItemChange = {
         testCountSelectText = it
         if (it != TestCountConstant.CUSTOM) {
           customTestCount = it.toInt()

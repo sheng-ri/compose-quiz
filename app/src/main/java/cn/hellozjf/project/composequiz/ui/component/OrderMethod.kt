@@ -35,7 +35,7 @@ fun OrderMethod(
     Spacer(
       modifier = Modifier.size(16.dp)
     )
-    OrderMethodDropdown(
+    CommonDropdown(
       expand = dropdownExpand,
       onExpandChange = onDropdownExpandChange,
       items = orderMethods,

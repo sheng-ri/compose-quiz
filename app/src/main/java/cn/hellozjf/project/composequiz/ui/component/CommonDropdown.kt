@@ -1,6 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.component
 
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -15,36 +15,33 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import cn.hellozjf.project.composequiz.util.TestCountConstant
+import cn.hellozjf.project.composequiz.util.OrderMethodConstant
 
-/**
- * TODO 两个下拉框合并成一个下拉框
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoriteTestDropdown(
+fun CommonDropdown(
   expand: Boolean,
   onExpandChange: (Boolean) -> Unit,
   items: List<String>,
-  selectText: String,       // 这个是下拉框选中的文本
-  onSelectTextChange: (String) -> Unit,
+  selectItem: String,
+  onSelectItemChange: (String) -> Unit,
 ) {
   ExposedDropdownMenuBox(
     expanded = expand,
-    onExpandedChange = onExpandChange,
-    modifier = Modifier.width(128.dp)
+    onExpandedChange = onExpandChange
   ) {
     TextField(
-      value = selectText,
+      value = selectItem,
       onValueChange = {},
       modifier = Modifier
+        .fillMaxWidth()
         .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
       readOnly = true,
       trailingIcon = {
         ExposedDropdownMenuDefaults.TrailingIcon(expanded = expand)
       }
     )
+
     ExposedDropdownMenu(
       expanded = expand,
       onDismissRequest = { onExpandChange(false) }
@@ -53,7 +50,7 @@ fun FavoriteTestDropdown(
         DropdownMenuItem(
           text = { Text(text = item) },
           onClick = {
-            onSelectTextChange(item)
+            onSelectItemChange(item)
             onExpandChange(false)
           }
         )
@@ -66,24 +63,21 @@ fun FavoriteTestDropdown(
   showBackground = true
 )
 @Composable
-fun FavoriteTestDropdownPreview() {
-  val items = listOf(
-    TestCountConstant.FIVE,
-    TestCountConstant.TEN,
-    TestCountConstant.TWENTY,
-    TestCountConstant.CUSTOM,
-  )
+fun CommonDropdownPreview() {
   var expand by remember { mutableStateOf(false) }
-  var selectText by remember { mutableStateOf(items[0]) }
-  FavoriteTestDropdown(
+  val items: List<String> = listOf(
+    "0", "1", "2", "3", "4"
+  )
+  var selectItem by remember { mutableStateOf("0") }
+  CommonDropdown(
     expand = expand,
     onExpandChange = {
       expand = it
     },
     items = items,
-    selectText = selectText,
-    onSelectTextChange = {
-      selectText = it
+    selectItem = selectItem,
+    onSelectItemChange = {
+      selectItem = it
     }
   )
 }
