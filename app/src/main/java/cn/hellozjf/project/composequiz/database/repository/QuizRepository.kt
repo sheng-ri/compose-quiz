@@ -74,6 +74,10 @@ class QuizRepository(private val quizDao: QuizDao) {
     }
   }
 
+  suspend fun setFavoriteSuspend(id: Int, favorite: Boolean, favoriteTime: Long) {
+    quizDao.setFavorite(id, favorite, favoriteTime)
+  }
+
   fun incWrongAnswerCount(id: Int) {
     coroutineScope.launch(Dispatchers.IO) {
       quizDao.incWrongAnswerCount(id)

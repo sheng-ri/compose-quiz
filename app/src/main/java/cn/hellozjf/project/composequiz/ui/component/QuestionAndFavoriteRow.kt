@@ -6,19 +6,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Quiz
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun QuestionAndFavoriteRow(
   index: Int,
   quiz: Quiz,
-  chapterQuizViewModel: ChapterQuizViewModel
+  setFavorite: suspend (Int, Boolean, Long) -> Unit
 ) {
+
+  val coroutineScope = rememberCoroutineScope()
+
   Row {
     Text(
       text = "${index + 1}. ${quiz.question}",
@@ -34,7 +38,9 @@ fun QuestionAndFavoriteRow(
       modifier = Modifier
         .size(32.dp)
         .clickable {
-          chapterQuizViewModel.setFavorite(quiz.id, !quiz.favorite, System.currentTimeMillis())
+          coroutineScope.launch {
+            setFavorite(quiz.id, !quiz.favorite, System.currentTimeMillis())
+          }
         }
     )
   }

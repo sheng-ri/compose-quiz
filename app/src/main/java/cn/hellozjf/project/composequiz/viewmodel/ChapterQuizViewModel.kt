@@ -72,6 +72,10 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     repository.setFavorite(id, favorite, favoriteTime)
   }
 
+  suspend fun setFavoriteSuspend(id: Int, favorite: Boolean, favoriteTime: Long) {
+    repository.setFavoriteSuspend(id, favorite, favoriteTime)
+  }
+
   fun incWrongAnswerCount(id: Int) {
     repository.incWrongAnswerCount(id)
   }

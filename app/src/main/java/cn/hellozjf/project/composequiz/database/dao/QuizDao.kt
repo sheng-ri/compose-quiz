@@ -8,13 +8,12 @@ import kotlinx.coroutines.flow.Flow
 
 /**
  * 问答实体数据库操作
- * TODO 增删改都要改成 suspend fun
  */
 @Dao
 interface QuizDao {
 
   @Insert
-  fun insertQuiz(quiz: Quiz)
+  suspend fun insertQuiz(quiz: Quiz)
 
   @Query("SELECT * FROM quiz WHERE chapter_index = :chapterIndex")
   fun findFlowByChapter(chapterIndex: Int): Flow<List<Quiz>>
@@ -47,14 +46,14 @@ interface QuizDao {
   suspend fun findByFavoriteOrderByWrongAnswerCount(): List<Quiz>
 
   @Query("DELETE FROM quiz WHERE chapter_index = :chapterIndex")
-  fun deleteByChapter(chapterIndex: Int)
+  suspend fun deleteByChapter(chapterIndex: Int)
 
   @Query("SELECT count(*) FROM quiz")
   fun getCount(): Int
 
   @Query("UPDATE quiz SET favorite = :favorite, favorite_time = :favoriteTime WHERE id = :id")
-  fun setFavorite(id: Int, favorite: Boolean, favoriteTime: Long)
+  suspend fun setFavorite(id: Int, favorite: Boolean, favoriteTime: Long)
 
   @Query("UPDATE quiz SET wrong_answer_count = wrong_answer_count + 1 WHERE id = :id")
-  fun incWrongAnswerCount(id: Int)
+  suspend fun incWrongAnswerCount(id: Int)
 }

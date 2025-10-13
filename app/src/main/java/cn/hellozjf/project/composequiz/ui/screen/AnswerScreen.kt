@@ -101,7 +101,7 @@ fun AnswerScreen(
             item(key = quiz.id) {
               val selectOption = chooseOptionMap[quiz.id] ?: ""
               QuizAnswerItem(
-                chapterQuizViewModel = chapterQuizViewModel,
+                setFavorite = chapterQuizViewModel::setFavorite,
                 index = index,
                 quiz = quiz,
                 selectOption = selectOption,

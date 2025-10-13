@@ -10,11 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cn.hellozjf.project.composequiz.database.entity.Quiz
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 
 @Composable
 fun QuizAnswerItem(
-  chapterQuizViewModel: ChapterQuizViewModel,
+  setFavorite: suspend (Int, Boolean, Long) -> Unit,
   index: Int,
   quiz: Quiz,
   selectOption: String,
@@ -34,7 +33,7 @@ fun QuizAnswerItem(
       QuestionAndFavoriteRow(
         index = index,
         quiz = quiz,
-        chapterQuizViewModel = chapterQuizViewModel
+        setFavorite = setFavorite
       )
       val optionList =
         listOf(quiz.correctOption, quiz.wrongOption1, quiz.wrongOption2, quiz.wrongOption3)
