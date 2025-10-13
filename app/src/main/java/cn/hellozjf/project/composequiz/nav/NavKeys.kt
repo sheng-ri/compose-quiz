@@ -16,6 +16,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object MainScreenKey: NavKey
 
+/**
+ * TODO 这里传 quizIdList 感觉会更好
+ */
 @Serializable
 data class QuizScreenKey(
   val title: String,

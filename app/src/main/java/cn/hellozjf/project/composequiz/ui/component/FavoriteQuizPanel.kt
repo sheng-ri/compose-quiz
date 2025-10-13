@@ -1,20 +1,24 @@
 package cn.hellozjf.project.composequiz.ui.component
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.Quiz
-import cn.hellozjf.project.composequiz.util.OrderConstant
-import cn.hellozjf.project.composequiz.util.TestCountConstant
+import cn.hellozjf.project.composequiz.util.OrderMethodConstant
 
 /**
  * 这是收藏的问答列表、排序方式、测试 组件
@@ -38,29 +42,25 @@ fun FavoriteQuizPanel(
   // 默认先升序
   // TODO 后续增加一下升序降序？
   val orderMethodItems = listOf(
-    OrderConstant.CHAPTER,
-    OrderConstant.FAVORITE_TIME,
-    OrderConstant.WRONG_ANSWER_COUNT
+    OrderMethodConstant.CHAPTER,
+    OrderMethodConstant.FAVORITE_TIME,
+    OrderMethodConstant.WRONG_ANSWER_COUNT
   )
   var orderMethodSelectText by remember { mutableStateOf(orderMethodItems[0]) }
   val onOrderMethodSelectTextChange: (String) -> Unit = {
     orderMethodSelectText = it
   }
 
-  // 跟测试数量有关的状态
-  var testCountExpand by remember { mutableStateOf(false) }
-  val onTestCountExpandChange: (Boolean) -> Unit = {
-    testCountExpand = it
-  }
-  val testCountItems = listOf(
-    TestCountConstant.FIVE,
-    TestCountConstant.TEN,
-    TestCountConstant.TWENTY,
-    TestCountConstant.CUSTOM,
-  )
-  var testCountSelectText by remember { mutableStateOf(testCountItems[0]) }
-  val onTestCountSelectTextChange: (String) -> Unit = {
-    testCountSelectText = it
+  var quizList by remember { mutableStateOf(listOf<Quiz>()) }
+
+  LaunchedEffect(key1 = orderMethodSelectText) {
+    val quizzes = when (orderMethodSelectText) {
+      OrderMethodConstant.CHAPTER -> findByFavoriteOrderByChapterIndex()
+      OrderMethodConstant.FAVORITE_TIME -> findByFavoriteOrderByFavoriteTime()
+      OrderMethodConstant.WRONG_ANSWER_COUNT -> findByFavoriteOrderByWrongAnswerCount()
+      else -> findByFavoriteOrderByChapterIndex()
+    }
+    quizList = quizzes
   }
 
   Column(
@@ -70,31 +70,141 @@ fun FavoriteQuizPanel(
       text = "每日测试",
       fontSize = 32.sp
     )
-    OrderMethodRow(
-      expand = orderMethodExpand,
-      onExpandChange = onOrderMethodExpandChange,
-      items = orderMethodItems,
-      selectText = orderMethodSelectText,
-      onSelectTextChange = onOrderMethodSelectTextChange
+    OrderMethod(
+      dropdownExpand = orderMethodExpand,
+      onDropdownExpandChange = onOrderMethodExpandChange,
+      orderMethods = orderMethodItems,
+      selectOrderMethod = orderMethodSelectText,
+      onSelectOrderMethodChange = onOrderMethodSelectTextChange
     )
     FavoriteQuizList(
-      selectText = orderMethodSelectText,
+      quizList = quizList,
       getChapterByIndex = getChapterByIndex,
-      findByFavoriteOrderByChapterIndex = findByFavoriteOrderByChapterIndex,
-      findByFavoriteOrderByFavoriteTime = findByFavoriteOrderByFavoriteTime,
-      findByFavoriteOrderByWrongAnswerCount = findByFavoriteOrderByWrongAnswerCount,
       onNavigation = onNavigation,
       modifier = Modifier.weight(1f)
     )
-    FavoriteTestCount(
-      expand = testCountExpand,
-      onExpandChange = onTestCountExpandChange,
-      items = testCountItems,
-      selectText = testCountSelectText,
-      onSelectTextChange = onTestCountSelectTextChange,
+    FavoriteTestRow(
       findQuizByFavorite = findQuizByFavorite,
       onNavigation = onNavigation,
     )
   }
 }
 
+@Preview(
+  showBackground = true
+)
+@Composable
+fun FavoriteQuizPanelPreview() {
+  val getChapterByIndex: suspend (Int) -> Chapter? = { chapterIndex ->
+    Chapter(
+      index = chapterIndex,
+      fullTitle = "第${chapterIndex}章完整版标题",
+      simpleTitle = "简化标题",
+      simpleUrl = "http://xx.com/sim/${chapterIndex}",
+      fullUrl = "http://xxx.com/full/${chapterIndex}"
+    )
+  }
+  val quiz00 = Quiz(
+    id = 0,
+    chapterIndex = 0,
+    question = "第0章问题0",
+    correctOption = "正确选项",
+    wrongOption1 = "错误选项1",
+    wrongOption2 = "错误选项2",
+    wrongOption3 = "错误选项3",
+    explanation = "第0章问题0解释",
+    favorite = true,
+    favoriteTime = 20L,
+    wrongAnswerCount = 4
+  )
+  val quiz01 = Quiz(
+    id = 1,
+    chapterIndex = 0,
+    question = "第0章问题1",
+    correctOption = "正确选项",
+    wrongOption1 = "错误选项1",
+    wrongOption2 = "错误选项2",
+    wrongOption3 = "错误选项3",
+    explanation = "第0章问题1解释",
+    favorite = true,
+    favoriteTime = 10L,
+    wrongAnswerCount = 3
+  )
+  val quiz10 = Quiz(
+    id = 10,
+    chapterIndex = 1,
+    question = "第1章问题0",
+    correctOption = "正确选项",
+    wrongOption1 = "错误选项1",
+    wrongOption2 = "错误选项2",
+    wrongOption3 = "错误选项3",
+    explanation = "第1章问题0解释",
+    favorite = true,
+    favoriteTime = 40L,
+    wrongAnswerCount = 2
+  )
+  val quiz11 = Quiz(
+    id = 11,
+    chapterIndex = 1,
+    question = "第1章问题1",
+    correctOption = "正确选项",
+    wrongOption1 = "错误选项1",
+    wrongOption2 = "错误选项2",
+    wrongOption3 = "错误选项3",
+    explanation = "第1章问题1解释",
+    favorite = true,
+    favoriteTime = 30L,
+    wrongAnswerCount = 1
+  )
+  val rawList = listOf(quiz00, quiz01, quiz10, quiz11)
+  val findByFavoriteOrderByChapterIndex: suspend () -> List<Quiz> = {
+    rawList.sortedBy { it.chapterIndex }
+  }
+  val findByFavoriteOrderByFavoriteTime: suspend () -> List<Quiz> = {
+    rawList.sortedBy { it.favoriteTime }
+  }
+  val findByFavoriteOrderByWrongAnswerCount: suspend () -> List<Quiz> = {
+    rawList.sortedBy { it.wrongAnswerCount }
+  }
+  val findQuizByFavorite: suspend () -> List<Quiz> = {
+    val list = mutableListOf<Quiz>()
+    for (i in 0 until 10) {
+      val quiz = Quiz(
+        id = i,
+        chapterIndex = i,
+        question = "问题$i",
+        correctOption = "正确答案",
+        wrongOption1 = "错误答案1",
+        wrongOption2 = "错误答案2",
+        wrongOption3 = "错误答案3",
+        explanation = "问题${i}解释",
+        favorite = true,
+        favoriteTime = System.currentTimeMillis()
+      )
+      list.add(quiz)
+    }
+    list.toList()
+  }
+  FavoriteQuizPanel(
+    getChapterByIndex = getChapterByIndex,
+    findByFavoriteOrderByChapterIndex = findByFavoriteOrderByChapterIndex,
+    findByFavoriteOrderByFavoriteTime = findByFavoriteOrderByFavoriteTime,
+    findByFavoriteOrderByWrongAnswerCount = findByFavoriteOrderByWrongAnswerCount,
+    findQuizByFavorite = findQuizByFavorite,
+    onNavigation = {}
+  )
+}
+
+@Preview(
+  showBackground = true
+)
+@Composable
+fun FavoriteQuizPanelTest() {
+  Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Box(
+      modifier = Modifier.padding(innerPadding)
+    ) {
+      FavoriteQuizPanelPreview()
+    }
+  }
+}

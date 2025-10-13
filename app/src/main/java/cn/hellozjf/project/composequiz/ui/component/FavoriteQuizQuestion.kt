@@ -7,20 +7,25 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.tooling.preview.Preview
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 
 /**
- * 这是收藏的问答题目
+ * 收藏测试页面 问答的题目 组件
  */
 @Composable
 fun FavoriteQuizQuestion(
   onExpandChange: (Boolean) -> Unit,
   expand: Boolean,
   quiz: Quiz,
-  modifier: Modifier
+  modifier: Modifier = Modifier
 ) {
   Row(
     modifier = Modifier.clickable { onExpandChange(!expand) },
@@ -37,4 +42,27 @@ fun FavoriteQuizQuestion(
       modifier.rotate(if (expand) 180f else 0f)
     )
   }
+}
+
+@Preview(
+  showBackground = true
+)
+@Composable
+fun FavoriteQuizQuestionPreview() {
+  var expand by remember { mutableStateOf(false) }
+  FavoriteQuizQuestion(
+    onExpandChange = {
+      expand = it
+    },
+    expand = expand,
+    quiz = Quiz(
+      chapterIndex = 0,
+      question = "第0章题目的标题",
+      correctOption = "题目正确选项",
+      wrongOption1 = "题目错误选项1",
+      wrongOption2 = "题目错误选项2",
+      wrongOption3 = "题目错误选项3",
+      explanation = "题目的解释"
+    )
+  )
 }

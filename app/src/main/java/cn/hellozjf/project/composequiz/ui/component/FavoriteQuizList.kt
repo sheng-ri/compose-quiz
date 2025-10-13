@@ -3,48 +3,31 @@ package cn.hellozjf.project.composequiz.ui.component
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.Quiz
-import cn.hellozjf.project.composequiz.util.OrderConstant
 
 /**
- * 这是收藏的问答列表
+ * 收藏测试页面 收藏的问答列表
  */
 @Composable
 fun FavoriteQuizList(
-  selectText: String,
+  quizList: List<Quiz>,
   getChapterByIndex: suspend (Int) -> Chapter?,
-  findByFavoriteOrderByChapterIndex: suspend () -> List<Quiz>,
-  findByFavoriteOrderByFavoriteTime: suspend () -> List<Quiz>,
-  findByFavoriteOrderByWrongAnswerCount: suspend () -> List<Quiz>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
   val listState = rememberLazyListState()
   val questionExpandMap = remember { mutableStateMapOf<Int, Boolean>() }
-  val quizListState = remember { mutableStateOf(listOf<Quiz>()) }
-
-  LaunchedEffect(key1 = selectText) {
-    val quizList = when (selectText) {
-      OrderConstant.CHAPTER -> findByFavoriteOrderByChapterIndex()
-      OrderConstant.FAVORITE_TIME -> findByFavoriteOrderByFavoriteTime()
-      OrderConstant.WRONG_ANSWER_COUNT -> findByFavoriteOrderByWrongAnswerCount()
-      else -> findByFavoriteOrderByChapterIndex()
-    }
-    quizListState.value = quizList
-  }
 
   LazyColumn(
     modifier = modifier,
     state = listState
   ) {
-    val quizList = quizListState.value
     if (quizList.isNotEmpty()) {
       quizList.forEachIndexed { index, quiz ->
         item(key = quiz.id) {
@@ -63,4 +46,42 @@ fun FavoriteQuizList(
       }
     }
   }
+}
+
+@Preview(
+  showBackground = true
+)
+@Composable
+fun FavoriteQuizListPreview() {
+  val getChapterByIndex: suspend (Int) -> Chapter? = { chapterIndex ->
+    Chapter(
+      index = chapterIndex,
+      fullTitle = "第${chapterIndex}章完整版标题",
+      simpleTitle = "简化标题",
+      simpleUrl = "http://xx.com/sim/${chapterIndex}",
+      fullUrl = "http://xxx.com/full/${chapterIndex}"
+    )
+  }
+  val quizList = run {
+    val result = mutableListOf<Quiz>()
+    for (i in 0 until 10) {
+      val quiz = Quiz(
+        id = i,
+        chapterIndex = i,
+        question = "问题$i",
+        correctOption = "问题${i}正确选项",
+        wrongOption1 = "问题${i}错误选项1",
+        wrongOption2 = "问题${i}错误选项2",
+        wrongOption3 = "问题${i}错误选项3",
+        explanation = "问题${i}的解释"
+      )
+      result.add(quiz)
+    }
+    result
+  }
+  FavoriteQuizList(
+    quizList = quizList,
+    getChapterByIndex = getChapterByIndex,
+    onNavigation = {},
+  )
 }

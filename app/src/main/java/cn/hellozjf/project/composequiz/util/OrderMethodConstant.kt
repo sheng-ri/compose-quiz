@@ -1,6 +1,9 @@
 package cn.hellozjf.project.composequiz.util
 
-class OrderConstant {
+/**
+ * TODO 常量改枚举
+ */
+class OrderMethodConstant {
   companion object {
     // "章节", "收藏时间", "答错次数"
     val CHAPTER = "章节"
