@@ -2,23 +2,18 @@ package cn.hellozjf.project.composequiz.database.repository
 
 import androidx.lifecycle.MutableLiveData
 import cn.hellozjf.project.composequiz.database.dao.ChapterDao
+import cn.hellozjf.project.composequiz.database.dao.ChapterZhDao
 import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class ChapterRepository(private val chapterDao: ChapterDao) {
-
-  /**
-   * TODO 这个协程作用域应该要移除
-   */
+class ChapterZhRepository(private val chapterDao: ChapterZhDao) {
   private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-  /**
-   * TODO 增删改方法要改成 suspend 方法
-   */
-  fun insertChapter(chapter: Chapter) {
+  fun insertChapter(chapter: ChapterZh) {
     coroutineScope.launch(Dispatchers.IO) {
       chapterDao.insertChapter(chapter)
     }
@@ -30,15 +25,15 @@ class ChapterRepository(private val chapterDao: ChapterDao) {
     }
   }
 
-  fun findAllOrderByIndex(): Flow<List<Chapter>> {
+  fun findAllOrderByIndex(): Flow<List<ChapterZh>> {
     return chapterDao.findAllOrderByIndex()
   }
 
-  fun findByIndexFlow(index: Int): Flow<List<Chapter>> {
+  fun findByIndexFlow(index: Int): Flow<List<ChapterZh>> {
     return chapterDao.findByIndexFlow(index)
   }
 
-  suspend fun findByIndex(index: Int): Chapter? {
+  suspend fun findByIndex(index: Int): ChapterZh? {
     return chapterDao.findByIndex(index)
   }
 

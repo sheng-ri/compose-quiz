@@ -21,7 +21,9 @@ import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 
 /**
  * 答案列表屏幕
@@ -32,7 +34,9 @@ fun AnswerScreen(
   title: String,
   oldQuizList: List<Quiz>,
   chapterViewModel: ChapterViewModel,
+  chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
+  chapterQuizZhViewModel: ChapterQuizZhViewModel,
   chooseOptionMap: Map<Int, String>,
   quizOrderList: List<Int>,
   optionOrderList: List<List<Int>>,

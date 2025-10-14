@@ -107,6 +107,7 @@ fun FavoriteQuizPanelPreview() {
   val quiz00 = Quiz(
     id = 0,
     chapterIndex = 0,
+    quizIndex = 1,
     question = "第0章问题0",
     correctOption = "正确选项",
     wrongOption1 = "错误选项1",
@@ -120,6 +121,7 @@ fun FavoriteQuizPanelPreview() {
   val quiz01 = Quiz(
     id = 1,
     chapterIndex = 0,
+    quizIndex = 2,
     question = "第0章问题1",
     correctOption = "正确选项",
     wrongOption1 = "错误选项1",
@@ -133,6 +135,7 @@ fun FavoriteQuizPanelPreview() {
   val quiz10 = Quiz(
     id = 10,
     chapterIndex = 1,
+    quizIndex = 1,
     question = "第1章问题0",
     correctOption = "正确选项",
     wrongOption1 = "错误选项1",
@@ -146,6 +149,7 @@ fun FavoriteQuizPanelPreview() {
   val quiz11 = Quiz(
     id = 11,
     chapterIndex = 1,
+    quizIndex = 2,
     question = "第1章问题1",
     correctOption = "正确选项",
     wrongOption1 = "错误选项1",
@@ -172,6 +176,7 @@ fun FavoriteQuizPanelPreview() {
       val quiz = Quiz(
         id = i,
         chapterIndex = i,
+        quizIndex = 1,
         question = "问题$i",
         correctOption = "正确答案",
         wrongOption1 = "错误答案1",

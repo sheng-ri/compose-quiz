@@ -124,6 +124,7 @@ fun FavoriteTestRowPreview() {
         val quiz = Quiz(
           id = i,
           chapterIndex = i,
+          quizIndex = 1,
           question = "问题$i",
           correctOption = "正确答案",
           wrongOption1 = "错误答案1",

@@ -9,7 +9,9 @@ import cn.hellozjf.project.composequiz.nav.MainScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 
 /**
  * 这个是最顶层的 Screen，它会根据 NavKey 显示具体的 Screen
@@ -17,7 +19,9 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 @Composable
 fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel
+  chapterZhViewModel: ChapterZhViewModel,
+  chapterQuizViewModel: ChapterQuizViewModel,
+  chapterQuizZhViewModel: ChapterQuizZhViewModel
 ) {
   val backStack = rememberNavBackStack(MainScreenKey)
   val onNavigation: (NavKey) -> Unit = {
@@ -43,7 +47,9 @@ fun NavDisplayScreen(
       entry<MainScreenKey> {
         MainScreen(
           chapterViewModel = chapterViewModel,
+          chapterZhViewModel = chapterZhViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
+          chapterQuizZhViewModel = chapterQuizZhViewModel,
           onNavigation = onNavigation
         )
       }
@@ -54,7 +60,9 @@ fun NavDisplayScreen(
           title = title,
           quizList = quizList,
           chapterViewModel = chapterViewModel,
+          chapterZhViewModel = chapterZhViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
+          chapterQuizZhViewModel = chapterQuizZhViewModel,
           onNavigation = onNavigation
         )
       }
@@ -68,7 +76,9 @@ fun NavDisplayScreen(
           title = title,
           oldQuizList = quizList,
           chapterViewModel = chapterViewModel,
+          chapterZhViewModel = chapterZhViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
+          chapterQuizZhViewModel = chapterQuizZhViewModel,
           chooseOptionMap = chooseOptionMap,
           quizOrderList = quizOrderList,
           optionOrderList = optionOrderList,

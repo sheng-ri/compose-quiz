@@ -9,8 +9,8 @@ import kotlinx.serialization.Serializable
  * 问答实体
  */
 @Serializable
-@Entity(tableName = "quiz")
-data class Quiz(
+@Entity(tableName = "quiz_zh")
+data class QuizZh(
 
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "id")

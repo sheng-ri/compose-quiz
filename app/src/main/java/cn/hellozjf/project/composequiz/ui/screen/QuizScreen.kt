@@ -15,7 +15,9 @@ import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.ui.component.QuizList
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 
 /**
  * 问答屏幕
@@ -26,7 +28,9 @@ fun QuizScreen(
   title: String,
   quizList: List<Quiz>,
   chapterViewModel: ChapterViewModel,
+  chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
+  chapterQuizZhViewModel: ChapterQuizZhViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
 

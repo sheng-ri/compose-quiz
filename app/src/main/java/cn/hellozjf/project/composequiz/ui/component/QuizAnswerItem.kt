@@ -62,6 +62,7 @@ fun QuizAnswerItemPreview() {
       Quiz(
         id = 0,
         chapterIndex = 0,
+        quizIndex = 1,
         question = "问题0",
         correctOption = "正确答案",
         wrongOption1 = "错误答案1",

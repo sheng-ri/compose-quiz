@@ -68,6 +68,7 @@ fun FavoriteQuizListPreview() {
       val quiz = Quiz(
         id = i,
         chapterIndex = i,
+        quizIndex = 1,
         question = "问题$i",
         correctOption = "问题${i}正确选项",
         wrongOption1 = "问题${i}错误选项1",

@@ -20,7 +20,9 @@ import cn.hellozjf.project.composequiz.ui.component.ChapterList
 import cn.hellozjf.project.composequiz.ui.component.DailyQuiz
 import cn.hellozjf.project.composequiz.ui.component.FavoriteQuizPanel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 
 /**
  * NavDisplayScreen 默认显示的 Screen
@@ -31,7 +33,9 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 @Composable
 fun MainScreen(
   chapterViewModel: ChapterViewModel,
+  chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
+  chapterQuizZhViewModel: ChapterQuizZhViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
   var destination by rememberSaveable { mutableStateOf(DestinationQuiz.DAILY_QUIZ) }
@@ -63,6 +67,7 @@ fun MainScreen(
       when (destination) {
         DestinationQuiz.CHAPTER_LIST -> {
           // 按章节号排序，查出所有的章节
+          // TODO 这里需要根据当前的语言，选择具体的 viewModel
           val chapterList by chapterViewModel.findAllOrderByIndex().collectAsState(listOf())
           ChapterList(
             chapterList = chapterList,
@@ -72,6 +77,7 @@ fun MainScreen(
         }
 
         DestinationQuiz.FAVORITE_QUIZ -> {
+          // TODO 这里需要根据当前的语言，选择具体的 viewModel
           FavoriteQuizPanel(
             getChapterByIndex = chapterViewModel::findByIndex,
             findByFavoriteOrderByChapterIndex = chapterQuizViewModel::findByFavoriteOrderByChapterIndex,

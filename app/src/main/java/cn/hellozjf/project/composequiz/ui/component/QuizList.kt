@@ -57,6 +57,7 @@ fun QuizListPreview() {
     Quiz(
       id = 0,
       chapterIndex = 0,
+      quizIndex = 1,
       question = "问题0",
       correctOption = "正确选项",
       wrongOption1 = "错误选项1",
@@ -67,6 +68,7 @@ fun QuizListPreview() {
     Quiz(
       id = 1,
       chapterIndex = 0,
+      quizIndex = 2,
       question = "问题1",
       correctOption = "正确选项",
       wrongOption1 = "错误选项1",
@@ -77,6 +79,7 @@ fun QuizListPreview() {
     Quiz(
       id = 2,
       chapterIndex = 0,
+      quizIndex = 3,
       question = "问题2",
       correctOption = "正确选项",
       wrongOption1 = "错误选项1",

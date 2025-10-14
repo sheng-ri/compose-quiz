@@ -57,6 +57,7 @@ fun FavoriteQuizQuestionPreview() {
     expanded = expand,
     quiz = Quiz(
       chapterIndex = 0,
+      quizIndex = 1,
       question = "第0章题目的标题",
       correctOption = "题目正确选项",
       wrongOption1 = "题目错误选项1",

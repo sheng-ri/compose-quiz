@@ -92,6 +92,7 @@ fun ChapterListItemPreview() {
     for (i in 0 until 10) {
       val quiz = Quiz(
         chapterIndex = chapterIndex,
+        quizIndex = i + 1,
         question = "章节${chapterIndex}问题${i}",
         correctOption = "问题${i}正确选项",
         wrongOption1 = "问题${i}错误选项1",
