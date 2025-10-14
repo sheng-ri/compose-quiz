@@ -1,0 +1,58 @@
+章节号,章节标题,简化标题,习题网址,实际网址
+3,Compose项目概述,Compose项目测验,https://www.answertopia.com/kpq5,https://www.answertopia.com/quizzes/compose-project-quiz/
+5,在Android Studio中创建Android虚拟设备 (AVD),AVD创建测验,https://www.answertopia.com/2kv9,https://www.answertopia.com/quizzes/avd-creation-quiz/
+6,使用和配置Android Studio AVD模拟器,AVD配置测验,https://www.answertopia.com/lovr,https://www.answertopia.com/quizzes/avd-configuration-quiz/
+7,Android Studio用户界面之旅,Android Studio之旅测验,https://www.answertopia.com/5e5m,https://www.answertopia.com/quizzes/android-studio-tour-quiz/
+8,在物理Android设备上测试Android Studio应用,Android设备测试测验,https://www.answertopia.com/0p1s,https://www.answertopia.com/quizzes/android-device-testing-quiz/
+9,Android Studio代码编辑器的基础知识,Android Studio代码编辑器测验,https://www.answertopia.com/4zkm,https://www.answertopia.com/quizzes/android-studio-code-editor-quiz/
+10,Android架构概述,Android架构测验,https://www.answertopia.com/dgnz,https://www.answertopia.com/quizzes/android-architecture-quiz/
+12,Kotlin数据类型、变量和可空性,Kotlin数据类型和变量测验,https://www.answertopia.com/r9sf,https://www.answertopia.com/quizzes/kotlin-data-types-and-variables-quiz/
+13,Kotlin运算符和表达式,Kotlin运算符和表达式测验,https://www.answertopia.com/3xrq,https://www.answertopia.com/quizzes/kotlin-operators-and-expressions-quiz/
+14,Kotlin控制流,Kotlin控制流测验,https://www.answertopia.com/f9n6,https://www.answertopia.com/quizzes/kotlin-control-flow-quiz/
+15,Kotlin函数和Lambdas概述,Kotlin函数和Lambdas测验,https://www.answertopia.com/hrgr,https://www.answertopia.com/quizzes/kotlin-functions-and-lambdas-quiz/
+16,Kotlin面向对象编程的基础知识,Kotlin对象对象测验,https://www.answertopia.com/f0ke,https://www.answertopia.com/quizzes/kotlin-oop-quiz/
+17,Kotlin继承和子类化简介,Kotlin继承测验,https://www.answertopia.com/qzqv,https://www.answertopia.com/quizzes/kotlin-inheritance-quiz/
+19,Compose的概述,Jetpack Compose概述测验,https://www.answertopia.com/fit4,https://www.answertopia.com/quizzes/jetpack-compose-overview-quiz/
+20,Gradle版本目录指南,Android Studio版本目录测验,https://www.answertopia.com/sjel,https://www.answertopia.com/quizzes/android-studio-version-catalogs-quiz/
+21,Composable函数概述,可组合函数测验,https://www.answertopia.com/in2s,https://www.answertopia.com/quizzes/composable-functions-quiz/
+22,Compose状态和重组概述,Compose状态测验,https://www.answertopia.com/c3sb,https://www.answertopia.com/quizzes/compose-state-quiz/
+23,Composition Local简介,Jetpack CompositionLocal测验,https://www.answertopia.com/k0zv,https://www.answertopia.com/quizzes/jetpack-compositionlocal-quiz/
+24,Compose Slot api概述,Compose Slot API测验,https://www.answertopia.com/dmuz,https://www.answertopia.com/quizzes/compose-slot-api-quiz/
+26,在Compose中使用Modifiers,Compose Modifiers测验,https://www.answertopia.com/0q87,https://www.answertopia.com/quizzes/compose-modifiers-quiz/
+27,带注释的字符串和画笔样式,Compose字符串和画笔测验,https://www.answertopia.com/powe,https://www.answertopia.com/quizzes/compose-strings-and-brushes-quiz/
+28,用Row和Col组成布局,Compose Row和Col测验,https://www.answertopia.com/nip2,https://www.answertopia.com/quizzes/compose-rows-and-columns-quiz/
+29,Compose中的Box布局,Compose Box布局测验,https://www.answertopia.com/11hw,https://www.answertopia.com/quizzes/compose-box-layout-quiz/
+30,FlowRow和FlowColumn简介,Compose Flow布局测验,https://www.answertopia.com/loa2,https://www.answertopia.com/quizzes/compose-flow-layouts-quiz/
+32,自定义布局Modifiers,Compose自定义布局测验（一）,https://www.answertopia.com/qmc5,https://www.answertopia.com/quizzes/combose-custom-layouts-quiz-pt-1/
+33,构建自定义布局,Compose自定义布局测验（二）,https://www.answertopia.com/rlxx,https://www.answertopia.com/quizzes/compose-custom-layouts-quiz-pt-2/
+34,Compose中的ConstraintLayout指南,Compose ConstraintLayout测验（一）,https://www.answertopia.com/l5ja,https://www.answertopia.com/quizzes/compose-constraintlayout-quiz-pt-1/
+35,在Compose中使用ConstraintLayout,Compose ConstraintLayout测验（二）,https://www.answertopia.com/bo5f,https://www.answertopia.com/quizzes/compose-constraintlayout-quiz-pt-2/
+36,在Compose中使用IntrinsicSize,ComposeIntrinsicSize测验,https://www.answertopia.com/7zdx,https://www.answertopia.com/quizzes/compose-intrinsicsize-quiz/
+37,Jetpack Compose中的Coroutines和LaunchedEffects,Kotlin Coroutines和LaunchedEffects测验,https://www.answertopia.com/vro7,https://www.answertopia.com/quizzes/kotlin-coroutines-and-launchedeffects-quiz/
+38,Compose中的Lists和Grids概述,Compose Row和Column列表测验,https://www.answertopia.com/iifq,https://www.answertopia.com/quizzes/compose-row-and-column-list-quiz/
+40,Compose Lazy List教程,Compose Lazy List测验,https://www.answertopia.com/ziwi,https://www.answertopia.com/quizzes/compose-lazy-list-quiz/
+41,设计自适应的列表-详细信息布局,Compose列表-详细信息布局测验,https://www.answertopia.com/of9z,https://www.answertopia.com/quizzes/compose-list-detail-layouts-quiz/
+42,Lazy List粘性标题和滚动检测,Compose粘性标题测验,https://www.answertopia.com/su6b,https://www.answertopia.com/quizzes/compose-sticky-headers-quiz/
+43,Compose Lazy交错Grid教程,Compose交错Grid测验,https://www.answertopia.com/puyx,https://www.answertopia.com/quizzes/compose-staggered-grid-quiz/
+44,VerticalPager和HorizontalPager在Compose中,Compose Pagers测验,https://www.answertopia.com/arsi,https://www.answertopia.com/quizzes/compose-pagers-quiz/
+45,Compose可视动画,Compose可视动画测验,https://www.answertopia.com/22fd,https://www.answertopia.com/quizzes/compose-visibility-animation-quiz/
+46,Compose状态驱动动画,Compose状态驱动动画测验,https://www.answertopia.com/u2s6,https://www.answertopia.com/quizzes/compose-state-driven-animation-quiz/
+47,Compose中的Cavnas图形绘制,Compose Canvas绘制测验,https://www.answertopia.com/syit,https://www.answertopia.com/quizzes/compose-canvas-drawing-quiz/
+48,在Compose中使用ViewModels,Compose ViewModel测验,https://www.answertopia.com/dooi,https://www.answertopia.com/quizzes/compose-viewmodel-quiz/
+50,Android SQLite数据库概述,SQLite数据库测验,https://www.answertopia.com/hl7q,https://www.answertopia.com/quizzes/sqlite-databases-quiz/
+51,Room数据库和Compose,Compose Room数据库测验（一）,https://www.answertopia.com/ay27,https://www.answertopia.com/quizzes/compose-room-database-quiz-pt-1/
+52,Compose Room数据库和Repository教程,Compose Room数据库测验（二）,https://www.answertopia.com/u9zq,https://www.answertopia.com/quizzes/compose-room-database-quiz-pt-2/
+53,Navigation 3和NavDisplay,Compose Navigation3测验,https://www.answertopia.com/4bwm,https://www.answertopia.com/quizzes/compose-navigation-3-quiz/
+54,Navigation3 NavDisplay教程,Compose Navigation测验,https://www.answertopia.com/4ti2,https://www.answertopia.com/quizzes/compose-navigation-quiz/
+55,NavigationSuiteScaffold底部栏和侧边栏导航,Compose NavigationSuiteScaffold测验,https://www.answertopia.com/to9y,https://www.answertopia.com/quizzes/compose-navigationsuitescaffold-quiz/
+56,检测Compose中的手势,Compose手势检测测验,https://www.answertopia.com/bu12,https://www.answertopia.com/quizzes/compose-gesture-detection-quiz/
+57,Kotlin Flow简介,Kotlin Flow测验,https://www.answertopia.com/k7nn,https://www.answertopia.com/quizzes/kotlin-flow-quiz/
+58,Jetpack Compose SharedFlow教程,Kotlin SharedFlow测验,https://www.answertopia.com/ytdi,https://www.answertopia.com/quizzes/kotlin-sharedflow-quiz/
+59,将Gemini AI集成到Android应用程序中,Gemini AI概览测验,https://www.answertopia.com/387k,https://www.answertopia.com/quizzes/gemini-ai-overview-quiz/
+60,准备Gemini Firebase AI逻辑项目,Gemini Firebase AI逻辑测验,https://www.answertopia.com/54ex,https://www.answertopia.com/quizzes/gemini-firebase-ai-logic-quiz/
+63,Gemini AI图像生成,Gemini AI图像测验,https://www.answertopia.com/lhvy,https://www.answertopia.com/quizzes/gemini-ai-imagen-quiz/
+64,介绍Glance Widget,Compose Glance Widget测验（一）,https://www.answertopia.com/bozf,https://www.answertopia.com/quizzes/compose-glance-widget-quiz-pt-1/
+65,Glance Widget教程,Compose Glance Widget测验（二）,https://www.answertopia.com/ueor,https://www.answertopia.com/quizzes/compose-glance-widget-quiz-pt-2/
+66,Android生物认证教程,Compose生物认证测验,https://www.answertopia.com/omwl,https://www.answertopia.com/quizzes/compose-biometric-authentication-quiz/
+67,使用Compose主题,Compose主题测验（一）,https://www.answertopia.com/r60u,https://www.answertopia.com/quizzes/compose-theme-quiz-pt-1/
+68,Material Design 3主题教程,Compose主题测验（二）,https://www.answertopia.com/0i5i,https://www.answertopia.com/quizzes/compose-theme-quiz-pt-2/
