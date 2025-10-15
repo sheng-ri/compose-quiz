@@ -15,6 +15,7 @@ import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
+import cn.hellozjf.project.composequiz.ui.screen.MyAppScaffold
 import cn.hellozjf.project.composequiz.ui.screen.NavDisplayScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import cn.hellozjf.project.composequiz.util.ChapterConstant
@@ -39,6 +40,8 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       ComposeQuizTheme {
+
+//        MyAppScaffold()
 
         val coroutineScope = rememberCoroutineScope()
         val owner = LocalViewModelStoreOwner.current
