@@ -1,72 +1,38 @@
 package cn.hellozjf.project.composequiz.database.repository
 
 import cn.hellozjf.project.composequiz.database.dao.QuizEnDao
-import cn.hellozjf.project.composequiz.database.dao.QuizExtDao
-import cn.hellozjf.project.composequiz.database.dao.QuizZhDao
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
-import cn.hellozjf.project.composequiz.database.entity.QuizZh
-import cn.hellozjf.project.composequiz.dto.QuizDTO
-import cn.hellozjf.project.composequiz.dto.toDTO
-import cn.hellozjf.project.composequiz.util.LanguageConstant
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
-class QuizRepository(
-  private val quizEnDao: QuizEnDao,
-  private val quizZhDao: QuizZhDao,
-  private val quizExtDao: QuizExtDao
-) {
+class QuizEnRepository(private val quizEnDao: QuizEnDao) {
 
-  suspend fun insertQuiz(quizEn: QuizEn) {
-    quizEnDao.insertQuiz(quizEn)
-  }
+  // TODO 后面把协程作用域改为 viewModelScope
+  private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
-  suspend fun insertQuiz(quizZh: QuizZh) {
-    quizZhDao.insertQuiz(quizZh)
-  }
-
-  suspend fun deleteQuizByChapterIndex(chapterIndex: Int) {
-    quizEnDao.deleteByChapter(chapterIndex)
-    quizZhDao.deleteByChapter(chapterIndex)
-  }
-
-  fun findQuizDTOFlowByChapterIndex(
-    chapterIndex: Int,
-    language: String
-  ): Flow<List<QuizDTO>> {
-    return if (language == LanguageConstant.ZH) {
-      // 中文
-      quizZhDao.findQuizDTOFlowByChapterIndex(chapterIndex)
-    } else {
-      // 英文
-      quizEnDao.findQuizDTOFlowByChapterIndex(chapterIndex)
+  fun insertQuiz(quizEn: QuizEn) {
+    coroutineScope.launch(Dispatchers.IO) {
+      quizEnDao.insertQuiz(quizEn)
     }
   }
 
-  suspend fun findQuizDTOByChapterIndex(
-    chapterIndex: Int,
-    language: String,
-  ): List<QuizDTO> {
-    return if (language == LanguageConstant.ZH) {
-      // 中文
-      quizZhDao.findByChapterIndex(chapterIndex).toDTO()
-    } else {
-      quizEnDao.findByChapterIndex(chapterIndex).toDTO()
+  fun deleteQuizByChapter(chapter: Int) {
+    coroutineScope.launch(Dispatchers.IO) {
+      quizEnDao.deleteByChapter(chapter)
     }
   }
 
-  suspend fun findQuizDTOByFavorite(
-    language: String
-  ): List<QuizDTO> {
-    val quizExtList = quizExtDao.findByFavorite()
-    return if (language == LanguageConstant.ZH) {
-      // 中文
-      quizExtList.map {
-        quizZhDao.findByChapterIndexAndQuizIndex(it.chapterIndex, it.quizIndex)
-      }.filter { it != null }
-    }
+  fun findQuizFlowByChapter(chapter: Int): Flow<List<QuizEn>> {
+    return quizEnDao.findFlowByChapterIndex(chapter)
+  }
+
+  suspend fun findQuizByChapter(chapter: Int): List<QuizEn> {
+    return quizEnDao.findByChapterIndex(chapter)
+  }
+
+  suspend fun findQuizByFavorite(): List<QuizEn> {
     return quizEnDao.findByFavorite()
   }
 

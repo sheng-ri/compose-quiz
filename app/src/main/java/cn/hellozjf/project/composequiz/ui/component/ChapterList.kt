@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
 
 private val TAG = "ChapterList"
 
@@ -18,7 +18,7 @@ private val TAG = "ChapterList"
 @Composable
 fun ChapterList(
   chapterList: List<Chapter>,
-  findQuizByChapterIndex: suspend (Int) -> List<Quiz>,
+  findQuizEnByChapterIndex: suspend (Int) -> List<QuizEn>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
@@ -33,7 +33,7 @@ fun ChapterList(
       item(key = chapter.id) {
         ChapterListItem(
           chapter = chapter,
-          findQuizByChapterIndex = findQuizByChapterIndex,
+          findQuizEnByChapterIndex = findQuizEnByChapterIndex,
           onNavigation = onNavigation
         )
       }
@@ -66,10 +66,10 @@ fun ChapterListPreview() {
     result
   }
 
-  val findQuizByChapterIndex: suspend (Int) -> List<Quiz> = { chapterIndex ->
-    val result = mutableListOf<Quiz>()
+  val findQuizEnByChapterIndex: suspend (Int) -> List<QuizEn> = { chapterIndex ->
+    val result = mutableListOf<QuizEn>()
     for (i in 0 until 10) {
-      val quiz = Quiz(
+      val quizEn = QuizEn(
         chapterIndex = chapterIndex,
         quizIndex = i + 1,
         question = "章节${chapterIndex}问题${i}",
@@ -79,14 +79,14 @@ fun ChapterListPreview() {
         wrongOption3 = "问题${i}错误选项3",
         explanation = "章节${chapterIndex}问题${i}解释"
       )
-      result.add(quiz)
+      result.add(quizEn)
     }
     result.toList()
   }
 
   ChapterList(
     chapterList = chapterList,
-    findQuizByChapterIndex = findQuizByChapterIndex,
+    findQuizEnByChapterIndex = findQuizEnByChapterIndex,
     onNavigation = {}
   )
 }

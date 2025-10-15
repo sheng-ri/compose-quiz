@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
@@ -39,7 +38,7 @@ import cn.hellozjf.project.composequiz.ui.component.ChapterList
 import cn.hellozjf.project.composequiz.ui.component.DailyQuiz
 import cn.hellozjf.project.composequiz.ui.component.FavoriteQuizPanel
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizEnViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
@@ -57,7 +56,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  chapterQuizEnViewModel: ChapterQuizEnViewModel,
   chapterQuizZhViewModel: ChapterQuizZhViewModel,
   configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit
@@ -193,7 +192,7 @@ fun MainScreen(
             val chapterList by chapterViewModel.findAllOrderByIndex().collectAsState(listOf())
             ChapterList(
               chapterList = chapterList,
-              findQuizByChapterIndex = chapterQuizViewModel::findQuizByChapterIndex,
+              findQuizEnByChapterIndex = chapterQuizEnViewModel::findQuizByChapterIndex,
               onNavigation = onNavigation
             )
           }
@@ -202,10 +201,10 @@ fun MainScreen(
             // TODO 这里需要根据当前的语言，选择具体的 viewModel
             FavoriteQuizPanel(
               getChapterByIndex = chapterViewModel::findByIndex,
-              findByFavoriteOrderByChapterIndex = chapterQuizViewModel::findByFavoriteOrderByChapterIndex,
-              findByFavoriteOrderByFavoriteTime = chapterQuizViewModel::findByFavoriteOrderByFavoriteTime,
-              findByFavoriteOrderByWrongAnswerCount = chapterQuizViewModel::findByFavoriteOrderByWrongAnswerCount,
-              findQuizByFavorite = chapterQuizViewModel::findQuizByFavorite,
+              findByFavoriteOrderByChapterIndex = chapterQuizEnViewModel::findByFavoriteOrderByChapterIndex,
+              findByFavoriteOrderByFavoriteTime = chapterQuizEnViewModel::findByFavoriteOrderByFavoriteTime,
+              findByFavoriteOrderByWrongAnswerCount = chapterQuizEnViewModel::findByFavoriteOrderByWrongAnswerCount,
+              findQuizEnByFavorite = chapterQuizEnViewModel::findQuizByFavorite,
               onNavigation = onNavigation
             )
           }

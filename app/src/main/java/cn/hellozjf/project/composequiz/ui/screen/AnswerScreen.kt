@@ -35,11 +35,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Config
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizEnViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
@@ -54,10 +54,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun AnswerScreen(
   title: String,
-  oldQuizList: List<Quiz>,
+  oldQuizEnList: List<QuizEn>,
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  chapterQuizEnViewModel: ChapterQuizEnViewModel,
   chapterQuizZhViewModel: ChapterQuizZhViewModel,
   configViewModel: ConfigViewModel,
   chooseOptionMap: Map<Int, String>,
@@ -67,11 +67,11 @@ fun AnswerScreen(
   onClearBackStack: () -> Unit
 ) {
 
-  val idList = remember(oldQuizList) {
-    oldQuizList.map { it.id }
+  val idList = remember(oldQuizEnList) {
+    oldQuizEnList.map { it.id }
   }
 
-  val quizList by chapterQuizViewModel.findByIdList(idList).collectAsState(listOf())
+  val quizList by chapterQuizEnViewModel.findByIdList(idList).collectAsState(listOf())
 
   // 这是所有的题目
   val quizDTOList = remember(quizList) {
@@ -79,6 +79,7 @@ fun AnswerScreen(
       QuizDTO(
         id = it.id,
         chapterIndex = it.chapterIndex,
+        quizIndex = it.quizIndex,
         question = it.question,
         correctOption = it.correctOption,
         wrongOption1 = it.wrongOption1,
@@ -113,7 +114,7 @@ fun AnswerScreen(
         totalCorrectCount++
       } else {
         // 这题答错了，需要记录答错次数
-        chapterQuizViewModel.incWrongAnswerCount(quiz.id)
+        chapterQuizEnViewModel.incWrongAnswerCount(quiz.id)
       }
     }
   }
@@ -228,9 +229,9 @@ fun AnswerScreen(
             item(key = quiz.id) {
               val selectOption = chooseOptionMap[quiz.id] ?: ""
               QuizAnswerItem(
-                setFavorite = chapterQuizViewModel::setFavorite,
+                setFavorite = chapterQuizEnViewModel::setFavorite,
                 index = index,
-                quiz = quiz,
+                quizEn = quiz,
                 selectedOption = selectOption,
                 optionOrder = optionOrder
               )

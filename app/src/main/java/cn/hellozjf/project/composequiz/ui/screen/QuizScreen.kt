@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
@@ -33,11 +34,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Config
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.ui.component.QuizList
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizEnViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
@@ -52,22 +54,25 @@ import kotlinx.coroutines.launch
 @Composable
 fun QuizScreen(
   title: String,
-  quizList: List<Quiz>,
+  quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  chapterQuizEnViewModel: ChapterQuizEnViewModel,
   chapterQuizZhViewModel: ChapterQuizZhViewModel,
   configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
 
+  // 这是问题列表，初始为空列表，当 LaunchedEffect 执行完毕之后，就能得到实际的问题列表了
+  var quizEnList by remember { mutableStateOf<List<QuizEn>>(listOf()) }
+
   // 这是题目的顺序
-  val quizOrder = remember(quizList.size) {
-    List(quizList.size) { it }.shuffled()
+  val quizOrder = remember(quizEnList.size) {
+    List(quizEnList.size) { it }.shuffled()
   }
   // 这是各个题目选项的顺序
-  val optionOrderList = remember(quizList.size) {
-    List(quizList.size) {
+  val optionOrderList = remember(quizEnList.size) {
+    List(quizEnList.size) {
       List(4) { it }.shuffled()
     }
   }
@@ -75,11 +80,29 @@ fun QuizScreen(
   val quizSelectOption = remember { mutableStateMapOf<Int, String>() }
 
   var showMenu by remember { mutableStateOf(false) }
-  var configState = configViewModel.getConfigFlow().collectAsState(Config(
-    language = LanguageConstant.EN
-  ))
+  var configState = configViewModel.getConfigFlow().collectAsState(
+    Config(
+      language = LanguageConstant.EN
+    )
+  )
 
   val coroutineScope = rememberCoroutineScope()
+
+  LaunchedEffect(key1 = Unit) {
+    // 先把语言查出来
+    val language = configViewModel.getConfig()?.language ?: LanguageConstant.EN
+    // 根据语言选择对应的 quizViewModel
+    val quizViewModel = if (language == LanguageConstant.EN) {
+      // 根据 quizPairList 查出 quizList
+      chapterQuizEnViewModel
+    } else {
+      chapterQuizZhViewModel
+    }
+    // 根据 quizPairList 查出 quizList
+    quizKeyList.map {
+
+    }
+  }
 
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -174,7 +197,7 @@ fun QuizScreen(
 //      )
 
       QuizList(
-        quizList = quizList,
+        quizEnList = quizEnList,
         quizOrder = quizOrder,
         quizSelectedOptionMap = quizSelectOption.toMap(),
         onQuizSelectedOptionChange = { id, selectOption ->
@@ -189,7 +212,7 @@ fun QuizScreen(
           onNavigation(
             QuizAnswerScreenKey(
               title = title,
-              quizList = quizList,
+              quizList = quizEnList,
               chooseOptionMap = quizSelectOption.toMap(),
               quizOrderList = quizOrder,
               optionOrderList = optionOrderList

@@ -18,7 +18,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +31,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ChapterListItem(
   chapter: Chapter,
-  findQuizByChapterIndex: suspend (Int) -> List<Quiz>,
+  findQuizEnByChapterIndex: suspend (Int) -> List<QuizEn>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
@@ -48,12 +49,17 @@ fun ChapterListItem(
         coroutineScope.launch {
           // 在 IO 线程执行数据库查询
           val quizList = withContext(Dispatchers.IO) {
-            findQuizByChapterIndex(chapter.index)
+            findQuizEnByChapterIndex(chapter.index)
           }
           onNavigation(
             QuizScreenKey(
               title = chapter.simpleTitle,
-              quizList = quizList
+              quizKeyList = quizList.map {
+                QuizKey(
+                  chapterIndex = it.chapterIndex,
+                  quizIndex = it.quizIndex
+                )
+              }
             )
           )
         }
@@ -87,10 +93,10 @@ fun ChapterListItemPreview() {
     simpleUrl = "http://xxx.com/sim/0",
     fullUrl = "http://xxx.com/full/0"
   )
-  val findQuizByChapterIndex: suspend (Int) -> List<Quiz> = { chapterIndex ->
-    val result = mutableListOf<Quiz>()
+  val findQuizEnByChapterIndex: suspend (Int) -> List<QuizEn> = { chapterIndex ->
+    val result = mutableListOf<QuizEn>()
     for (i in 0 until 10) {
-      val quiz = Quiz(
+      val quizEn = QuizEn(
         chapterIndex = chapterIndex,
         quizIndex = i + 1,
         question = "章节${chapterIndex}问题${i}",
@@ -100,13 +106,13 @@ fun ChapterListItemPreview() {
         wrongOption3 = "问题${i}错误选项3",
         explanation = "章节${chapterIndex}问题${i}解释"
       )
-      result.add(quiz)
+      result.add(quizEn)
     }
     result.toList()
   }
   ChapterListItem(
     chapter = chapter,
-    findQuizByChapterIndex = findQuizByChapterIndex,
+    findQuizEnByChapterIndex = findQuizEnByChapterIndex,
     onNavigation = {}
   )
 }

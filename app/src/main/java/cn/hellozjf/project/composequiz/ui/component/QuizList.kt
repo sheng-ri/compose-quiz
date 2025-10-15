@@ -7,14 +7,14 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
 
 /**
  * 问答列表
  */
 @Composable
 fun QuizList(
-  quizList: List<Quiz>,
+  quizEnList: List<QuizEn>,
   quizOrder: List<Int>,
   quizSelectedOptionMap: Map<Int, String>,
   onQuizSelectedOptionChange: (Int, String) -> Unit,
@@ -27,9 +27,9 @@ fun QuizList(
     modifier = modifier,
     state = listState
   ) {
-    if (quizList.isNotEmpty()) {
+    if (quizEnList.isNotEmpty()) {
       quizOrder.forEachIndexed { index, order ->
-        val quiz = quizList[order]
+        val quiz = quizEnList[order]
         item(key = quiz.id) {
           val selectOption = quizSelectedOptionMap[quiz.id] ?: ""
           val onSelectOptionChange: (String) -> Unit = { newSelectOption ->
@@ -37,7 +37,7 @@ fun QuizList(
           }
           QuizListItem(
             index = index,
-            quiz = quiz,
+            quizEn = quiz,
             selectedOption = selectOption,
             onSelectedOptionChange = onSelectOptionChange,
             optionOrder = optionOrderList[order]
@@ -53,8 +53,8 @@ fun QuizList(
 )
 @Composable
 fun QuizListPreview() {
-  val quizList: List<Quiz> = listOf(
-    Quiz(
+  val quizEnLists: List<QuizEn> = listOf(
+    QuizEn(
       id = 0,
       chapterIndex = 0,
       quizIndex = 1,
@@ -65,7 +65,7 @@ fun QuizListPreview() {
       wrongOption3 = "错误选项3",
       explanation = "问题0解释"
     ),
-    Quiz(
+    QuizEn(
       id = 1,
       chapterIndex = 0,
       quizIndex = 2,
@@ -76,7 +76,7 @@ fun QuizListPreview() {
       wrongOption3 = "错误选项3",
       explanation = "问题1解释"
     ),
-    Quiz(
+    QuizEn(
       id = 2,
       chapterIndex = 0,
       quizIndex = 3,
@@ -103,7 +103,7 @@ fun QuizListPreview() {
     listOf(0, 1, 3, 2),
   )
   QuizList(
-    quizList = quizList,
+    quizEnList = quizEnLists,
     quizOrder = quizOrder,
     quizSelectedOptionMap = quizSelectOptionMap,
     onQuizSelectedOptionChange = onQuizSelectOptionChange,

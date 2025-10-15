@@ -9,14 +9,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
 
 /**
  * 收藏测试页面 收藏的问答列表
  */
 @Composable
 fun FavoriteQuizList(
-  quizList: List<Quiz>,
+  quizEnList: List<QuizEn>,
   getChapterByIndex: suspend (Int) -> Chapter?,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
@@ -28,8 +28,8 @@ fun FavoriteQuizList(
     modifier = modifier,
     state = listState
   ) {
-    if (quizList.isNotEmpty()) {
-      quizList.forEachIndexed { index, quiz ->
+    if (quizEnList.isNotEmpty()) {
+      quizEnList.forEachIndexed { index, quiz ->
         item(key = quiz.id) {
           val expand = questionExpandMap[quiz.id] ?: false
           val onExpandChange: (Boolean) -> Unit = {
@@ -38,7 +38,7 @@ fun FavoriteQuizList(
           FavoriteQuiz(
             expanded = expand,
             onExpandedChange = onExpandChange,
-            quiz = quiz,
+            quizEn = quiz,
             getChapterByIndex = getChapterByIndex,
             onNavigation = onNavigation
           )
@@ -63,9 +63,9 @@ fun FavoriteQuizListPreview() {
     )
   }
   val quizList = run {
-    val result = mutableListOf<Quiz>()
+    val result = mutableListOf<QuizEn>()
     for (i in 0 until 10) {
-      val quiz = Quiz(
+      val quizEn = QuizEn(
         id = i,
         chapterIndex = i,
         quizIndex = 1,
@@ -76,12 +76,12 @@ fun FavoriteQuizListPreview() {
         wrongOption3 = "问题${i}错误选项3",
         explanation = "问题${i}的解释"
       )
-      result.add(quiz)
+      result.add(quizEn)
     }
     result
   }
   FavoriteQuizList(
-    quizList = quizList,
+    quizEnList = quizList,
     getChapterByIndex = getChapterByIndex,
     onNavigation = {},
   )

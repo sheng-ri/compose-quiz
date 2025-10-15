@@ -15,7 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
 
 /**
  * 问答列表项目
@@ -23,7 +23,7 @@ import cn.hellozjf.project.composequiz.database.entity.Quiz
 @Composable
 fun QuizListItem(
   index: Int,
-  quiz: Quiz,
+  quizEn: QuizEn,
   selectedOption: String,
   onSelectedOptionChange: (String) -> Unit,
   optionOrder: List<Int>,
@@ -41,13 +41,13 @@ fun QuizListItem(
     Column {
       // 题目
       Text(
-        text = "${index + 1}. ${quiz.question}"
+        text = "${index + 1}. ${quizEn.question}"
       )
       val options = listOf(
-        quiz.correctOption,
-        quiz.wrongOption1,
-        quiz.wrongOption2,
-        quiz.wrongOption3
+        quizEn.correctOption,
+        quizEn.wrongOption1,
+        quizEn.wrongOption2,
+        quizEn.wrongOption3
       )
       // 可以进行的选项
       for (order in optionOrder) {
@@ -69,7 +69,7 @@ fun QuizListItemPreview() {
   var selectOption by remember { mutableStateOf("错误选项3") }
   QuizListItem(
     index = 0,
-    quiz = Quiz(
+    quizEn = QuizEn(
       id = 0,
       chapterIndex = 0,
       quizIndex = 1,

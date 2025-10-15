@@ -17,13 +17,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cn.hellozjf.project.composequiz.R
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import kotlinx.coroutines.launch
 
 @Composable
 fun QuestionAndFavoriteRow(
   index: Int,
-  quiz: Quiz,
+  quizEn: QuizEn,
   setFavorite: suspend (Int, Boolean, Long) -> Unit
 ) {
 
@@ -33,21 +33,21 @@ fun QuestionAndFavoriteRow(
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(
-      text = "${index + 1}. ${quiz.question}",
+      text = "${index + 1}. ${quizEn.question}",
       modifier = Modifier.weight(1f)
     )
     Image(
-      painter = if (quiz.favorite) {
+      painter = if (quizEn.favorite) {
         painterResource(R.drawable.baseline_favorite_24)
       } else {
         painterResource(R.drawable.baseline_favorite_border_24)
       },
-      contentDescription = if (quiz.favorite) "已收藏" else "未收藏", // 无障碍功能必需
+      contentDescription = if (quizEn.favorite) "已收藏" else "未收藏", // 无障碍功能必需
       modifier = Modifier
         .size(32.dp)
         .clickable {
           coroutineScope.launch {
-            setFavorite(quiz.id, !quiz.favorite, System.currentTimeMillis())
+            setFavorite(quizEn.id, !quizEn.favorite, System.currentTimeMillis())
           }
         }
     )
@@ -59,9 +59,9 @@ fun QuestionAndFavoriteRow(
 )
 @Composable
 fun QuestionAndFavoriteRowPreview() {
-  var quiz by remember {
+  var quizEn by remember {
     mutableStateOf(
-      Quiz(
+      QuizEn(
         id = 0,
         chapterIndex = 0,
         quizIndex = 1,
@@ -78,10 +78,10 @@ fun QuestionAndFavoriteRowPreview() {
   }
   QuestionAndFavoriteRow(
     index = 0,
-    quiz = quiz,
+    quizEn = quizEn,
     setFavorite = { index, favorite, favoriteTime ->
       if (index == 0) {
-        quiz = quiz.copy(
+        quizEn = quizEn.copy(
           favorite = favorite,
           favoriteTime = favoriteTime
         )

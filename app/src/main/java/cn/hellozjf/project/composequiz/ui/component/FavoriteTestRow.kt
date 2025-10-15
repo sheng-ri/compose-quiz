@@ -15,7 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.util.TestCountConstant
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,7 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteTestRow(
-  findQuizByFavorite: suspend () -> List<Quiz>,
+  findQuizEnByFavorite: suspend () -> List<QuizEn>,
   onNavigation: (NavKey) -> Unit
 ) {
 
@@ -93,7 +94,7 @@ fun FavoriteTestRow(
       onClick = {
         coroutineScope.launch {
           val quizList = withContext(Dispatchers.IO) {
-            val favoriteQuizList = findQuizByFavorite()
+            val favoriteQuizList = findQuizEnByFavorite()
             val quizList = favoriteQuizList.shuffled().take(customTestCount)
             quizList
           }
@@ -101,7 +102,12 @@ fun FavoriteTestRow(
           onNavigation(
             QuizScreenKey(
               title = "收藏测试",
-              quizList = quizList
+              quizKeyList = quizList.map {
+                QuizKey(
+                  chapterIndex = it.chapterIndex,
+                  quizIndex = it.quizIndex
+                )
+              }
             )
           )
         }
@@ -118,10 +124,10 @@ fun FavoriteTestRow(
 @Composable
 fun FavoriteTestRowPreview() {
   FavoriteTestRow(
-    findQuizByFavorite = {
-      val list = mutableListOf<Quiz>()
+    findQuizEnByFavorite = {
+      val list = mutableListOf<QuizEn>()
       for (i in 0 until 10) {
-        val quiz = Quiz(
+        val quizEn = QuizEn(
           id = i,
           chapterIndex = i,
           quizIndex = 1,
@@ -134,7 +140,7 @@ fun FavoriteTestRowPreview() {
           favorite = true,
           favoriteTime = System.currentTimeMillis()
         )
-        list.add(quiz)
+        list.add(quizEn)
       }
       list.toList()
     },

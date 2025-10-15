@@ -15,7 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
 
 /**
  * 收藏测试页面 问答的题目 组件
@@ -24,7 +24,7 @@ import cn.hellozjf.project.composequiz.database.entity.Quiz
 fun FavoriteQuizQuestion(
   expanded: Boolean,
   onExpandedChange: (Boolean) -> Unit,
-  quiz: Quiz,
+  quizEn: QuizEn,
   modifier: Modifier = Modifier
 ) {
   Row(
@@ -32,7 +32,7 @@ fun FavoriteQuizQuestion(
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(
-      text = quiz.question,
+      text = quizEn.question,
       modifier = Modifier
         .weight(1f)
     )
@@ -55,7 +55,7 @@ fun FavoriteQuizQuestionPreview() {
       expand = it
     },
     expanded = expand,
-    quiz = Quiz(
+    quizEn = QuizEn(
       chapterIndex = 0,
       quizIndex = 1,
       question = "第0章题目的标题",

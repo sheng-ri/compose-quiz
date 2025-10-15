@@ -9,12 +9,11 @@ import kotlinx.serialization.Serializable
  * 问答实体
  */
 @Serializable
-@Entity(tableName = "quiz_zh")
+@Entity(
+  tableName = "quiz_zh",
+  primaryKeys = ["chapterIndex", "quizIndex"]
+)
 data class QuizZh(
-
-  @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = "id")
-  val id: Int = 0,
 
   @ColumnInfo(name = "chapter_index")
   val chapterIndex: Int,
@@ -39,16 +38,4 @@ data class QuizZh(
 
   @ColumnInfo(name = "explanation")
   val explanation: String,
-
-  /**
-   * TODO favorite、favoriteTime、wrongAnswerCount 这三个字段需要从 Quiz 表脱离出来，放到一个单独的表中，以便和 QuizZh 表共享
-   */
-  @ColumnInfo(name = "favorite")
-  val favorite: Boolean = false,
-
-  @ColumnInfo(name = "favorite_time")
-  val favoriteTime: Long = 0L,
-
-  @ColumnInfo(name = "wrong_answer_count")
-  val wrongAnswerCount: Int = 0
 )

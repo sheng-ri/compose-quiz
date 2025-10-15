@@ -1,8 +1,6 @@
 package cn.hellozjf.project.composequiz.database.repository
 
-import cn.hellozjf.project.composequiz.database.dao.QuizDao
 import cn.hellozjf.project.composequiz.database.dao.QuizZhDao
-import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,11 +26,11 @@ class QuizZhRepository(private val quizDao: QuizZhDao) {
   }
 
   fun findQuizFlowByChapter(chapter: Int): Flow<List<QuizZh>> {
-    return quizDao.findFlowByChapter(chapter)
+    return quizDao.findFlowByChapterIndex(chapter)
   }
 
   suspend fun findQuizByChapter(chapter: Int): List<QuizZh> {
-    return quizDao.findByChapter(chapter)
+    return quizDao.findByChapterIndex(chapter)
   }
 
   suspend fun findQuizByFavorite(): List<QuizZh> {
@@ -85,5 +83,12 @@ class QuizZhRepository(private val quizDao: QuizZhDao) {
     coroutineScope.launch(Dispatchers.IO) {
       quizDao.incWrongAnswerCount(id)
     }
+  }
+
+  suspend fun findByChapterIndexAndQuizIndex(chapterIndex: Int, quizIndex: Int): QuizZh? {
+    return quizDao.findByChapterIndexAndQuizIndex(
+      chapterIndex = chapterIndex,
+      quizIndex = quizIndex
+    )
   }
 }

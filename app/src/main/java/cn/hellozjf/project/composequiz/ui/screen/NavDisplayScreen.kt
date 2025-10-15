@@ -8,7 +8,7 @@ import androidx.navigation3.ui.NavDisplay
 import cn.hellozjf.project.composequiz.nav.MainScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizEnViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
@@ -21,7 +21,7 @@ import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  chapterQuizEnViewModel: ChapterQuizEnViewModel,
   chapterQuizZhViewModel: ChapterQuizZhViewModel,
   configViewModel: ConfigViewModel
 ) {
@@ -50,7 +50,7 @@ fun NavDisplayScreen(
         MainScreen(
           chapterViewModel = chapterViewModel,
           chapterZhViewModel = chapterZhViewModel,
-          chapterQuizViewModel = chapterQuizViewModel,
+          chapterQuizEnViewModel = chapterQuizEnViewModel,
           chapterQuizZhViewModel = chapterQuizZhViewModel,
           configViewModel = configViewModel,
           onNavigation = onNavigation
@@ -58,13 +58,13 @@ fun NavDisplayScreen(
       }
       entry<QuizScreenKey> { key: QuizScreenKey ->
         val title = key.title
-        val quizList = key.quizList
+        val quizPairList = key.quizKeyList
         QuizScreen(
           title = title,
-          quizList = quizList,
+          quizKeyList = quizPairList,
           chapterViewModel = chapterViewModel,
           chapterZhViewModel = chapterZhViewModel,
-          chapterQuizViewModel = chapterQuizViewModel,
+          chapterQuizEnViewModel = chapterQuizEnViewModel,
           chapterQuizZhViewModel = chapterQuizZhViewModel,
           configViewModel = configViewModel,
           onNavigation = onNavigation
@@ -78,10 +78,10 @@ fun NavDisplayScreen(
         val optionOrderList = key.optionOrderList
         AnswerScreen(
           title = title,
-          oldQuizList = quizList,
+          oldQuizEnList = quizList,
           chapterViewModel = chapterViewModel,
           chapterZhViewModel = chapterZhViewModel,
-          chapterQuizViewModel = chapterQuizViewModel,
+          chapterQuizEnViewModel = chapterQuizEnViewModel,
           chapterQuizZhViewModel = chapterQuizZhViewModel,
           configViewModel = configViewModel,
           chooseOptionMap = chooseOptionMap,

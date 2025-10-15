@@ -14,13 +14,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
 
 @Composable
 fun QuizAnswerItem(
   setFavorite: suspend (Int, Boolean, Long) -> Unit,
   index: Int,
-  quiz: Quiz,
+  quizEn: QuizEn,
   selectedOption: String,
   optionOrder: List<Int>,
   modifier: Modifier = Modifier
@@ -37,19 +37,19 @@ fun QuizAnswerItem(
     Column {
       QuestionAndFavoriteRow(
         index = index,
-        quiz = quiz,
+        quizEn = quizEn,
         setFavorite = setFavorite
       )
       val optionList =
-        listOf(quiz.correctOption, quiz.wrongOption1, quiz.wrongOption2, quiz.wrongOption3)
+        listOf(quizEn.correctOption, quizEn.wrongOption1, quizEn.wrongOption2, quizEn.wrongOption3)
       for (order in optionOrder) {
         FavoriteQuizOption(
           option = optionList[order],
           selectedOption = selectedOption,
-          correctOption = quiz.correctOption
+          correctOption = quizEn.correctOption
         )
       }
-      Explanation(quiz.explanation)
+      Explanation(quizEn.explanation)
     }
   }
 }
@@ -57,9 +57,9 @@ fun QuizAnswerItem(
 @Preview(showBackground = true)
 @Composable
 fun QuizAnswerItemPreview() {
-  var quiz by remember {
+  var quizEn by remember {
     mutableStateOf(
-      Quiz(
+      QuizEn(
         id = 0,
         chapterIndex = 0,
         quizIndex = 1,
@@ -76,12 +76,12 @@ fun QuizAnswerItemPreview() {
   }
   QuizAnswerItem(
     index = 0,
-    quiz = quiz,
+    quizEn = quizEn,
     selectedOption = "错误答案1",
     optionOrder = listOf(3, 1, 2, 0),
     setFavorite = { index, favorite, favoriteTime ->
       if (index == 0) {
-        quiz = quiz.copy(
+        quizEn = quizEn.copy(
           favorite = favorite,
           favoriteTime = favoriteTime
         )

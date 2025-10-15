@@ -7,26 +7,26 @@ import androidx.room.RoomDatabase
 import cn.hellozjf.project.composequiz.database.dao.ChapterDao
 import cn.hellozjf.project.composequiz.database.dao.ChapterZhDao
 import cn.hellozjf.project.composequiz.database.dao.ConfigDao
-import cn.hellozjf.project.composequiz.database.dao.QuizDao
+import cn.hellozjf.project.composequiz.database.dao.QuizEnDao
 import cn.hellozjf.project.composequiz.database.dao.QuizZhDao
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 import cn.hellozjf.project.composequiz.database.entity.Config
-import cn.hellozjf.project.composequiz.database.entity.Quiz
+import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 
 @Database(
   entities = [
     Chapter::class,
     ChapterZh::class,
-    Quiz::class,
+    QuizEn::class,
     QuizZh::class,
     Config::class
   ], version = 13, exportSchema = false
 )
 abstract class QuizRoomDatabase : RoomDatabase() {
 
-  abstract fun quizDao(): QuizDao
+  abstract fun quizEnDao(): QuizEnDao
   abstract fun quizZhDao(): QuizZhDao
 
   abstract fun chapterDao(): ChapterDao
