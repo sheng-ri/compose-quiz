@@ -81,7 +81,7 @@ fun QuizScreen(
       TopAppBar(
         title = {
           Text(
-            text = "Compose问答",
+            text = "章节测试",
             fontWeight = FontWeight.Bold
           )
         },
