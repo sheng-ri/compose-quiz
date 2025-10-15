@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.R
+import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.nav.DestinationQuiz
 import cn.hellozjf.project.composequiz.ui.component.ChapterList
 import cn.hellozjf.project.composequiz.ui.component.DailyQuiz
@@ -42,6 +43,8 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import kotlinx.coroutines.launch
 
 /**
  * NavDisplayScreen 默认显示的 Screen
@@ -56,13 +59,16 @@ fun MainScreen(
   chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   chapterQuizZhViewModel: ChapterQuizZhViewModel,
+  configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
   var destination by rememberSaveable { mutableStateOf(DestinationQuiz.DAILY_QUIZ) }
   val coroutineScope = rememberCoroutineScope()
 
   var showMenu by remember { mutableStateOf(false) }
-  var language by remember {mutableStateOf(LanguageConstant.EN)}
+  var configState = configViewModel.getConfigFlow().collectAsState(Config(
+    language = LanguageConstant.EN
+  ))
 
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -92,10 +98,8 @@ fun MainScreen(
 //          }
           Row(
             modifier = Modifier.clickable {
-              language = if (language == LanguageConstant.EN) {
-                LanguageConstant.ZH
-              } else {
-                LanguageConstant.EN
+              coroutineScope.launch {
+                configViewModel.toggleLanguage()
               }
             }
           ) {
@@ -104,7 +108,7 @@ fun MainScreen(
               contentDescription = "语言"
             )
             Text(
-              text = language
+              text = configState.value?.language ?: LanguageConstant.EN
             )
           }
 

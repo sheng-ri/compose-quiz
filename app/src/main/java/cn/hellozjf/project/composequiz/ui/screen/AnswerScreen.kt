@@ -27,12 +27,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.R
+import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
@@ -41,6 +43,8 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import kotlinx.coroutines.launch
 
 /**
  * 答案列表屏幕
@@ -55,6 +59,7 @@ fun AnswerScreen(
   chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   chapterQuizZhViewModel: ChapterQuizZhViewModel,
+  configViewModel: ConfigViewModel,
   chooseOptionMap: Map<Int, String>,
   quizOrderList: List<Int>,
   optionOrderList: List<List<Int>>,
@@ -88,7 +93,13 @@ fun AnswerScreen(
   var totalCorrectCount by remember { mutableStateOf(0) }
 
   var showMenu by remember { mutableStateOf(false) }
-  var language by remember {mutableStateOf(LanguageConstant.EN)}
+  var configState = configViewModel.getConfigFlow().collectAsState(
+    Config(
+      language = LanguageConstant.EN
+    )
+  )
+
+  val coroutineScope = rememberCoroutineScope()
 
   // 下面这句话只会检查 quizDTOList 的内容，当内容不变时就不会重复执行
   LaunchedEffect(key1 = quizDTOList.hashCode()) {
@@ -135,10 +146,8 @@ fun AnswerScreen(
 //          }
           Row(
             modifier = Modifier.clickable {
-              language = if (language == LanguageConstant.EN) {
-                LanguageConstant.ZH
-              } else {
-                LanguageConstant.EN
+              coroutineScope.launch {
+                configViewModel.toggleLanguage()
               }
             }
           ) {
@@ -147,7 +156,7 @@ fun AnswerScreen(
               contentDescription = "语言"
             )
             Text(
-              text = language
+              text = configState.value?.language ?: LanguageConstant.EN
             )
           }
 

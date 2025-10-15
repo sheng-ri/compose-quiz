@@ -9,7 +9,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -17,23 +16,23 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Constraints
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.R
+import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.ui.component.QuizList
@@ -42,6 +41,8 @@ import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import kotlinx.coroutines.launch
 
 /**
  * 问答屏幕
@@ -56,6 +57,7 @@ fun QuizScreen(
   chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   chapterQuizZhViewModel: ChapterQuizZhViewModel,
+  configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
 
@@ -73,7 +75,11 @@ fun QuizScreen(
   val quizSelectOption = remember { mutableStateMapOf<Int, String>() }
 
   var showMenu by remember { mutableStateOf(false) }
-  var language by remember {mutableStateOf(LanguageConstant.EN)}
+  var configState = configViewModel.getConfigFlow().collectAsState(Config(
+    language = LanguageConstant.EN
+  ))
+
+  val coroutineScope = rememberCoroutineScope()
 
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -94,19 +100,10 @@ fun QuizScreen(
           }
         },
         actions = {
-//          // 搜索按钮
-//          IconButton(onClick = { /* 处理搜索 */ }) {
-//            Icon(
-//              imageVector = Icons.Default.Search,
-//              contentDescription = "搜索"
-//            )
-//          }
           Row(
             modifier = Modifier.clickable {
-              language = if (language == LanguageConstant.EN) {
-                LanguageConstant.ZH
-              } else {
-                LanguageConstant.EN
+              coroutineScope.launch {
+                configViewModel.toggleLanguage()
               }
             }
           ) {
@@ -115,7 +112,7 @@ fun QuizScreen(
               contentDescription = "语言"
             )
             Text(
-              text = language
+              text = configState.value?.language ?: LanguageConstant.EN
             )
           }
 

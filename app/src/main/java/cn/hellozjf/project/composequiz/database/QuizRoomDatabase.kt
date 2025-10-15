@@ -6,10 +6,12 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import cn.hellozjf.project.composequiz.database.dao.ChapterDao
 import cn.hellozjf.project.composequiz.database.dao.ChapterZhDao
+import cn.hellozjf.project.composequiz.database.dao.ConfigDao
 import cn.hellozjf.project.composequiz.database.dao.QuizDao
 import cn.hellozjf.project.composequiz.database.dao.QuizZhDao
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
+import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 
@@ -19,7 +21,8 @@ import cn.hellozjf.project.composequiz.database.entity.QuizZh
     ChapterZh::class,
     Quiz::class,
     QuizZh::class,
-  ], version = 12, exportSchema = false
+    Config::class
+  ], version = 13, exportSchema = false
 )
 abstract class QuizRoomDatabase : RoomDatabase() {
 
@@ -28,6 +31,8 @@ abstract class QuizRoomDatabase : RoomDatabase() {
 
   abstract fun chapterDao(): ChapterDao
   abstract fun chapterZhDao(): ChapterZhDao
+
+  abstract fun configDao(): ConfigDao
 
   companion object {
     private var INSTANCE: QuizRoomDatabase? = null

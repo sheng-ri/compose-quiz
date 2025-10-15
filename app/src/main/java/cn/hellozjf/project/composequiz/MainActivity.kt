@@ -13,17 +13,19 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
+import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.database.entity.Quiz
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
-import cn.hellozjf.project.composequiz.ui.screen.MyAppScaffold
 import cn.hellozjf.project.composequiz.ui.screen.NavDisplayScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
+import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -74,13 +76,22 @@ class MainActivity : ComponentActivity() {
               LocalContext.current.applicationContext as Application
             )
           )
+          val configViewModel: ConfigViewModel = viewModel(
+            viewModelStoreOwner = it,
+            key = "ConfigViewModel",
+            factory = ConfigViewModelFactory(
+              LocalContext.current.applicationContext as Application
+            )
+          )
           NavDisplayScreen(
             chapterViewModel = chapterViewModel,
             chapterZhViewModel = chapterZhViewModel,
             chapterQuizViewModel = chapterQuizViewModel,
-            chapterQuizZhViewModel = chapterQuizZhViewModel
+            chapterQuizZhViewModel = chapterQuizZhViewModel,
+            configViewModel = configViewModel
           )
 
+          // 从 CSV 中读取章节和章节题目数据，并写入数据库中
           readCsvAndWriteToDB(
             coroutineScope = coroutineScope,
             chapterViewModel = chapterViewModel,
@@ -88,7 +99,28 @@ class MainActivity : ComponentActivity() {
             chapterQuizViewModel = chapterQuizViewModel,
             chapterQuizZhViewModel = chapterQuizZhViewModel
           )
+
+          // 进行 config 初始化
+          initConfig(
+            coroutineScope = coroutineScope,
+            configViewModel = configViewModel
+          )
         }
+      }
+    }
+  }
+
+  private fun initConfig(
+    coroutineScope: CoroutineScope,
+    configViewModel: ConfigViewModel
+  ) {
+    coroutineScope.launch(context = Dispatchers.IO) {
+      if (configViewModel.getConfig() == null) {
+        configViewModel.insertConfig(
+          Config(
+            language = LanguageConstant.EN
+          )
+        )
       }
     }
   }
@@ -260,5 +292,13 @@ class ChapterZhViewModelFactory(
 ) : ViewModelProvider.Factory {
   override fun <T : ViewModel> create(modelClass: Class<T>): T {
     return ChapterZhViewModel(application) as T
+  }
+}
+
+class ConfigViewModelFactory(
+  val application: Application
+) : ViewModelProvider.Factory {
+  override fun <T : ViewModel> create(modelClass: Class<T>): T {
+    return ConfigViewModel(application) as T
   }
 }
