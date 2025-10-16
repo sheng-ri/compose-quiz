@@ -38,8 +38,7 @@ import cn.hellozjf.project.composequiz.ui.component.ChapterList
 import cn.hellozjf.project.composequiz.ui.component.DailyQuiz
 import cn.hellozjf.project.composequiz.ui.component.FavoriteQuizPanel
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizEnViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
@@ -56,8 +55,7 @@ import kotlinx.coroutines.launch
 fun MainScreen(
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
-  chapterQuizEnViewModel: ChapterQuizEnViewModel,
-  chapterQuizZhViewModel: ChapterQuizZhViewModel,
+  chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
@@ -65,7 +63,7 @@ fun MainScreen(
   val coroutineScope = rememberCoroutineScope()
 
   var showMenu by remember { mutableStateOf(false) }
-  var configState = configViewModel.getConfigFlow().collectAsState(Config(
+  val configState = configViewModel.getConfigFlow().collectAsState(Config(
     language = LanguageConstant.EN
   ))
 
@@ -191,8 +189,9 @@ fun MainScreen(
             // TODO 这里需要根据当前的语言，选择具体的 viewModel
             val chapterList by chapterViewModel.findAllOrderByIndex().collectAsState(listOf())
             ChapterList(
+              language = configState.value?.language ?: LanguageConstant.EN,
               chapterList = chapterList,
-              findQuizEnByChapterIndex = chapterQuizEnViewModel::findQuizByChapterIndex,
+              findQuizDTOByChapterIndex = chapterQuizViewModel::findQuizDTOListByChapterIndex,
               onNavigation = onNavigation
             )
           }
@@ -201,10 +200,10 @@ fun MainScreen(
             // TODO 这里需要根据当前的语言，选择具体的 viewModel
             FavoriteQuizPanel(
               getChapterByIndex = chapterViewModel::findByIndex,
-              findByFavoriteOrderByChapterIndex = chapterQuizEnViewModel::findByFavoriteOrderByChapterIndex,
-              findByFavoriteOrderByFavoriteTime = chapterQuizEnViewModel::findByFavoriteOrderByFavoriteTime,
-              findByFavoriteOrderByWrongAnswerCount = chapterQuizEnViewModel::findByFavoriteOrderByWrongAnswerCount,
-              findQuizEnByFavorite = chapterQuizEnViewModel::findQuizByFavorite,
+              findByFavoriteOrderByChapterIndex = chapterQuizViewModel::findByFavoriteOrderByChapterIndex,
+              findByFavoriteOrderByFavoriteTime = chapterQuizViewModel::findByFavoriteOrderByFavoriteTime,
+              findByFavoriteOrderByWrongAnswerCount = chapterQuizViewModel::findByFavoriteOrderByWrongAnswerCount,
+              findQuizEnByFavorite = chapterQuizViewModel::findQuizListByFavorite,
               onNavigation = onNavigation
             )
           }

@@ -6,12 +6,8 @@ import cn.hellozjf.project.composequiz.database.dao.QuizZhDao
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import cn.hellozjf.project.composequiz.dto.QuizDTO
-import cn.hellozjf.project.composequiz.dto.toDTO
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 class QuizRepository(
   private val quizEnDao: QuizEnDao,
@@ -19,22 +15,34 @@ class QuizRepository(
   private val quizExtDao: QuizExtDao
 ) {
 
+  /**
+   * 添加英文版本的 Quiz
+   */
   suspend fun insertQuiz(quizEn: QuizEn) {
     quizEnDao.insertQuiz(quizEn)
   }
 
+  /**
+   * 添加中文版本的 Quiz
+   */
   suspend fun insertQuiz(quizZh: QuizZh) {
     quizZhDao.insertQuiz(quizZh)
   }
 
+  /**
+   * 根据章节编号删除 Quiz
+   */
   suspend fun deleteQuizByChapterIndex(chapterIndex: Int) {
     quizEnDao.deleteByChapter(chapterIndex)
     quizZhDao.deleteByChapter(chapterIndex)
   }
 
+  /**
+   * 根据章节编号查找 Quiz 流
+   */
   fun findQuizDTOFlowByChapterIndex(
-    chapterIndex: Int,
-    language: String
+    language: String,
+    chapterIndex: Int
   ): Flow<List<QuizDTO>> {
     return if (language == LanguageConstant.ZH) {
       // 中文
@@ -45,83 +53,137 @@ class QuizRepository(
     }
   }
 
-  suspend fun findQuizDTOByChapterIndex(
-    chapterIndex: Int,
+  /**
+   * 根据章节编号查找 Quiz 列表
+   */
+  suspend fun findQuizDTOListByChapterIndex(
     language: String,
+    chapterIndex: Int,
   ): List<QuizDTO> {
     return if (language == LanguageConstant.ZH) {
       // 中文
-      quizZhDao.findByChapterIndex(chapterIndex).toDTO()
+      quizZhDao.findQuizDTOByChapterIndex(chapterIndex)
     } else {
-      quizEnDao.findByChapterIndex(chapterIndex).toDTO()
+      quizEnDao.findQuizDTOByChapterIndex(chapterIndex)
     }
   }
 
-  suspend fun findQuizDTOByFavorite(
+  suspend fun findQuizDTOListByFavorite(
     language: String
   ): List<QuizDTO> {
-    val quizExtList = quizExtDao.findByFavorite()
     return if (language == LanguageConstant.ZH) {
-      // 中文
-      quizExtList.map {
-        quizZhDao.findByChapterIndexAndQuizIndex(it.chapterIndex, it.quizIndex)
-      }.filter { it != null }
-    }
-    return quizEnDao.findByFavorite()
-  }
-
-  fun findByIdListFlow(idList: List<Int>): Flow<List<QuizEn>> {
-    return quizEnDao.findByIdListFlow(idList)
-  }
-
-  fun findByFavoriteOrderByChapterIndexFlow(): Flow<List<QuizEn>> {
-    return quizEnDao.findByFavoriteOrderByChapterIndexFlow()
-  }
-
-  suspend fun findByFavoriteOrderByChapterIndex(): List<QuizEn> {
-    return quizEnDao.findByFavoriteOrderByChapterIndex()
-  }
-
-  fun findByFavoriteOrderByFavoriteTimeFlow(): Flow<List<QuizEn>> {
-    return quizEnDao.findByFavoriteOrderByFavoriteTimeFlow()
-  }
-
-  suspend fun findByFavoriteOrderByFavoriteTime(): List<QuizEn> {
-    return quizEnDao.findByFavoriteOrderByFavoriteTime()
-  }
-
-  fun findByFavoriteOrderByWrongAnswerCountFlow(): Flow<List<QuizEn>> {
-    return quizEnDao.findByFavoriteOrderByWrongAnswerCountFlow()
-  }
-
-  suspend fun findByFavoriteOrderByWrongAnswerCount(): List<QuizEn> {
-    return quizEnDao.findByFavoriteOrderByWrongAnswerCount()
-  }
-
-  fun getCount(): Int {
-    return quizEnDao.getCount()
-  }
-
-  fun setFavorite(id: Int, favorite: Boolean, favoriteTime: Long) {
-    coroutineScope.launch(Dispatchers.IO) {
-      quizEnDao.setFavorite(id, favorite, favoriteTime)
+      quizZhDao.findByFavorite()
+    } else {
+      quizEnDao.findByFavorite()
     }
   }
 
-  suspend fun setFavoriteSuspend(id: Int, favorite: Boolean, favoriteTime: Long) {
-    quizEnDao.setFavorite(id, favorite, favoriteTime)
-  }
-
-  fun incWrongAnswerCount(id: Int) {
-    coroutineScope.launch(Dispatchers.IO) {
-      quizEnDao.incWrongAnswerCount(id)
+  fun findDTOFlowByFavoriteOrderByChapterIndex(
+    language: String
+  ): Flow<List<QuizDTO>> {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.findDTOFlowByFavoriteOrderByChapterIndex()
+    } else {
+      quizEnDao.findDTOFlowByFavoriteOrderByChapterIndex()
     }
   }
 
-  suspend fun findByChapterIndexAndQuizIndex(chapterIndex: Int, quizIndex: Int): QuizEn? {
-    return quizEnDao.findByChapterIndexAndQuizIndex(
-      chapterIndex = chapterIndex,
-      quizIndex = quizIndex
-    )
+  suspend fun findDTOListByFavoriteOrderByChapterIndex(
+    language: String
+  ): List<QuizDTO> {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.findDTOListByFavoriteOrderByChapterIndex()
+    } else {
+      quizEnDao.findDTOListByFavoriteOrderByChapterIndex()
+    }
+  }
+
+  fun findDTOFlowByFavoriteOrderByFavoriteTime(
+    language: String
+  ): Flow<List<QuizDTO>> {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.findDTOFlowByFavoriteOrderByFavoriteTime()
+    } else {
+      quizEnDao.findDTOFlowByFavoriteOrderByFavoriteTime()
+    }
+  }
+
+  suspend fun findDTOListByFavoriteOrderByFavoriteTime(
+    language: String
+  ): List<QuizDTO> {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.findDTOListByFavoriteOrderByFavoriteTime()
+    } else {
+      quizEnDao.findDTOListByFavoriteOrderByFavoriteTime()
+    }
+  }
+
+  fun findDTOFlowByFavoriteOrderByWrongAnswerCount(
+    language: String
+  ): Flow<List<QuizDTO>> {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.findDTOFlowByFavoriteOrderByWrongAnswerCount()
+    } else {
+      quizEnDao.findDTOFlowByFavoriteOrderByWrongAnswerCount()
+    }
+  }
+
+  suspend fun findDTOListByFavoriteOrderByWrongAnswerCount(
+    language: String
+  ): List<QuizDTO> {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.findDTOListByFavoriteOrderByWrongAnswerCount()
+    } else {
+      quizEnDao.findDTOListByFavoriteOrderByWrongAnswerCount()
+    }
+  }
+
+  suspend fun setFavorite(
+    chapterIndex: Int,
+    quizIndex: Int,
+    favorite: Boolean,
+    favoriteTime: Long
+  ) {
+    val quizExt = quizExtDao.query(chapterIndex, quizIndex)
+    quizExt?.let {
+      quizExtDao.update(
+        it.copy(
+          favorite = favorite,
+          favoriteTime = favoriteTime
+        )
+      )
+    }
+  }
+
+  suspend fun incWrongAnswerCount(
+    chapterIndex: Int,
+    quizIndex: Int
+  ) {
+    val quizExt = quizExtDao.query(chapterIndex, quizIndex)
+    quizExt?.let {
+      quizExtDao.update(
+        it.copy(
+          wrongAnswerCount = it.wrongAnswerCount + 1
+        )
+      )
+    }
+  }
+
+  suspend fun findByChapterIndexAndQuizIndex(
+    language: String,
+    chapterIndex: Int,
+    quizIndex: Int
+  ): QuizDTO? {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.findQuizDTOByChapterIndexAndQuizIndex(
+        chapterIndex = chapterIndex,
+        quizIndex = quizIndex
+      )
+    } else {
+      quizEnDao.findQuizDTOByChapterIndexAndQuizIndex(
+        chapterIndex = chapterIndex,
+        quizIndex = quizIndex
+      )
+    }
   }
 }

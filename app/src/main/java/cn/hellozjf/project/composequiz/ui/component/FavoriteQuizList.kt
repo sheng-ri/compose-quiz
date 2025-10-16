@@ -10,13 +10,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 
 /**
  * 收藏测试页面 收藏的问答列表
  */
 @Composable
 fun FavoriteQuizList(
-  quizEnList: List<QuizEn>,
+  quizDTOList: List<QuizDTO>,
   getChapterByIndex: suspend (Int) -> Chapter?,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
@@ -28,8 +29,8 @@ fun FavoriteQuizList(
     modifier = modifier,
     state = listState
   ) {
-    if (quizEnList.isNotEmpty()) {
-      quizEnList.forEachIndexed { index, quiz ->
+    if (quizDTOList.isNotEmpty()) {
+      quizDTOList.forEachIndexed { index, quiz ->
         item(key = quiz.id) {
           val expand = questionExpandMap[quiz.id] ?: false
           val onExpandChange: (Boolean) -> Unit = {
@@ -81,7 +82,7 @@ fun FavoriteQuizListPreview() {
     result
   }
   FavoriteQuizList(
-    quizEnList = quizList,
+    quizDTOList = quizList,
     getChapterByIndex = getChapterByIndex,
     onNavigation = {},
   )

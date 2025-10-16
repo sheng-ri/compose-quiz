@@ -39,8 +39,7 @@ import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.ui.component.QuizList
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizEnViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
@@ -57,8 +56,7 @@ fun QuizScreen(
   quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
-  chapterQuizEnViewModel: ChapterQuizEnViewModel,
-  chapterQuizZhViewModel: ChapterQuizZhViewModel,
+  chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
@@ -94,7 +92,7 @@ fun QuizScreen(
     // 根据语言选择对应的 quizViewModel
     val quizViewModel = if (language == LanguageConstant.EN) {
       // 根据 quizPairList 查出 quizList
-      chapterQuizEnViewModel
+      chapterQuizViewModel
     } else {
       chapterQuizZhViewModel
     }

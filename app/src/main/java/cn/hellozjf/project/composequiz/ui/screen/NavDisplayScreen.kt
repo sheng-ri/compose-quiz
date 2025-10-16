@@ -8,8 +8,7 @@ import androidx.navigation3.ui.NavDisplay
 import cn.hellozjf.project.composequiz.nav.MainScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizEnViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
@@ -21,8 +20,7 @@ import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
-  chapterQuizEnViewModel: ChapterQuizEnViewModel,
-  chapterQuizZhViewModel: ChapterQuizZhViewModel,
+  chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel
 ) {
   val backStack = rememberNavBackStack(MainScreenKey)
@@ -50,8 +48,7 @@ fun NavDisplayScreen(
         MainScreen(
           chapterViewModel = chapterViewModel,
           chapterZhViewModel = chapterZhViewModel,
-          chapterQuizEnViewModel = chapterQuizEnViewModel,
-          chapterQuizZhViewModel = chapterQuizZhViewModel,
+          chapterQuizViewModel = chapterQuizViewModel,
           configViewModel = configViewModel,
           onNavigation = onNavigation
         )
@@ -64,8 +61,7 @@ fun NavDisplayScreen(
           quizKeyList = quizPairList,
           chapterViewModel = chapterViewModel,
           chapterZhViewModel = chapterZhViewModel,
-          chapterQuizEnViewModel = chapterQuizEnViewModel,
-          chapterQuizZhViewModel = chapterQuizZhViewModel,
+          chapterQuizViewModel = chapterQuizViewModel,
           configViewModel = configViewModel,
           onNavigation = onNavigation
         )
@@ -81,8 +77,7 @@ fun NavDisplayScreen(
           oldQuizEnList = quizList,
           chapterViewModel = chapterViewModel,
           chapterZhViewModel = chapterZhViewModel,
-          chapterQuizEnViewModel = chapterQuizEnViewModel,
-          chapterQuizZhViewModel = chapterQuizZhViewModel,
+          chapterQuizViewModel = chapterQuizViewModel,
           configViewModel = configViewModel,
           chooseOptionMap = chooseOptionMap,
           quizOrderList = quizOrderList,

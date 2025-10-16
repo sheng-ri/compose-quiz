@@ -8,7 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.util.LanguageConstant
 
 private val TAG = "ChapterList"
 
@@ -17,8 +18,9 @@ private val TAG = "ChapterList"
  */
 @Composable
 fun ChapterList(
+  language: String,
   chapterList: List<Chapter>,
-  findQuizEnByChapterIndex: suspend (Int) -> List<QuizEn>,
+  findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
@@ -32,8 +34,9 @@ fun ChapterList(
     chapterList.forEach { chapter ->
       item(key = chapter.id) {
         ChapterListItem(
+          language = language,
           chapter = chapter,
-          findQuizEnByChapterIndex = findQuizEnByChapterIndex,
+          findQuizDTOByChapterIndex = findQuizDTOByChapterIndex,
           onNavigation = onNavigation
         )
       }
@@ -66,27 +69,29 @@ fun ChapterListPreview() {
     result
   }
 
-  val findQuizEnByChapterIndex: suspend (Int) -> List<QuizEn> = { chapterIndex ->
-    val result = mutableListOf<QuizEn>()
-    for (i in 0 until 10) {
-      val quizEn = QuizEn(
-        chapterIndex = chapterIndex,
-        quizIndex = i + 1,
-        question = "章节${chapterIndex}问题${i}",
-        correctOption = "问题${i}正确选项",
-        wrongOption1 = "问题${i}错误选项1",
-        wrongOption2 = "问题${i}错误选项2",
-        wrongOption3 = "问题${i}错误选项3",
-        explanation = "章节${chapterIndex}问题${i}解释"
-      )
-      result.add(quizEn)
+  val findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO> =
+    { language, chapterIndex ->
+      val result = mutableListOf<QuizDTO>()
+      for (i in 0 until 10) {
+        val quizDTO = QuizDTO(
+          chapterIndex = chapterIndex,
+          quizIndex = i + 1,
+          question = "章节${chapterIndex}问题${i}",
+          correctOption = "问题${i}正确选项",
+          wrongOption1 = "问题${i}错误选项1",
+          wrongOption2 = "问题${i}错误选项2",
+          wrongOption3 = "问题${i}错误选项3",
+          explanation = "章节${chapterIndex}问题${i}解释"
+        )
+        result.add(quizDTO)
+      }
+      result.toList()
     }
-    result.toList()
-  }
 
   ChapterList(
+    language = LanguageConstant.ZH,
     chapterList = chapterList,
-    findQuizEnByChapterIndex = findQuizEnByChapterIndex,
+    findQuizDTOByChapterIndex = findQuizDTOByChapterIndex,
     onNavigation = {}
   )
 }

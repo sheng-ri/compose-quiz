@@ -21,8 +21,7 @@ import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizEnViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
@@ -48,17 +47,10 @@ class MainActivity : ComponentActivity() {
         val coroutineScope = rememberCoroutineScope()
         val owner = LocalViewModelStoreOwner.current
         owner?.let {
-          val chapterQuizEnViewModel: ChapterQuizEnViewModel = viewModel(
+          val chapterQuizViewModel: ChapterQuizViewModel = viewModel(
             viewModelStoreOwner = it,
             key = "ChapterQuizViewModel",
             factory = ChapterQuizViewModelFactory(
-              LocalContext.current.applicationContext as Application
-            )
-          )
-          val chapterQuizZhViewModel: ChapterQuizZhViewModel = viewModel(
-            viewModelStoreOwner = it,
-            key = "ChapterQuizZhViewModel",
-            factory = ChapterQuizZhViewModelFactory(
               LocalContext.current.applicationContext as Application
             )
           )
@@ -86,7 +78,7 @@ class MainActivity : ComponentActivity() {
           NavDisplayScreen(
             chapterViewModel = chapterViewModel,
             chapterZhViewModel = chapterZhViewModel,
-            chapterQuizEnViewModel = chapterQuizEnViewModel,
+            chapterQuizViewModel = chapterQuizViewModel,
             chapterQuizZhViewModel = chapterQuizZhViewModel,
             configViewModel = configViewModel
           )
@@ -96,7 +88,7 @@ class MainActivity : ComponentActivity() {
             coroutineScope = coroutineScope,
             chapterViewModel = chapterViewModel,
             chapterZhViewModel = chapterZhViewModel,
-            chapterQuizEnViewModel = chapterQuizEnViewModel,
+            chapterQuizViewModel = chapterQuizViewModel,
             chapterQuizZhViewModel = chapterQuizZhViewModel
           )
 
@@ -132,7 +124,7 @@ class MainActivity : ComponentActivity() {
     coroutineScope: CoroutineScope,
     chapterViewModel: ChapterViewModel,
     chapterZhViewModel: ChapterZhViewModel,
-    chapterQuizEnViewModel: ChapterQuizEnViewModel,
+    chapterQuizViewModel: ChapterQuizViewModel,
     chapterQuizZhViewModel: ChapterQuizZhViewModel,
   ) {
     // 读取章节信息
@@ -143,8 +135,8 @@ class MainActivity : ComponentActivity() {
       if (chapterZhViewModel.getCount() == 0) {
         readChapterZhCsv(chapterZhViewModel)
       }
-      if (chapterQuizEnViewModel.getCount() == 0) {
-        readQuizCsv(chapterQuizEnViewModel)
+      if (chapterQuizViewModel.getCount() == 0) {
+        readQuizCsv(chapterQuizViewModel)
       }
       if (chapterQuizZhViewModel.getCount() == 0) {
         readQuizZhCsv(chapterQuizZhViewModel)
@@ -199,7 +191,7 @@ class MainActivity : ComponentActivity() {
   }
 
   private fun readQuizCsv(
-    chapterQuizEnViewModel: ChapterQuizEnViewModel
+    chapterQuizViewModel: ChapterQuizViewModel
   ) {
     try {
       this.assets.open(ChapterQuizConstant.PATH).bufferedReader().use { reader ->
@@ -221,7 +213,7 @@ class MainActivity : ComponentActivity() {
             wrongOption3 = record.get(ChapterQuizConstant.WRONG_OPTION3),
             explanation = record.get(ChapterQuizConstant.EXPLANATION)
           )
-          chapterQuizEnViewModel.insertQuiz(quizEn)
+          chapterQuizViewModel.insertQuiz(quizEn)
         }
 
       }
@@ -267,15 +259,7 @@ class ChapterQuizViewModelFactory(
   val application: Application
 ) : ViewModelProvider.Factory {
   override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    return ChapterQuizEnViewModel(application) as T
-  }
-}
-
-class ChapterQuizZhViewModelFactory(
-  val application: Application
-) : ViewModelProvider.Factory {
-  override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    return ChapterQuizZhViewModel(application) as T
+    return ChapterQuizViewModel(application) as T
   }
 }
 

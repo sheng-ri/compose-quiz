@@ -39,8 +39,7 @@ import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizEnViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizZhViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
@@ -57,8 +56,7 @@ fun AnswerScreen(
   oldQuizEnList: List<QuizEn>,
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
-  chapterQuizEnViewModel: ChapterQuizEnViewModel,
-  chapterQuizZhViewModel: ChapterQuizZhViewModel,
+  chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
   chooseOptionMap: Map<Int, String>,
   quizOrderList: List<Int>,
@@ -71,7 +69,7 @@ fun AnswerScreen(
     oldQuizEnList.map { it.id }
   }
 
-  val quizList by chapterQuizEnViewModel.findByIdList(idList).collectAsState(listOf())
+  val quizList by chapterQuizViewModel.findByIdList(idList).collectAsState(listOf())
 
   // 这是所有的题目
   val quizDTOList = remember(quizList) {
@@ -114,7 +112,7 @@ fun AnswerScreen(
         totalCorrectCount++
       } else {
         // 这题答错了，需要记录答错次数
-        chapterQuizEnViewModel.incWrongAnswerCount(quiz.id)
+        chapterQuizViewModel.incWrongAnswerCount(quiz.id)
       }
     }
   }
@@ -229,7 +227,7 @@ fun AnswerScreen(
             item(key = quiz.id) {
               val selectOption = chooseOptionMap[quiz.id] ?: ""
               QuizAnswerItem(
-                setFavorite = chapterQuizEnViewModel::setFavorite,
+                setFavorite = chapterQuizViewModel::setFavorite,
                 index = index,
                 quizEn = quiz,
                 selectedOption = selectOption,

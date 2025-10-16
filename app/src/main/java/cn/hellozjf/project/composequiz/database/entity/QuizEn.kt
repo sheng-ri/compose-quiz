@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 @Entity(
   tableName = "quiz_en",
-  primaryKeys = ["chapterIndex", "quizIndex"]
+  primaryKeys = ["chapter_index", "quiz_index"]
 )
 data class QuizEn(
 

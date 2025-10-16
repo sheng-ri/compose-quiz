@@ -8,11 +8,13 @@ import cn.hellozjf.project.composequiz.database.dao.ChapterDao
 import cn.hellozjf.project.composequiz.database.dao.ChapterZhDao
 import cn.hellozjf.project.composequiz.database.dao.ConfigDao
 import cn.hellozjf.project.composequiz.database.dao.QuizEnDao
+import cn.hellozjf.project.composequiz.database.dao.QuizExtDao
 import cn.hellozjf.project.composequiz.database.dao.QuizZhDao
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.database.entity.QuizExt
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 
 @Database(
@@ -21,6 +23,7 @@ import cn.hellozjf.project.composequiz.database.entity.QuizZh
     ChapterZh::class,
     QuizEn::class,
     QuizZh::class,
+    QuizExt::class,
     Config::class
   ], version = 13, exportSchema = false
 )
@@ -28,6 +31,7 @@ abstract class QuizRoomDatabase : RoomDatabase() {
 
   abstract fun quizEnDao(): QuizEnDao
   abstract fun quizZhDao(): QuizZhDao
+  abstract fun quizExtDao(): QuizExtDao
 
   abstract fun chapterDao(): ChapterDao
   abstract fun chapterZhDao(): ChapterZhDao

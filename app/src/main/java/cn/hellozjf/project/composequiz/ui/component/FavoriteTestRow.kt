@@ -15,9 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
+import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.util.TestCountConstant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,7 +31,8 @@ import kotlinx.coroutines.withContext
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteTestRow(
-  findQuizEnByFavorite: suspend () -> List<QuizEn>,
+  language: String,
+  findQuizDTOByFavorite: suspend (String) -> List<QuizDTO>,
   onNavigation: (NavKey) -> Unit
 ) {
 
@@ -94,7 +96,7 @@ fun FavoriteTestRow(
       onClick = {
         coroutineScope.launch {
           val quizList = withContext(Dispatchers.IO) {
-            val favoriteQuizList = findQuizEnByFavorite()
+            val favoriteQuizList = findQuizDTOByFavorite(language)
             val quizList = favoriteQuizList.shuffled().take(customTestCount)
             quizList
           }
@@ -124,11 +126,11 @@ fun FavoriteTestRow(
 @Composable
 fun FavoriteTestRowPreview() {
   FavoriteTestRow(
-    findQuizEnByFavorite = {
-      val list = mutableListOf<QuizEn>()
+    language = LanguageConstant.EN,
+    findQuizDTOByFavorite = {
+      val list = mutableListOf<QuizDTO>()
       for (i in 0 until 10) {
-        val quizEn = QuizEn(
-          id = i,
+        val quizDTO = QuizDTO(
           chapterIndex = i,
           quizIndex = 1,
           question = "问题$i",
@@ -140,7 +142,7 @@ fun FavoriteTestRowPreview() {
           favorite = true,
           favoriteTime = System.currentTimeMillis()
         )
-        list.add(quizEn)
+        list.add(quizDTO)
       }
       list.toList()
     },

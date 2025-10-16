@@ -18,9 +18,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
+import cn.hellozjf.project.composequiz.util.LanguageConstant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -30,8 +31,9 @@ import kotlinx.coroutines.withContext
  */
 @Composable
 fun ChapterListItem(
+  language: String,
   chapter: Chapter,
-  findQuizEnByChapterIndex: suspend (Int) -> List<QuizEn>,
+  findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
@@ -49,7 +51,7 @@ fun ChapterListItem(
         coroutineScope.launch {
           // 在 IO 线程执行数据库查询
           val quizList = withContext(Dispatchers.IO) {
-            findQuizEnByChapterIndex(chapter.index)
+            findQuizDTOByChapterIndex(language, chapter.index)
           }
           onNavigation(
             QuizScreenKey(
@@ -93,10 +95,10 @@ fun ChapterListItemPreview() {
     simpleUrl = "http://xxx.com/sim/0",
     fullUrl = "http://xxx.com/full/0"
   )
-  val findQuizEnByChapterIndex: suspend (Int) -> List<QuizEn> = { chapterIndex ->
-    val result = mutableListOf<QuizEn>()
+  val findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO> = { language, chapterIndex ->
+    val result = mutableListOf<QuizDTO>()
     for (i in 0 until 10) {
-      val quizEn = QuizEn(
+      val quizDTO = QuizDTO(
         chapterIndex = chapterIndex,
         quizIndex = i + 1,
         question = "章节${chapterIndex}问题${i}",
@@ -106,13 +108,14 @@ fun ChapterListItemPreview() {
         wrongOption3 = "问题${i}错误选项3",
         explanation = "章节${chapterIndex}问题${i}解释"
       )
-      result.add(quizEn)
+      result.add(quizDTO)
     }
     result.toList()
   }
   ChapterListItem(
+    language = LanguageConstant.ZH,
     chapter = chapter,
-    findQuizEnByChapterIndex = findQuizEnByChapterIndex,
+    findQuizDTOByChapterIndex = findQuizDTOByChapterIndex,
     onNavigation = {}
   )
 }

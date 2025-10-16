@@ -17,7 +17,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.util.OrderMethodConstant
 
 /**
@@ -25,11 +26,12 @@ import cn.hellozjf.project.composequiz.util.OrderMethodConstant
  */
 @Composable
 fun FavoriteQuizPanel(
+  language: String,
   getChapterByIndex: suspend (Int) -> Chapter?,
-  findByFavoriteOrderByChapterIndex: suspend () -> List<QuizEn>,
-  findByFavoriteOrderByFavoriteTime: suspend () -> List<QuizEn>,
-  findByFavoriteOrderByWrongAnswerCount: suspend () -> List<QuizEn>,
-  findQuizEnByFavorite: suspend () -> List<QuizEn>,
+  findByFavoriteOrderByChapterIndex: suspend (String) -> List<QuizDTO>,
+  findByFavoriteOrderByFavoriteTime: suspend (String) -> List<QuizDTO>,
+  findByFavoriteOrderByWrongAnswerCount: suspend (String) -> List<QuizDTO>,
+  findQuizDTOByFavorite: suspend (String) -> List<QuizDTO>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -51,16 +53,16 @@ fun FavoriteQuizPanel(
     orderMethodSelectText = it
   }
 
-  var quizEnList by remember { mutableStateOf(listOf<QuizEn>()) }
+  var quizDTOList by remember { mutableStateOf(listOf<QuizDTO>()) }
 
   LaunchedEffect(key1 = orderMethodSelectText) {
     val quizzes = when (orderMethodSelectText) {
-      OrderMethodConstant.CHAPTER -> findByFavoriteOrderByChapterIndex()
-      OrderMethodConstant.FAVORITE_TIME -> findByFavoriteOrderByFavoriteTime()
-      OrderMethodConstant.WRONG_ANSWER_COUNT -> findByFavoriteOrderByWrongAnswerCount()
-      else -> findByFavoriteOrderByChapterIndex()
+      OrderMethodConstant.CHAPTER -> findByFavoriteOrderByChapterIndex(language)
+      OrderMethodConstant.FAVORITE_TIME -> findByFavoriteOrderByFavoriteTime(language)
+      OrderMethodConstant.WRONG_ANSWER_COUNT -> findByFavoriteOrderByWrongAnswerCount(language)
+      else -> findByFavoriteOrderByChapterIndex(language)
     }
-    quizEnList = quizzes
+    quizDTOList = quizzes
   }
 
   Column(
@@ -78,13 +80,14 @@ fun FavoriteQuizPanel(
       onSelectedOrderMethodChange = onOrderMethodSelectTextChange
     )
     FavoriteQuizList(
-      quizEnList = quizEnList,
+      quizDTOList = quizDTOList,
       getChapterByIndex = getChapterByIndex,
       onNavigation = onNavigation,
       modifier = Modifier.weight(1f)
     )
     FavoriteTestRow(
-      findQuizEnByFavorite = findQuizEnByFavorite,
+      language = language,
+      findQuizDTOByFavorite = findQuizDTOByFavorite,
       onNavigation = onNavigation,
     )
   }
@@ -104,8 +107,7 @@ fun FavoriteQuizPanelPreview() {
       fullUrl = "http://xxx.com/full/${chapterIndex}"
     )
   }
-  val quizEn00 = QuizEn(
-    id = 0,
+  val quizDTO00 = QuizDTO(
     chapterIndex = 0,
     quizIndex = 1,
     question = "第0章问题0",
@@ -118,8 +120,7 @@ fun FavoriteQuizPanelPreview() {
     favoriteTime = 20L,
     wrongAnswerCount = 4
   )
-  val quizEn01 = QuizEn(
-    id = 1,
+  val quizDTO01 = QuizDTO(
     chapterIndex = 0,
     quizIndex = 2,
     question = "第0章问题1",
@@ -132,8 +133,7 @@ fun FavoriteQuizPanelPreview() {
     favoriteTime = 10L,
     wrongAnswerCount = 3
   )
-  val quizEn10 = QuizEn(
-    id = 10,
+  val quizDTO10 = QuizDTO(
     chapterIndex = 1,
     quizIndex = 1,
     question = "第1章问题0",
@@ -146,8 +146,7 @@ fun FavoriteQuizPanelPreview() {
     favoriteTime = 40L,
     wrongAnswerCount = 2
   )
-  val quizEn11 = QuizEn(
-    id = 11,
+  val quizDTO11 = QuizDTO(
     chapterIndex = 1,
     quizIndex = 2,
     question = "第1章问题1",
@@ -160,21 +159,20 @@ fun FavoriteQuizPanelPreview() {
     favoriteTime = 30L,
     wrongAnswerCount = 1
   )
-  val rawList = listOf(quizEn00, quizEn01, quizEn10, quizEn11)
-  val findByFavoriteOrderByChapterIndex: suspend () -> List<QuizEn> = {
+  val rawList = listOf(quizDTO00, quizDTO01, quizDTO10, quizDTO11)
+  val findByFavoriteOrderByChapterIndex: suspend (String) -> List<QuizDTO> = {
     rawList.sortedBy { it.chapterIndex }
   }
-  val findByFavoriteOrderByFavoriteTime: suspend () -> List<QuizEn> = {
+  val findByFavoriteOrderByFavoriteTime: suspend (String) -> List<QuizDTO> = {
     rawList.sortedBy { it.favoriteTime }
   }
-  val findByFavoriteOrderByWrongAnswerCount: suspend () -> List<QuizEn> = {
+  val findByFavoriteOrderByWrongAnswerCount: suspend (String) -> List<QuizDTO> = {
     rawList.sortedBy { it.wrongAnswerCount }
   }
-  val findQuizEnByFavorite: suspend () -> List<QuizEn> = {
-    val list = mutableListOf<QuizEn>()
+  val findQuizDTOByFavorite: suspend (String) -> List<QuizDTO> = {
+    val list = mutableListOf<QuizDTO>()
     for (i in 0 until 10) {
-      val quizEn = QuizEn(
-        id = i,
+      val quizDTO = QuizDTO(
         chapterIndex = i,
         quizIndex = 1,
         question = "问题$i",
@@ -186,16 +184,17 @@ fun FavoriteQuizPanelPreview() {
         favorite = true,
         favoriteTime = System.currentTimeMillis()
       )
-      list.add(quizEn)
+      list.add(quizDTO)
     }
     list.toList()
   }
   FavoriteQuizPanel(
+    language = LanguageConstant.ZH,
     getChapterByIndex = getChapterByIndex,
     findByFavoriteOrderByChapterIndex = findByFavoriteOrderByChapterIndex,
     findByFavoriteOrderByFavoriteTime = findByFavoriteOrderByFavoriteTime,
     findByFavoriteOrderByWrongAnswerCount = findByFavoriteOrderByWrongAnswerCount,
-    findQuizEnByFavorite = findQuizEnByFavorite,
+    findQuizDTOByFavorite = findQuizDTOByFavorite,
     onNavigation = {}
   )
 }
