@@ -47,13 +47,13 @@ import kotlinx.coroutines.launch
 
 /**
  * 答案列表屏幕
- * TODO 这里需要优化一下，oldQuizList 改成 idList
+ * TODO 这里需要优化一下，oldQuizDTOList 改成 keyList
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnswerScreen(
   title: String,
-  oldQuizEnList: List<QuizEn>,
+  oldQuizDTOList: List<QuizDTO>,
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
@@ -65,11 +65,18 @@ fun AnswerScreen(
   onClearBackStack: () -> Unit
 ) {
 
-  val idList = remember(oldQuizEnList) {
-    oldQuizEnList.map { it.id }
+  val keyList = remember(oldQuizDTOList) {
+    oldQuizDTOList.map { it.getQuizKey() }
   }
+  val config by configViewModel.getConfigFlow().collectAsState(
+    Config(language = LanguageConstant.EN)
+  )
 
-  val quizList by chapterQuizViewModel.findByIdList(idList).collectAsState(listOf())
+  val quizList by chapterQuizViewModel.findFlowByKeyList(
+    language = config?.language ?: LanguageConstant.EN,
+    quizKeyList = keyList
+  ).collectAsState(listOf())
+  // val quizList by chapterQuizViewModel.findByIdList(idList).collectAsState(listOf())
 
   // 这是所有的题目
   val quizDTOList = remember(quizList) {

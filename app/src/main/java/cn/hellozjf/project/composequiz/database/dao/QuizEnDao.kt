@@ -3,9 +3,15 @@ package cn.hellozjf.project.composequiz.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.RawQuery
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.database.entity.QuizExt
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 /**
  * 问答实体数据库操作
@@ -35,7 +41,7 @@ interface QuizEnDao {
         quiz_ext.wrong_answer_count wrongAnswerCount
     FROM quiz_en
     LEFT JOIN quiz_ext ON quiz_en.chapter_index = quiz_ext.chapter_index AND quiz_en.quiz_index = quiz_ext.quiz_index
-    WHERE chapter_index = :chapterIndex
+    WHERE quiz_en.chapter_index = :chapterIndex
   """
   )
   fun findQuizDTOFlowByChapterIndex(chapterIndex: Int): Flow<List<QuizDTO>>
@@ -59,7 +65,7 @@ interface QuizEnDao {
         quiz_ext.wrong_answer_count wrongAnswerCount
     FROM quiz_en
     LEFT JOIN quiz_ext ON quiz_en.chapter_index = quiz_ext.chapter_index AND quiz_en.quiz_index = quiz_ext.quiz_index
-    WHERE chapter_index = :chapterIndex
+    WHERE quiz_en.chapter_index = :chapterIndex
   """
   )
   suspend fun findQuizDTOByChapterIndex(chapterIndex: Int): List<QuizDTO>
@@ -251,11 +257,79 @@ interface QuizEnDao {
         quiz_ext.wrong_answer_count wrongAnswerCount
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
-    WHERE chapter_index=:chapterIndex and quiz_index=:quizIndex
+    WHERE quiz_en.chapter_index=:chapterIndex and quiz_en.quiz_index=:quizIndex
   """
   )
-  suspend fun findQuizDTOByChapterIndexAndQuizIndex(
+  suspend fun findQuizDTOByKey(
     chapterIndex: Int,
     quizIndex: Int
   ): QuizDTO?
+
+
+//  fun findFlowByKeyList(quizKeyList: List<QuizKey>): Flow<List<QuizDTO>> {
+//    if (quizKeyList.isEmpty()) {
+//      return flowOf(emptyList())
+//    }
+//    val placeholders = quizKeyList.joinToString(",") {
+//      "(${it.chapterIndex},${it.quizIndex})"
+//    }
+//    return findFlowByKeyListRaw(placeholders)
+//  }
+//
+//  @Query(
+//    """
+//    SELECT
+//        quiz_en.chapter_index chapterIndex,
+//        quiz_en.quiz_index quizIndex,
+//        quiz_en.question question,
+//        quiz_en.correct_option correctOption,
+//        quiz_en.wrong_option1 wrongOption1,
+//        quiz_en.wrong_option2 wrongOption2,
+//        quiz_en.wrong_option3 wrongOption3,
+//        quiz_en.explanation explanation,
+//        quiz_ext.favorite favorite,
+//        quiz_ext.favorite_time favoriteTime,
+//        quiz_ext.wrong_answer_count wrongAnswerCount
+//    FROM quiz_en
+//    LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
+//    WHERE (quiz_en.chapter_index, quiz_en.quiz_index) IN (:placeholders)
+//  """
+//  )
+//  fun findFlowByKeyListRaw(placeholders: String): Flow<List<QuizDTO>>
+
+  fun findFlowByKeyList(quizKeyList: List<QuizKey>): Flow<List<QuizDTO>> {
+    if (quizKeyList.isEmpty()) {
+      return flowOf(emptyList())
+    }
+
+    val placeholders = quizKeyList.joinToString(",") {
+      "(${it.chapterIndex},${it.quizIndex})"
+    }
+
+    val query = SimpleSQLiteQuery(
+      """
+            SELECT 
+                quiz_en.chapter_index chapterIndex,
+                quiz_en.quiz_index quizIndex,
+                quiz_en.question question,
+                quiz_en.correct_option correctOption,
+                quiz_en.wrong_option1 wrongOption1,
+                quiz_en.wrong_option2 wrongOption2,
+                quiz_en.wrong_option3 wrongOption3,
+                quiz_en.explanation explanation,
+                quiz_ext.favorite favorite,
+                quiz_ext.favorite_time favoriteTime,
+                quiz_ext.wrong_answer_count wrongAnswerCount
+            FROM quiz_en
+            LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index 
+                              and quiz_en.quiz_index = quiz_ext.quiz_index
+            WHERE (quiz_en.chapter_index, quiz_en.quiz_index) IN ($placeholders)
+            """
+    )
+
+    return findFlowByRawQuery(query)
+  }
+
+  @RawQuery(observedEntities = [QuizEn::class, QuizExt::class])
+  fun findFlowByRawQuery(query: SupportSQLiteQuery): Flow<List<QuizDTO>>
 }

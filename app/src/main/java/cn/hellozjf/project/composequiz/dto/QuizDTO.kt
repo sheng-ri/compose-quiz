@@ -18,7 +18,18 @@ data class QuizDTO(
   val favorite: Boolean = false,
   val favoriteTime: Long = 0L,
   val wrongAnswerCount: Int = 0
-)
+) {
+  fun getKey(): String {
+    return "${chapterIndex}_${quizIndex}"
+  }
+
+  fun getQuizKey(): QuizKey {
+    return QuizKey(
+      chapterIndex = chapterIndex,
+      quizIndex = quizIndex
+    )
+  }
+}
 
 fun QuizEn.toDTO() = QuizDTO(
   chapterIndex = chapterIndex,

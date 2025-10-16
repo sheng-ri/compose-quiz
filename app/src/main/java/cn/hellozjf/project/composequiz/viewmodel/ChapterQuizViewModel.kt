@@ -8,6 +8,7 @@ import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import cn.hellozjf.project.composequiz.database.repository.QuizRepository
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
@@ -39,6 +40,12 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     }
   }
 
+  suspend fun getCount(
+    language: String
+  ): Int {
+    return repository.getCount(language)
+  }
+
   fun findQuizDTOFlowByChapterIndex(
     language: String,
     chapterIndex: Int
@@ -67,15 +74,24 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     )
   }
 
-  suspend fun findByChapterIndexAndQuizIndex(
+  suspend fun findByKey(
     language: String,
-    chapterIndex: Int,
-    quizIndex: Int
+    quizKey: QuizKey
   ): QuizDTO? {
-    return repository.findByChapterIndexAndQuizIndex(
+    return repository.findByKey(
       language = language,
-      chapterIndex = chapterIndex,
-      quizIndex = quizIndex
+      chapterIndex = quizKey.chapterIndex,
+      quizIndex = quizKey.quizIndex
+    )
+  }
+
+  fun findFlowByKeyList(
+    language: String,
+    quizKeyList: List<QuizKey>
+  ): Flow<List<QuizDTO>> {
+    return repository.findFlowByKeyList(
+      language = language,
+      quizKeyList = quizKeyList
     )
   }
 

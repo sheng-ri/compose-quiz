@@ -79,7 +79,6 @@ class MainActivity : ComponentActivity() {
             chapterViewModel = chapterViewModel,
             chapterZhViewModel = chapterZhViewModel,
             chapterQuizViewModel = chapterQuizViewModel,
-            chapterQuizZhViewModel = chapterQuizZhViewModel,
             configViewModel = configViewModel
           )
 
@@ -89,7 +88,7 @@ class MainActivity : ComponentActivity() {
             chapterViewModel = chapterViewModel,
             chapterZhViewModel = chapterZhViewModel,
             chapterQuizViewModel = chapterQuizViewModel,
-            chapterQuizZhViewModel = chapterQuizZhViewModel
+            configViewModel = configViewModel
           )
 
           // 进行 config 初始化
@@ -125,21 +124,26 @@ class MainActivity : ComponentActivity() {
     chapterViewModel: ChapterViewModel,
     chapterZhViewModel: ChapterZhViewModel,
     chapterQuizViewModel: ChapterQuizViewModel,
-    chapterQuizZhViewModel: ChapterQuizZhViewModel,
+    configViewModel: ConfigViewModel
   ) {
     // 读取章节信息
     coroutineScope.launch(context = Dispatchers.IO) {
+
+      val language = configViewModel.getConfig()?.language ?: LanguageConstant.EN
+      if (chapterQuizViewModel.getCount(language) == 0) {
+        // 初始化 QuizZh 或 QuizEn 表
+        if (language == LanguageConstant.ZH) {
+          readQuizZhCsv(chapterQuizViewModel)
+        } else {
+          readQuizEnCsv(chapterQuizViewModel)
+        }
+      }
+
       if (chapterViewModel.getCount() == 0) {
         readChapterCsv(chapterViewModel)
       }
       if (chapterZhViewModel.getCount() == 0) {
         readChapterZhCsv(chapterZhViewModel)
-      }
-      if (chapterQuizViewModel.getCount() == 0) {
-        readQuizCsv(chapterQuizViewModel)
-      }
-      if (chapterQuizZhViewModel.getCount() == 0) {
-        readQuizZhCsv(chapterQuizZhViewModel)
       }
     }
   }
@@ -190,7 +194,7 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  private fun readQuizCsv(
+  private fun readQuizEnCsv(
     chapterQuizViewModel: ChapterQuizViewModel
   ) {
     try {
@@ -223,7 +227,7 @@ class MainActivity : ComponentActivity() {
   }
 
   private fun readQuizZhCsv(
-    chapterQuizViewModel: ChapterQuizZhViewModel
+    chapterQuizViewModel: ChapterQuizViewModel
   ) {
     try {
       this.assets.open(ChapterQuizConstant.PATH).bufferedReader().use { reader ->

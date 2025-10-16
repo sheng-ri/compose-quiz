@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 
 /**
@@ -23,23 +22,24 @@ fun FavoriteQuizList(
   modifier: Modifier = Modifier
 ) {
   val listState = rememberLazyListState()
-  val questionExpandMap = remember { mutableStateMapOf<Int, Boolean>() }
+  val questionExpandMap = remember { mutableStateMapOf<String, Boolean>() }
 
   LazyColumn(
     modifier = modifier,
     state = listState
   ) {
     if (quizDTOList.isNotEmpty()) {
-      quizDTOList.forEachIndexed { index, quiz ->
-        item(key = quiz.id) {
-          val expand = questionExpandMap[quiz.id] ?: false
+      quizDTOList.forEachIndexed { index, quizDTO ->
+        val key = "${quizDTO.chapterIndex}_${quizDTO.quizIndex}"
+        item(key = key) {
+          val expand = questionExpandMap[key] ?: false
           val onExpandChange: (Boolean) -> Unit = {
-            questionExpandMap[quiz.id] = it
+            questionExpandMap[key] = it
           }
           FavoriteQuiz(
             expanded = expand,
             onExpandedChange = onExpandChange,
-            quizEn = quiz,
+            quizDTO = quizDTO,
             getChapterByIndex = getChapterByIndex,
             onNavigation = onNavigation
           )
@@ -64,10 +64,9 @@ fun FavoriteQuizListPreview() {
     )
   }
   val quizList = run {
-    val result = mutableListOf<QuizEn>()
+    val result = mutableListOf<QuizDTO>()
     for (i in 0 until 10) {
-      val quizEn = QuizEn(
-        id = i,
+      val quizDTO = QuizDTO(
         chapterIndex = i,
         quizIndex = 1,
         question = "问题$i",
@@ -77,7 +76,7 @@ fun FavoriteQuizListPreview() {
         wrongOption3 = "问题${i}错误选项3",
         explanation = "问题${i}的解释"
       )
-      result.add(quizEn)
+      result.add(quizDTO)
     }
     result
   }

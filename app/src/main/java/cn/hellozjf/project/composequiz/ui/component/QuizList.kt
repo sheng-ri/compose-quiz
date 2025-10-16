@@ -8,16 +8,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 
 /**
  * 问答列表
  */
 @Composable
 fun QuizList(
-  quizEnList: List<QuizEn>,
+  quizDTOList: List<QuizDTO>,
   quizOrder: List<Int>,
-  quizSelectedOptionMap: Map<Int, String>,
-  onQuizSelectedOptionChange: (Int, String) -> Unit,
+  quizSelectedOptionMap: Map<String, String>,
+  onQuizSelectedOptionChange: (String, String) -> Unit,
   optionOrderList: List<List<Int>>,
   modifier: Modifier = Modifier
 ) {
@@ -27,17 +28,18 @@ fun QuizList(
     modifier = modifier,
     state = listState
   ) {
-    if (quizEnList.isNotEmpty()) {
+    if (quizDTOList.isNotEmpty()) {
       quizOrder.forEachIndexed { index, order ->
-        val quiz = quizEnList[order]
-        item(key = quiz.id) {
-          val selectOption = quizSelectedOptionMap[quiz.id] ?: ""
+        val quizDTO = quizDTOList[order]
+        val key = quizDTO.getKey()
+        item(key = key) {
+          val selectOption = quizSelectedOptionMap[key] ?: ""
           val onSelectOptionChange: (String) -> Unit = { newSelectOption ->
-            onQuizSelectedOptionChange(quiz.id, newSelectOption)
+            onQuizSelectedOptionChange(key, newSelectOption)
           }
           QuizListItem(
             index = index,
-            quizEn = quiz,
+            quizDTO = quizDTO,
             selectedOption = selectOption,
             onSelectedOptionChange = onSelectOptionChange,
             optionOrder = optionOrderList[order]
@@ -53,9 +55,8 @@ fun QuizList(
 )
 @Composable
 fun QuizListPreview() {
-  val quizEnLists: List<QuizEn> = listOf(
-    QuizEn(
-      id = 0,
+  val quizDTOLists: List<QuizDTO> = listOf(
+    QuizDTO(
       chapterIndex = 0,
       quizIndex = 1,
       question = "问题0",
@@ -65,8 +66,7 @@ fun QuizListPreview() {
       wrongOption3 = "错误选项3",
       explanation = "问题0解释"
     ),
-    QuizEn(
-      id = 1,
+    QuizDTO(
       chapterIndex = 0,
       quizIndex = 2,
       question = "问题1",
@@ -76,8 +76,7 @@ fun QuizListPreview() {
       wrongOption3 = "错误选项3",
       explanation = "问题1解释"
     ),
-    QuizEn(
-      id = 2,
+    QuizDTO(
       chapterIndex = 0,
       quizIndex = 3,
       question = "问题2",
@@ -91,11 +90,11 @@ fun QuizListPreview() {
   val quizOrder: List<Int> = listOf(2, 1, 0)
   val quizSelectOptionMap = remember {
     mutableStateMapOf(
-      0 to "正确答案"
+      "0_0" to "正确答案"
     )
   }
-  val onQuizSelectOptionChange: (Int, String) -> Unit = { id, selectOption ->
-    quizSelectOptionMap[id] = selectOption
+  val onQuizSelectOptionChange: (String, String) -> Unit = { key, selectOption ->
+    quizSelectOptionMap[key] = selectOption
   }
   val optionOrderList: List<List<Int>> = listOf(
     listOf(0, 3, 1, 2),
@@ -103,7 +102,7 @@ fun QuizListPreview() {
     listOf(0, 1, 3, 2),
   )
   QuizList(
-    quizEnList = quizEnLists,
+    quizDTOList = quizDTOLists,
     quizOrder = quizOrder,
     quizSelectedOptionMap = quizSelectOptionMap,
     onQuizSelectedOptionChange = onQuizSelectOptionChange,

@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 
 /**
  * 收藏测试页面 收藏的问答
@@ -26,7 +27,7 @@ import cn.hellozjf.project.composequiz.database.entity.QuizEn
 fun FavoriteQuiz(
   expanded: Boolean,
   onExpandedChange: (Boolean) -> Unit,
-  quizEn: QuizEn,
+  quizDTO: QuizDTO,
   getChapterByIndex: suspend (Int) -> Chapter?,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
@@ -34,8 +35,8 @@ fun FavoriteQuiz(
 
   var chapter: Chapter? by remember { mutableStateOf(null) }
 
-  LaunchedEffect(key1 = quizEn) {
-    chapter = getChapterByIndex(quizEn.id)
+  LaunchedEffect(key1 = quizDTO) {
+    chapter = getChapterByIndex(quizDTO.chapterIndex)
   }
 
   Card(
@@ -52,39 +53,39 @@ fun FavoriteQuiz(
       FavoriteQuizQuestion(
         onExpandedChange = onExpandedChange,
         expanded = expanded,
-        quizEn = quizEn,
+        quizDTO = quizDTO,
         modifier = Modifier
       )
       if (expanded) {
         // 显示这题的所有选项，正确选项，解释，打错次数
         Column {
           FavoriteQuizOption(
-            option = quizEn.correctOption,
-            selectedOption = quizEn.correctOption,
-            correctOption = quizEn.correctOption
+            option = quizDTO.correctOption,
+            selectedOption = quizDTO.correctOption,
+            correctOption = quizDTO.correctOption
           )
           FavoriteQuizOption(
-            option = quizEn.wrongOption1,
-            selectedOption = quizEn.correctOption,
-            correctOption = quizEn.correctOption
+            option = quizDTO.wrongOption1,
+            selectedOption = quizDTO.correctOption,
+            correctOption = quizDTO.correctOption
           )
           FavoriteQuizOption(
-            option = quizEn.wrongOption2,
-            selectedOption = quizEn.correctOption,
-            correctOption = quizEn.correctOption
+            option = quizDTO.wrongOption2,
+            selectedOption = quizDTO.correctOption,
+            correctOption = quizDTO.correctOption
           )
           FavoriteQuizOption(
-            option = quizEn.wrongOption3,
-            selectedOption = quizEn.correctOption,
-            correctOption = quizEn.correctOption
+            option = quizDTO.wrongOption3,
+            selectedOption = quizDTO.correctOption,
+            correctOption = quizDTO.correctOption
           )
-          Explanation(quizEn.explanation)
+          Explanation(quizDTO.explanation)
           chapter?.let {
             QuizFromChapter(
               chapter = it
             )
           }
-          WrongAnswerCount(quizEn.wrongAnswerCount)
+          WrongAnswerCount(quizDTO.wrongAnswerCount)
         }
       }
     }
@@ -100,7 +101,7 @@ fun FavoriteQuizPreview() {
   val onExpandChange: (Boolean) -> Unit = {
     expand = it
   }
-  val quizEn: QuizEn = QuizEn(
+  val quizDTO: QuizDTO = QuizDTO(
     chapterIndex = 0,
     quizIndex = 1,
     question = "第0章题目的标题",
@@ -122,7 +123,7 @@ fun FavoriteQuizPreview() {
   FavoriteQuiz(
     expanded = expand,
     onExpandedChange = onExpandChange,
-    quizEn = quizEn,
+    quizDTO = quizDTO,
     getChapterByIndex = getChapterByIndex,
     onNavigation = {}
   )

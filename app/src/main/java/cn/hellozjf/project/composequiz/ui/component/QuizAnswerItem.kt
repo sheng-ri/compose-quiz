@@ -14,13 +14,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 
 @Composable
 fun QuizAnswerItem(
-  setFavorite: suspend (Int, Boolean, Long) -> Unit,
+  setFavorite: suspend (Int, Int, Boolean, Long) -> Unit,
   index: Int,
-  quizEn: QuizEn,
+  quizDTO: QuizDTO,
   selectedOption: String,
   optionOrder: List<Int>,
   modifier: Modifier = Modifier
@@ -37,19 +37,24 @@ fun QuizAnswerItem(
     Column {
       QuestionAndFavoriteRow(
         index = index,
-        quizEn = quizEn,
+        quizDTO = quizDTO,
         setFavorite = setFavorite
       )
       val optionList =
-        listOf(quizEn.correctOption, quizEn.wrongOption1, quizEn.wrongOption2, quizEn.wrongOption3)
+        listOf(
+          quizDTO.correctOption,
+          quizDTO.wrongOption1,
+          quizDTO.wrongOption2,
+          quizDTO.wrongOption3
+        )
       for (order in optionOrder) {
         FavoriteQuizOption(
           option = optionList[order],
           selectedOption = selectedOption,
-          correctOption = quizEn.correctOption
+          correctOption = quizDTO.correctOption
         )
       }
-      Explanation(quizEn.explanation)
+      Explanation(quizDTO.explanation)
     }
   }
 }
@@ -57,10 +62,9 @@ fun QuizAnswerItem(
 @Preview(showBackground = true)
 @Composable
 fun QuizAnswerItemPreview() {
-  var quizEn by remember {
+  var quizDTO by remember {
     mutableStateOf(
-      QuizEn(
-        id = 0,
+      QuizDTO(
         chapterIndex = 0,
         quizIndex = 1,
         question = "问题0",
@@ -76,16 +80,16 @@ fun QuizAnswerItemPreview() {
   }
   QuizAnswerItem(
     index = 0,
-    quizEn = quizEn,
+    quizDTO = quizDTO,
     selectedOption = "错误答案1",
     optionOrder = listOf(3, 1, 2, 0),
-    setFavorite = { index, favorite, favoriteTime ->
-      if (index == 0) {
-        quizEn = quizEn.copy(
-          favorite = favorite,
-          favoriteTime = favoriteTime
-        )
-      }
+    setFavorite = { chapterIndex, quizIndex, favorite, favoriteTime ->
+      //if (index == 0) {
+      quizDTO = quizDTO.copy(
+        favorite = favorite,
+        favoriteTime = favoriteTime
+      )
+      //}
     }
   )
 }

@@ -6,6 +6,7 @@ import cn.hellozjf.project.composequiz.database.dao.QuizZhDao
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import kotlinx.coroutines.flow.Flow
 
@@ -35,6 +36,16 @@ class QuizRepository(
   suspend fun deleteQuizByChapterIndex(chapterIndex: Int) {
     quizEnDao.deleteByChapter(chapterIndex)
     quizZhDao.deleteByChapter(chapterIndex)
+  }
+
+  suspend fun getCount(
+    language: String
+  ): Int {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.getCount()
+    } else {
+      quizEnDao.getCount()
+    }
   }
 
   /**
@@ -169,20 +180,35 @@ class QuizRepository(
     }
   }
 
-  suspend fun findByChapterIndexAndQuizIndex(
+  suspend fun findByKey(
     language: String,
     chapterIndex: Int,
     quizIndex: Int
   ): QuizDTO? {
     return if (language == LanguageConstant.ZH) {
-      quizZhDao.findQuizDTOByChapterIndexAndQuizIndex(
+      quizZhDao.findQuizDTOByKey(
         chapterIndex = chapterIndex,
         quizIndex = quizIndex
       )
     } else {
-      quizEnDao.findQuizDTOByChapterIndexAndQuizIndex(
+      quizEnDao.findQuizDTOByKey(
         chapterIndex = chapterIndex,
         quizIndex = quizIndex
+      )
+    }
+  }
+
+  fun findFlowByKeyList(
+    language: String,
+    quizKeyList: List<QuizKey>
+  ): Flow<List<QuizDTO>> {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.findFlowByKeyList(
+        quizKeyList = quizKeyList
+      )
+    } else {
+      quizEnDao.findFlowByKeyList(
+        quizKeyList = quizKeyList
       )
     }
   }

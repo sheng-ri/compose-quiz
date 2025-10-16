@@ -17,14 +17,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cn.hellozjf.project.composequiz.R
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import kotlinx.coroutines.launch
 
 @Composable
 fun QuestionAndFavoriteRow(
   index: Int,
-  quizEn: QuizEn,
-  setFavorite: suspend (Int, Boolean, Long) -> Unit
+  quizDTO: QuizDTO,
+  setFavorite: suspend (Int, Int, Boolean, Long) -> Unit
 ) {
 
   val coroutineScope = rememberCoroutineScope()
@@ -33,21 +33,26 @@ fun QuestionAndFavoriteRow(
     verticalAlignment = Alignment.CenterVertically
   ) {
     Text(
-      text = "${index + 1}. ${quizEn.question}",
+      text = "${index + 1}. ${quizDTO.question}",
       modifier = Modifier.weight(1f)
     )
     Image(
-      painter = if (quizEn.favorite) {
+      painter = if (quizDTO.favorite) {
         painterResource(R.drawable.baseline_favorite_24)
       } else {
         painterResource(R.drawable.baseline_favorite_border_24)
       },
-      contentDescription = if (quizEn.favorite) "已收藏" else "未收藏", // 无障碍功能必需
+      contentDescription = if (quizDTO.favorite) "已收藏" else "未收藏", // 无障碍功能必需
       modifier = Modifier
         .size(32.dp)
         .clickable {
           coroutineScope.launch {
-            setFavorite(quizEn.id, !quizEn.favorite, System.currentTimeMillis())
+            setFavorite(
+              quizDTO.chapterIndex,
+              quizDTO.quizIndex,
+              !quizDTO.favorite,
+              System.currentTimeMillis()
+            )
           }
         }
     )
@@ -59,10 +64,9 @@ fun QuestionAndFavoriteRow(
 )
 @Composable
 fun QuestionAndFavoriteRowPreview() {
-  var quizEn by remember {
+  var quizDTO by remember {
     mutableStateOf(
-      QuizEn(
-        id = 0,
+      QuizDTO(
         chapterIndex = 0,
         quizIndex = 1,
         question = "问题0",
@@ -78,14 +82,14 @@ fun QuestionAndFavoriteRowPreview() {
   }
   QuestionAndFavoriteRow(
     index = 0,
-    quizEn = quizEn,
-    setFavorite = { index, favorite, favoriteTime ->
-      if (index == 0) {
-        quizEn = quizEn.copy(
-          favorite = favorite,
-          favoriteTime = favoriteTime
-        )
-      }
+    quizDTO = quizDTO,
+    setFavorite = { chapterIndex, quizIndex, favorite, favoriteTime ->
+      //if (index == 0) {
+      quizDTO = quizDTO.copy(
+        favorite = favorite,
+        favoriteTime = favoriteTime
+      )
+      //}
     }
   )
 }
