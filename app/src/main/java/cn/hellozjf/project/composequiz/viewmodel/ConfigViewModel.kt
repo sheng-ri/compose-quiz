@@ -18,46 +18,28 @@ class ConfigViewModel(application: Application) : ViewModel() {
     repository = ConfigRepository(configDao)
   }
 
-  suspend fun insertConfig(config: Config) {
-    repository.insertConfig(config)
-  }
-
-  suspend fun deleteConfig(config: Config) {
-    repository.deleteConfig(config)
-  }
-
   suspend fun updateConfig(config: Config) {
     repository.updateConfig(config)
   }
 
   suspend fun toggleLanguage() {
     val config = getConfig()
-    config?.let {
-      updateConfig(Config(
-        language = if (it.language == LanguageConstant.EN) {
+    updateConfig(
+      Config(
+        language = if (config.language == LanguageConstant.EN) {
           LanguageConstant.ZH
         } else {
           LanguageConstant.EN
         }
-      ))
-    } ?: run {
-      insertConfig(Config(
-        language = LanguageConstant.EN
-      ))
-    }
+      )
+    )
   }
 
-  /**
-   * TODO 后续要确保 Config 一直能获取到
-   */
-  suspend fun getConfig(): Config? {
+  suspend fun getConfig(): Config {
     return repository.getConfig()
   }
 
-  /**
-   * TODO 后续要确保 Config 一直能获取到
-   */
-  fun getConfigFlow(): Flow<Config?> {
+  fun getConfigFlow(): Flow<Config> {
     return repository.getConfigFlow()
   }
 }

@@ -1,23 +1,12 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,10 +17,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.nav.DestinationQuiz
 import cn.hellozjf.project.composequiz.ui.component.ChapterList
@@ -42,7 +28,6 @@ import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
-import kotlinx.coroutines.launch
 
 /**
  * NavDisplayScreen 默认显示的 Screen
@@ -62,9 +47,11 @@ fun MainScreen(
   val coroutineScope = rememberCoroutineScope()
 
   var showMenu by remember { mutableStateOf(false) }
-  val configState = configViewModel.getConfigFlow().collectAsState(Config(
-    language = LanguageConstant.EN
-  ))
+  val config by configViewModel.getConfigFlow().collectAsState(
+    Config(
+      language = LanguageConstant.EN
+    )
+  )
 
   Scaffold(
     modifier = Modifier.fillMaxSize(),
@@ -74,7 +61,7 @@ fun MainScreen(
         toggleLanguage = {
           configViewModel.toggleLanguage()
         },
-        language = configState.value?.language ?: LanguageConstant.EN
+        language = config.language
       )
     }
   ) { innerPadding ->
@@ -105,8 +92,9 @@ fun MainScreen(
         when (destination) {
           DestinationQuiz.CHAPTER_LIST -> {
             // 按章节号排序，查出所有的章节
-            val language = configState.value?.language ?: LanguageConstant.EN
-            val chapterList by chapterViewModel.findDTOFlowOrderByIndex(language).collectAsState(listOf())
+            val language = config.language
+            val chapterList by chapterViewModel.findDTOFlowOrderByIndex(language)
+              .collectAsState(listOf())
             ChapterList(
               language = language,
               chapterDTOList = chapterList,
@@ -117,7 +105,7 @@ fun MainScreen(
 
           DestinationQuiz.FAVORITE_QUIZ -> {
             FavoriteQuizPanel(
-              language = configState.value?.language ?: LanguageConstant.EN,
+              language = config.language,
               getChapterDTOByIndex = chapterViewModel::findDTOByIndex,
               findByFavoriteOrderByChapterIndex = chapterQuizViewModel::findDTOListByFavoriteOrderByChapterIndex,
               findByFavoriteOrderByFavoriteTime = chapterQuizViewModel::findDTOListByFavoriteOrderByFavoriteTime,

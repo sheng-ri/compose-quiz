@@ -41,8 +41,6 @@ class MainActivity : ComponentActivity() {
     setContent {
       ComposeQuizTheme {
 
-//        MyAppScaffold()
-
         val coroutineScope = rememberCoroutineScope()
         val owner = LocalViewModelStoreOwner.current
         owner?.let {
@@ -80,28 +78,7 @@ class MainActivity : ComponentActivity() {
             chapterQuizViewModel = chapterQuizViewModel,
             configViewModel = configViewModel
           )
-
-          // 进行 config 初始化
-          initConfig(
-            coroutineScope = coroutineScope,
-            configViewModel = configViewModel
-          )
         }
-      }
-    }
-  }
-
-  private fun initConfig(
-    coroutineScope: CoroutineScope,
-    configViewModel: ConfigViewModel
-  ) {
-    coroutineScope.launch(context = Dispatchers.IO) {
-      if (configViewModel.getConfig() == null) {
-        configViewModel.insertConfig(
-          Config(
-            language = LanguageConstant.EN
-          )
-        )
       }
     }
   }

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.sqlite.db.SupportSQLiteDatabase
 import cn.hellozjf.project.composequiz.database.dao.ChapterEnDao
 import cn.hellozjf.project.composequiz.database.dao.ChapterZhDao
 import cn.hellozjf.project.composequiz.database.dao.ConfigDao
@@ -16,6 +17,10 @@ import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizExt
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
+import cn.hellozjf.project.composequiz.util.LanguageConstant
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Database(
   entities = [
@@ -25,7 +30,7 @@ import cn.hellozjf.project.composequiz.database.entity.QuizZh
     QuizZh::class,
     QuizExt::class,
     Config::class
-  ], version = 15, exportSchema = false
+  ], version = 16, exportSchema = false
 )
 abstract class QuizRoomDatabase : RoomDatabase() {
 
@@ -50,6 +55,28 @@ abstract class QuizRoomDatabase : RoomDatabase() {
             QuizRoomDatabase::class.java,
             "quiz_database"
           )
+            .addCallback(object : RoomDatabase.Callback() {
+              override fun onCreate(db: SupportSQLiteDatabase) {
+                // 只在首次创建数据库时执行
+                insertInitialData() // 版本升级时不会执行！
+              }
+
+              override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
+                super.onDestructiveMigration(db)
+                insertInitialData()
+              }
+
+              private fun insertInitialData() {
+                val scope = CoroutineScope(Dispatchers.IO)
+                scope.launch {
+                  val database = QuizRoomDatabase.getInstance(context)
+                  // 重新插入初始数据
+                  database.configDao().insertConfig(
+                    Config(language = LanguageConstant.EN)
+                  )
+                }
+              }
+            })
             // TODO 这里如果数据库版本变化，会销毁所有数据，所以后面记得把它改掉
             .fallbackToDestructiveMigration()
             .build()

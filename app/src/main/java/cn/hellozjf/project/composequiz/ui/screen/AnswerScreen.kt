@@ -53,7 +53,7 @@ fun AnswerScreen(
   )
 
   val quizList by chapterQuizViewModel.findFlowByKeyList(
-    language = config?.language ?: LanguageConstant.EN,
+    language = config.language,
     quizKeyList = quizKeyList
   ).collectAsState(listOf())
   // val quizList by chapterQuizViewModel.findByIdList(idList).collectAsState(listOf())
@@ -65,11 +65,6 @@ fun AnswerScreen(
   var totalCorrectCount by remember { mutableStateOf(0) }
 
   var showMenu by remember { mutableStateOf(false) }
-  var configState = configViewModel.getConfigFlow().collectAsState(
-    Config(
-      language = LanguageConstant.EN
-    )
-  )
 
   val coroutineScope = rememberCoroutineScope()
 
@@ -98,7 +93,7 @@ fun AnswerScreen(
         toggleLanguage = {
           configViewModel.toggleLanguage()
         },
-        language = configState.value?.language ?: LanguageConstant.EN
+        language = config.language
       )
     }
   ) { innerPadding ->
