@@ -35,13 +35,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Config
-import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 import kotlinx.coroutines.launch
 
@@ -56,7 +54,6 @@ fun AnswerScreen(
   // oldQuizDTOList: List<QuizDTO>,
   quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
-  chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
   chooseOptionMap: Map<String, String>,

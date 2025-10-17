@@ -8,16 +8,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.database.entity.ChapterEn
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.util.LanguageConstant
 
 /**
  * 收藏测试页面 收藏的问答列表
  */
 @Composable
 fun FavoriteQuizList(
+  language: String,
   quizDTOList: List<QuizDTO>,
-  getChapterByIndex: suspend (Int) -> Chapter?,
+  getChapterDTOByIndex: suspend (String, Int) -> ChapterDTO?,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
@@ -37,10 +40,11 @@ fun FavoriteQuizList(
             questionExpandMap[key] = it
           }
           FavoriteQuiz(
+            language = language,
             expanded = expand,
             onExpandedChange = onExpandChange,
             quizDTO = quizDTO,
-            getChapterByIndex = getChapterByIndex,
+            getChapterDTOByIndex = getChapterDTOByIndex,
             onNavigation = onNavigation
           )
         }
@@ -54,8 +58,8 @@ fun FavoriteQuizList(
 )
 @Composable
 fun FavoriteQuizListPreview() {
-  val getChapterByIndex: suspend (Int) -> Chapter? = { chapterIndex ->
-    Chapter(
+  val getChapterDTOByIndex: suspend (String, Int) -> ChapterDTO? = { language, chapterIndex ->
+    ChapterDTO(
       index = chapterIndex,
       fullTitle = "第${chapterIndex}章完整版标题",
       simpleTitle = "简化标题",
@@ -81,8 +85,9 @@ fun FavoriteQuizListPreview() {
     result
   }
   FavoriteQuizList(
+    language = LanguageConstant.ZH,
     quizDTOList = quizList,
-    getChapterByIndex = getChapterByIndex,
+    getChapterDTOByIndex = getChapterDTOByIndex,
     onNavigation = {},
   )
 }

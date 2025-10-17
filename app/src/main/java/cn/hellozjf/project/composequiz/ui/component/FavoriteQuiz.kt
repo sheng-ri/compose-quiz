@@ -16,27 +16,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.database.entity.Chapter
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.database.entity.ChapterEn
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.util.LanguageConstant
 
 /**
  * 收藏测试页面 收藏的问答
  */
 @Composable
 fun FavoriteQuiz(
+  language: String,
   expanded: Boolean,
   onExpandedChange: (Boolean) -> Unit,
   quizDTO: QuizDTO,
-  getChapterByIndex: suspend (Int) -> Chapter?,
+  getChapterDTOByIndex: suspend (String, Int) -> ChapterDTO?,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
 
-  var chapter: Chapter? by remember { mutableStateOf(null) }
+  var chapterDTO: ChapterDTO? by remember { mutableStateOf(null) }
 
   LaunchedEffect(key1 = quizDTO) {
-    chapter = getChapterByIndex(quizDTO.chapterIndex)
+    chapterDTO = getChapterDTOByIndex(language, quizDTO.chapterIndex)
   }
 
   Card(
@@ -80,9 +82,9 @@ fun FavoriteQuiz(
             correctOption = quizDTO.correctOption
           )
           Explanation(quizDTO.explanation)
-          chapter?.let {
+          chapterDTO?.let {
             QuizFromChapter(
-              chapter = it
+              chapterDTO = it
             )
           }
           WrongAnswerCount(quizDTO.wrongAnswerCount)
@@ -111,8 +113,8 @@ fun FavoriteQuizPreview() {
     wrongOption3 = "题目错误选项3",
     explanation = "题目的解释"
   )
-  val getChapterByIndex: suspend (Int) -> Chapter? = { chapterIndex ->
-    Chapter(
+  val getChapterDTOByIndex: suspend (String, Int) -> ChapterDTO? = { language, chapterIndex ->
+    ChapterDTO(
       index = chapterIndex,
       fullTitle = "第0章完整版标题",
       simpleTitle = "简化标题",
@@ -121,10 +123,11 @@ fun FavoriteQuizPreview() {
     )
   }
   FavoriteQuiz(
+    language = LanguageConstant.ZH,
     expanded = expand,
     onExpandedChange = onExpandChange,
     quizDTO = quizDTO,
-    getChapterByIndex = getChapterByIndex,
+    getChapterDTOByIndex = getChapterDTOByIndex,
     onNavigation = {}
   )
 }

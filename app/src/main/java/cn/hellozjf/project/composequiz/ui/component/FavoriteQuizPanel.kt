@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.util.OrderMethodConstant
@@ -27,7 +27,7 @@ import cn.hellozjf.project.composequiz.util.OrderMethodConstant
 @Composable
 fun FavoriteQuizPanel(
   language: String,
-  getChapterByIndex: suspend (Int) -> Chapter?,
+  getChapterDTOByIndex: suspend (String, Int) -> ChapterDTO?,
   findByFavoriteOrderByChapterIndex: suspend (String) -> List<QuizDTO>,
   findByFavoriteOrderByFavoriteTime: suspend (String) -> List<QuizDTO>,
   findByFavoriteOrderByWrongAnswerCount: suspend (String) -> List<QuizDTO>,
@@ -80,8 +80,9 @@ fun FavoriteQuizPanel(
       onSelectedOrderMethodChange = onOrderMethodSelectTextChange
     )
     FavoriteQuizList(
+      language = language,
       quizDTOList = quizDTOList,
-      getChapterByIndex = getChapterByIndex,
+      getChapterDTOByIndex = getChapterDTOByIndex,
       onNavigation = onNavigation,
       modifier = Modifier.weight(1f)
     )
@@ -98,8 +99,8 @@ fun FavoriteQuizPanel(
 )
 @Composable
 fun FavoriteQuizPanelPreview() {
-  val getChapterByIndex: suspend (Int) -> Chapter? = { chapterIndex ->
-    Chapter(
+  val getChapterDTOByIndex: suspend (String, Int) -> ChapterDTO? = { language, chapterIndex ->
+    ChapterDTO(
       index = chapterIndex,
       fullTitle = "第${chapterIndex}章完整版标题",
       simpleTitle = "简化标题",
@@ -190,7 +191,7 @@ fun FavoriteQuizPanelPreview() {
   }
   FavoriteQuizPanel(
     language = LanguageConstant.ZH,
-    getChapterByIndex = getChapterByIndex,
+    getChapterDTOByIndex = getChapterDTOByIndex,
     findByFavoriteOrderByChapterIndex = findByFavoriteOrderByChapterIndex,
     findByFavoriteOrderByFavoriteTime = findByFavoriteOrderByFavoriteTime,
     findByFavoriteOrderByWrongAnswerCount = findByFavoriteOrderByWrongAnswerCount,

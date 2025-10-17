@@ -41,7 +41,6 @@ import cn.hellozjf.project.composequiz.ui.component.QuizList
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 import kotlinx.coroutines.launch
 
@@ -55,7 +54,6 @@ fun QuizScreen(
   title: String,
   quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
-  chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit

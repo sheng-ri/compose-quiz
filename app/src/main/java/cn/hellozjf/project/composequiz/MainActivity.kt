@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
@@ -23,7 +23,6 @@ import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -61,13 +60,6 @@ class MainActivity : ComponentActivity() {
               LocalContext.current.applicationContext as Application
             )
           )
-          val chapterZhViewModel: ChapterZhViewModel = viewModel(
-            viewModelStoreOwner = it,
-            key = "ChapterZhViewModel",
-            factory = ChapterZhViewModelFactory(
-              LocalContext.current.applicationContext as Application
-            )
-          )
           val configViewModel: ConfigViewModel = viewModel(
             viewModelStoreOwner = it,
             key = "ConfigViewModel",
@@ -77,7 +69,6 @@ class MainActivity : ComponentActivity() {
           )
           NavDisplayScreen(
             chapterViewModel = chapterViewModel,
-            chapterZhViewModel = chapterZhViewModel,
             chapterQuizViewModel = chapterQuizViewModel,
             configViewModel = configViewModel
           )
@@ -86,7 +77,6 @@ class MainActivity : ComponentActivity() {
           readCsvAndWriteToDB(
             coroutineScope = coroutineScope,
             chapterViewModel = chapterViewModel,
-            chapterZhViewModel = chapterZhViewModel,
             chapterQuizViewModel = chapterQuizViewModel,
             configViewModel = configViewModel
           )
@@ -122,7 +112,6 @@ class MainActivity : ComponentActivity() {
   private fun readCsvAndWriteToDB(
     coroutineScope: CoroutineScope,
     chapterViewModel: ChapterViewModel,
-    chapterZhViewModel: ChapterZhViewModel,
     chapterQuizViewModel: ChapterQuizViewModel,
     configViewModel: ConfigViewModel
   ) {
@@ -139,16 +128,18 @@ class MainActivity : ComponentActivity() {
         }
       }
 
-      if (chapterViewModel.getCount() == 0) {
-        readChapterCsv(chapterViewModel)
-      }
-      if (chapterZhViewModel.getCount() == 0) {
-        readChapterZhCsv(chapterZhViewModel)
+      if (chapterViewModel.getCount(language) == 0) {
+        // 初始化 ChapterZh 或 ChapterEn 表
+        if (language == LanguageConstant.ZH) {
+          readChapterZhCsv(chapterViewModel)
+        } else {
+          readChapterEnCsv(chapterViewModel)
+        }
       }
     }
   }
 
-  private fun readChapterCsv(
+  private fun readChapterEnCsv(
     chapterViewModel: ChapterViewModel
   ) {
     try {
@@ -156,13 +147,13 @@ class MainActivity : ComponentActivity() {
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         for (record in csvParser) {
-          val chapter = Chapter()
-          chapter.index = record.get(ChapterConstant.INDEX).toInt()
-          chapter.fullTitle = record.get(ChapterConstant.FULL_TITLE)
-          chapter.simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
-          chapter.simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-          chapter.fullUrl = record.get(ChapterConstant.FULL_URL)
-          chapterViewModel.insertChapter(chapter)
+          val chapterEn = ChapterEn()
+          chapterEn.index = record.get(ChapterConstant.INDEX).toInt()
+          chapterEn.fullTitle = record.get(ChapterConstant.FULL_TITLE)
+          chapterEn.simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
+          chapterEn.simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
+          chapterEn.fullUrl = record.get(ChapterConstant.FULL_URL)
+          chapterViewModel.insertChapter(chapterEn)
         }
 
       }
@@ -172,7 +163,7 @@ class MainActivity : ComponentActivity() {
   }
 
   private fun readChapterZhCsv(
-    chapterViewModel: ChapterZhViewModel
+    chapterViewModel: ChapterViewModel
   ) {
     try {
       this.assets.open(ChapterConstant.PATH).bufferedReader().use { reader ->
@@ -272,14 +263,6 @@ class ChapterViewModelFactory(
 ) : ViewModelProvider.Factory {
   override fun <T : ViewModel> create(modelClass: Class<T>): T {
     return ChapterViewModel(application) as T
-  }
-}
-
-class ChapterZhViewModelFactory(
-  val application: Application
-) : ViewModelProvider.Factory {
-  override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    return ChapterZhViewModel(application) as T
   }
 }
 

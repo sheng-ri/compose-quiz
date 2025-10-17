@@ -17,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
@@ -32,7 +32,7 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ChapterListItem(
   language: String,
-  chapter: Chapter,
+  chapterDTO: ChapterDTO,
   findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
@@ -51,11 +51,11 @@ fun ChapterListItem(
         coroutineScope.launch {
           // 在 IO 线程执行数据库查询
           val quizList = withContext(Dispatchers.IO) {
-            findQuizDTOByChapterIndex(language, chapter.index)
+            findQuizDTOByChapterIndex(language, chapterDTO.index)
           }
           onNavigation(
             QuizScreenKey(
-              title = chapter.simpleTitle,
+              title = chapterDTO.simpleTitle,
               quizKeyList = quizList.map {
                 QuizKey(
                   chapterIndex = it.chapterIndex,
@@ -72,12 +72,12 @@ fun ChapterListItem(
       verticalAlignment = Alignment.CenterVertically
     ) {
       Text(
-        text = "第 ${chapter.index} 章",
+        text = "第 ${chapterDTO.index} 章",
         modifier = Modifier.width(75.dp)
       )
       Spacer(modifier = Modifier.width(8.dp))
       Text(
-        text = chapter.simpleTitle,
+        text = chapterDTO.simpleTitle,
         style = MaterialTheme.typography.headlineSmall,
         modifier = Modifier.padding(8.dp)
       )
@@ -88,33 +88,34 @@ fun ChapterListItem(
 @Preview
 @Composable
 fun ChapterListItemPreview() {
-  val chapter = Chapter(
+  val chapterDTO = ChapterDTO(
     index = 0,
     simpleTitle = "简单标题0",
     fullTitle = "完全标题0",
     simpleUrl = "http://xxx.com/sim/0",
     fullUrl = "http://xxx.com/full/0"
   )
-  val findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO> = { language, chapterIndex ->
-    val result = mutableListOf<QuizDTO>()
-    for (i in 0 until 10) {
-      val quizDTO = QuizDTO(
-        chapterIndex = chapterIndex,
-        quizIndex = i + 1,
-        question = "章节${chapterIndex}问题${i}",
-        correctOption = "问题${i}正确选项",
-        wrongOption1 = "问题${i}错误选项1",
-        wrongOption2 = "问题${i}错误选项2",
-        wrongOption3 = "问题${i}错误选项3",
-        explanation = "章节${chapterIndex}问题${i}解释"
-      )
-      result.add(quizDTO)
+  val findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO> =
+    { language, chapterIndex ->
+      val result = mutableListOf<QuizDTO>()
+      for (i in 0 until 10) {
+        val quizDTO = QuizDTO(
+          chapterIndex = chapterIndex,
+          quizIndex = i + 1,
+          question = "章节${chapterIndex}问题${i}",
+          correctOption = "问题${i}正确选项",
+          wrongOption1 = "问题${i}错误选项1",
+          wrongOption2 = "问题${i}错误选项2",
+          wrongOption3 = "问题${i}错误选项3",
+          explanation = "章节${chapterIndex}问题${i}解释"
+        )
+        result.add(quizDTO)
+      }
+      result.toList()
     }
-    result.toList()
-  }
   ChapterListItem(
     language = LanguageConstant.ZH,
-    chapter = chapter,
+    chapterDTO = chapterDTO,
     findQuizDTOByChapterIndex = findQuizDTOByChapterIndex,
     onNavigation = {}
   )

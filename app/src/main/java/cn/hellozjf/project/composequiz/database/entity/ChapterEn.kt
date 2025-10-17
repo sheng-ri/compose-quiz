@@ -8,9 +8,9 @@ import androidx.room.PrimaryKey
  * 章节实体
  */
 @Entity(
-  tableName = "chapter"
+  tableName = "chapter_en"
 )
-data class Chapter(
+data class ChapterEn(
   @PrimaryKey(autoGenerate = true)
   @ColumnInfo(name = "id")
   var id: Int = 0,

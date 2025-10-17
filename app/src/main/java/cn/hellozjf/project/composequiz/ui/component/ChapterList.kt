@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.database.entity.Chapter
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 
@@ -19,7 +19,7 @@ private val TAG = "ChapterList"
 @Composable
 fun ChapterList(
   language: String,
-  chapterList: List<Chapter>,
+  chapterDTOList: List<ChapterDTO>,
   findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
@@ -31,11 +31,11 @@ fun ChapterList(
     modifier = modifier.fillMaxSize(),
     state = lazyListState
   ) {
-    chapterList.forEach { chapter ->
-      item(key = chapter.id) {
+    chapterDTOList.forEach { chapterDTO ->
+      item(key = chapterDTO.id) {
         ChapterListItem(
           language = language,
-          chapter = chapter,
+          chapterDTO = chapterDTO,
           findQuizDTOByChapterIndex = findQuizDTOByChapterIndex,
           onNavigation = onNavigation
         )
@@ -50,19 +50,19 @@ fun ChapterList(
 @Composable
 fun ChapterListPreview() {
   val chapterList = run {
-    val result = mutableListOf<Chapter>()
+    val result = mutableListOf<ChapterDTO>()
     for (i in 0 until 10) {
       result.add(
         run {
-          val chapter = Chapter(
+          val chapterDTO = ChapterDTO(
             index = i,
             simpleTitle = "简单标题$i",
             fullTitle = "完全标题$i",
             simpleUrl = "http://xxx.com/sim/$i",
             fullUrl = "http://xxx.com/full/$i"
           )
-          chapter.id = i
-          chapter
+          chapterDTO.id = i
+          chapterDTO
         }
       )
     }
@@ -90,7 +90,7 @@ fun ChapterListPreview() {
 
   ChapterList(
     language = LanguageConstant.ZH,
-    chapterList = chapterList,
+    chapterDTOList = chapterList,
     findQuizDTOByChapterIndex = findQuizDTOByChapterIndex,
     onNavigation = {}
   )

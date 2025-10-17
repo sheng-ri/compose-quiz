@@ -10,7 +10,6 @@ import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 
 /**
@@ -19,7 +18,6 @@ import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 @Composable
 fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
-  chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel
 ) {
@@ -47,7 +45,6 @@ fun NavDisplayScreen(
       entry<MainScreenKey> {
         MainScreen(
           chapterViewModel = chapterViewModel,
-          chapterZhViewModel = chapterZhViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           configViewModel = configViewModel,
           onNavigation = onNavigation
@@ -60,7 +57,6 @@ fun NavDisplayScreen(
           title = title,
           quizKeyList = quizPairList,
           chapterViewModel = chapterViewModel,
-          chapterZhViewModel = chapterZhViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           configViewModel = configViewModel,
           onNavigation = onNavigation
@@ -77,7 +73,6 @@ fun NavDisplayScreen(
           // oldQuizEnList = quizKeyList,
           quizKeyList = quizKeyList,
           chapterViewModel = chapterViewModel,
-          chapterZhViewModel = chapterZhViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           configViewModel = configViewModel,
           chooseOptionMap = chooseOptionMap,

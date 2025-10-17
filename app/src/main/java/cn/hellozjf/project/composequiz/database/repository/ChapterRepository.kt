@@ -1,48 +1,72 @@
 package cn.hellozjf.project.composequiz.database.repository
 
-import androidx.lifecycle.MutableLiveData
-import cn.hellozjf.project.composequiz.database.dao.ChapterDao
-import cn.hellozjf.project.composequiz.database.entity.Chapter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import cn.hellozjf.project.composequiz.database.dao.ChapterEnDao
+import cn.hellozjf.project.composequiz.database.dao.ChapterZhDao
+import cn.hellozjf.project.composequiz.database.entity.ChapterEn
+import cn.hellozjf.project.composequiz.database.entity.ChapterZh
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
+import cn.hellozjf.project.composequiz.util.LanguageConstant
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
-class ChapterRepository(private val chapterDao: ChapterDao) {
-
-  /**
-   * TODO 这个协程作用域应该要移除
-   */
-  private val coroutineScope = CoroutineScope(Dispatchers.Main)
+class ChapterRepository(
+  private val chapterEnDao: ChapterEnDao,
+  private val chapterZhDao: ChapterZhDao,
+) {
 
   /**
-   * TODO 增删改方法要改成 suspend 方法
+   *
    */
-  fun insertChapter(chapter: Chapter) {
-    coroutineScope.launch(Dispatchers.IO) {
-      chapterDao.insertChapter(chapter)
+  suspend fun insertChapter(chapterEn: ChapterEn) {
+    chapterEnDao.insertChapter(chapterEn)
+  }
+
+  suspend fun insertChapter(chapterZh: ChapterZh) {
+    chapterZhDao.insertChapter(chapterZh)
+  }
+
+  suspend fun deleteAll() {
+    chapterEnDao.deleteAll()
+  }
+
+  fun findDTOFlowOrderByIndex(
+    language: String
+  ): Flow<List<ChapterDTO>> {
+    return if (language == LanguageConstant.ZH) {
+      chapterZhDao.findDTOFlowOrderByIndex()
+    } else {
+      chapterEnDao.findDTOFlowOrderByIndex()
     }
   }
 
-  fun deleteAll() {
-    coroutineScope.launch(Dispatchers.IO) {
-      chapterDao.deleteAll()
+  fun findDTOFlowByIndex(
+    language: String,
+    index: Int
+  ): Flow<List<ChapterDTO>> {
+    return if (language == LanguageConstant.ZH) {
+      chapterZhDao.findDTOFlowByIndex(index)
+    } else {
+      chapterEnDao.findDTOFlowByIndex(index)
     }
   }
 
-  fun findAllOrderByIndex(): Flow<List<Chapter>> {
-    return chapterDao.findAllOrderByIndex()
+  suspend fun findDTOByIndex(
+    language: String,
+    index: Int
+  ): ChapterDTO? {
+    return if (language == LanguageConstant.ZH) {
+      chapterZhDao.findDTOByIndex(index)
+    } else {
+      chapterEnDao.findDTOByIndex(index)
+    }
   }
 
-  fun findByIndexFlow(index: Int): Flow<List<Chapter>> {
-    return chapterDao.findByIndexFlow(index)
-  }
-
-  suspend fun findByIndex(index: Int): Chapter? {
-    return chapterDao.findByIndex(index)
-  }
-
-  fun getCount(): Int {
-    return chapterDao.getCount()
+  suspend fun getCount(
+    language: String
+  ): Int {
+    return if (language == LanguageConstant.ZH) {
+      chapterZhDao.getCount()
+    } else {
+      chapterEnDao.getCount()
+    }
   }
 }

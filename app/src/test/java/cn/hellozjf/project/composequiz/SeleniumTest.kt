@@ -1,6 +1,5 @@
 package cn.hellozjf.project.composequiz
 
-import cn.hellozjf.project.composequiz.database.entity.Chapter
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
 import org.apache.commons.csv.CSVFormat

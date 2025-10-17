@@ -40,7 +40,6 @@ import cn.hellozjf.project.composequiz.ui.component.FavoriteQuizPanel
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
-import cn.hellozjf.project.composequiz.viewmodel.ChapterZhViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 import kotlinx.coroutines.launch
 
@@ -54,7 +53,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainScreen(
   chapterViewModel: ChapterViewModel,
-  chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit
@@ -187,10 +185,11 @@ fun MainScreen(
           DestinationQuiz.CHAPTER_LIST -> {
             // 按章节号排序，查出所有的章节
             // TODO 这里需要根据当前的语言，选择具体的 viewModel
-            val chapterList by chapterViewModel.findAllOrderByIndex().collectAsState(listOf())
+            val language = configState.value?.language ?: LanguageConstant.EN
+            val chapterList by chapterViewModel.findDTOFlowOrderByIndex(language).collectAsState(listOf())
             ChapterList(
-              language = configState.value?.language ?: LanguageConstant.EN,
-              chapterList = chapterList,
+              language = language,
+              chapterDTOList = chapterList,
               findQuizDTOByChapterIndex = chapterQuizViewModel::findQuizDTOListByChapterIndex,
               onNavigation = onNavigation
             )
@@ -199,7 +198,7 @@ fun MainScreen(
           DestinationQuiz.FAVORITE_QUIZ -> {
             FavoriteQuizPanel(
               language = configState.value?.language ?: LanguageConstant.EN,
-              getChapterByIndex = chapterViewModel::findByIndex,
+              getChapterDTOByIndex = chapterViewModel::findDTOByIndex,
               findByFavoriteOrderByChapterIndex = chapterQuizViewModel::findDTOListByFavoriteOrderByChapterIndex,
               findByFavoriteOrderByFavoriteTime = chapterQuizViewModel::findDTOListByFavoriteOrderByFavoriteTime,
               findByFavoriteOrderByWrongAnswerCount = chapterQuizViewModel::findDTOListByFavoriteOrderByWrongAnswerCount,
