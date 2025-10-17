@@ -50,13 +50,13 @@ fun ChapterListItem(
       .clickable {
         coroutineScope.launch {
           // 在 IO 线程执行数据库查询
-          val quizList = withContext(Dispatchers.IO) {
+          val quizDTOList = withContext(Dispatchers.IO) {
             findQuizDTOByChapterIndex(language, chapterDTO.index)
           }
           onNavigation(
             QuizScreenKey(
               title = chapterDTO.simpleTitle,
-              quizKeyList = quizList.map {
+              quizKeyList = quizDTOList.map {
                 QuizKey(
                   chapterIndex = it.chapterIndex,
                   quizIndex = it.quizIndex

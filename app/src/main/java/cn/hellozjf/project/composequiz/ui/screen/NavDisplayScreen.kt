@@ -52,10 +52,10 @@ fun NavDisplayScreen(
       }
       entry<QuizScreenKey> { key: QuizScreenKey ->
         val title = key.title
-        val quizPairList = key.quizKeyList
+        val quizKeyList = key.quizKeyList
         QuizScreen(
           title = title,
-          quizKeyList = quizPairList,
+          quizKeyList = quizKeyList,
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           configViewModel = configViewModel,

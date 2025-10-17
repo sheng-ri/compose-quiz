@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
@@ -82,17 +83,23 @@ fun QuizScreen(
     )
   )
 
+  val language by remember {
+    derivedStateOf {
+      configState.value?.language ?: LanguageConstant.EN
+    }
+  }
+
   val coroutineScope = rememberCoroutineScope()
 
-  LaunchedEffect(key1 = Unit) {
-    // 先把语言查出来
-    val language = configViewModel.getConfig()?.language ?: LanguageConstant.EN
-    // 根据语言选择对应的 quizViewModel
-    val quizViewModel = chapterQuizViewModel
+  LaunchedEffect(key1 = language) {
     // 根据 quizKeyList 查出 quizList
-    quizKeyList.map {
-      // TODO 不知道在干什么
+    val dtoList = quizKeyList.mapNotNull {
+      chapterQuizViewModel.findByKey(
+        language = language,
+        quizKey = it
+      )
     }
+    quizDTOList = dtoList
   }
 
   Scaffold(
