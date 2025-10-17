@@ -19,7 +19,7 @@ data class QuizDTO(
   val favoriteTime: Long = 0L,
   val wrongAnswerCount: Int = 0
 ) {
-  fun getKey(): String {
+  fun getMapKey(): String {
     return "${chapterIndex}_${quizIndex}"
   }
 
@@ -42,8 +42,6 @@ fun QuizEn.toDTO() = QuizDTO(
   explanation = explanation
 )
 
-fun List<QuizEn>.toDTO() = map { it.toDTO() }
-
 fun QuizZh.toDTO() = QuizDTO(
   chapterIndex = chapterIndex,
   quizIndex = quizIndex,
@@ -54,5 +52,3 @@ fun QuizZh.toDTO() = QuizDTO(
   wrongOption3 = wrongOption3,
   explanation = explanation
 )
-
-fun List<QuizZh>.toDTO() = map { it.toDTO() }

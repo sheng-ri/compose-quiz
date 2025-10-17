@@ -68,13 +68,14 @@ fun NavDisplayScreen(
       }
       entry<QuizAnswerScreenKey> { key: QuizAnswerScreenKey ->
         val title = key.title
-        val quizList = key.quizList
+        val quizKeyList = key.quizKeyList
         val chooseOptionMap = key.chooseOptionMap
         val quizOrderList = key.quizOrderList
         val optionOrderList = key.optionOrderList
         AnswerScreen(
           title = title,
-          oldQuizEnList = quizList,
+          // oldQuizEnList = quizKeyList,
+          quizKeyList = quizKeyList,
           chapterViewModel = chapterViewModel,
           chapterZhViewModel = chapterZhViewModel,
           chapterQuizViewModel = chapterQuizViewModel,

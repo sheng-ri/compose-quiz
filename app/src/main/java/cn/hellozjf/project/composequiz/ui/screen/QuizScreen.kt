@@ -34,7 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Config
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.ui.component.QuizList
@@ -62,20 +62,20 @@ fun QuizScreen(
 ) {
 
   // 这是问题列表，初始为空列表，当 LaunchedEffect 执行完毕之后，就能得到实际的问题列表了
-  var quizEnList by remember { mutableStateOf<List<QuizEn>>(listOf()) }
+  var quizDTOList by remember { mutableStateOf<List<QuizDTO>>(listOf()) }
 
   // 这是题目的顺序
-  val quizOrder = remember(quizEnList.size) {
-    List(quizEnList.size) { it }.shuffled()
+  val quizOrder = remember(quizDTOList.size) {
+    List(quizDTOList.size) { it }.shuffled()
   }
   // 这是各个题目选项的顺序
-  val optionOrderList = remember(quizEnList.size) {
-    List(quizEnList.size) {
+  val optionOrderList = remember(quizDTOList.size) {
+    List(quizDTOList.size) {
       List(4) { it }.shuffled()
     }
   }
   // 问题ID选择的答案
-  val quizSelectOption = remember { mutableStateMapOf<Int, String>() }
+  val quizSelectOption = remember { mutableStateMapOf<String, String>() }
 
   var showMenu by remember { mutableStateOf(false) }
   var configState = configViewModel.getConfigFlow().collectAsState(
@@ -90,15 +90,10 @@ fun QuizScreen(
     // 先把语言查出来
     val language = configViewModel.getConfig()?.language ?: LanguageConstant.EN
     // 根据语言选择对应的 quizViewModel
-    val quizViewModel = if (language == LanguageConstant.EN) {
-      // 根据 quizPairList 查出 quizList
-      chapterQuizViewModel
-    } else {
-      chapterQuizZhViewModel
-    }
-    // 根据 quizPairList 查出 quizList
+    val quizViewModel = chapterQuizViewModel
+    // 根据 quizKeyList 查出 quizList
     quizKeyList.map {
-
+      // TODO 不知道在干什么
     }
   }
 
@@ -195,7 +190,7 @@ fun QuizScreen(
 //      )
 
       QuizList(
-        quizEnList = quizEnList,
+        quizDTOList = quizDTOList,
         quizOrder = quizOrder,
         quizSelectedOptionMap = quizSelectOption.toMap(),
         onQuizSelectedOptionChange = { id, selectOption ->
@@ -210,7 +205,7 @@ fun QuizScreen(
           onNavigation(
             QuizAnswerScreenKey(
               title = title,
-              quizList = quizEnList,
+              quizKeyList = quizKeyList,
               chooseOptionMap = quizSelectOption.toMap(),
               quizOrderList = quizOrder,
               optionOrderList = optionOrderList

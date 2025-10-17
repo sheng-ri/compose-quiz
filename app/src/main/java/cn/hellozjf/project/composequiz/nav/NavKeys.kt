@@ -17,7 +17,7 @@ data class QuizScreenKey(
 data class QuizAnswerScreenKey(
   val title: String,
   val quizKeyList: List<QuizKey>,
-  val chooseOptionMap: Map<Int, String>,
+  val chooseOptionMap: Map<String, String>,
   val quizOrderList: List<Int>,
   val optionOrderList: List<List<Int>>
 ) : NavKey

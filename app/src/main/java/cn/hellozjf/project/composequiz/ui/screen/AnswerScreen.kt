@@ -35,8 +35,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.database.entity.Config
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
@@ -53,47 +53,31 @@ import kotlinx.coroutines.launch
 @Composable
 fun AnswerScreen(
   title: String,
-  oldQuizDTOList: List<QuizDTO>,
+  // oldQuizDTOList: List<QuizDTO>,
+  quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
   chapterZhViewModel: ChapterZhViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
-  chooseOptionMap: Map<Int, String>,
+  chooseOptionMap: Map<String, String>,
   quizOrderList: List<Int>,
   optionOrderList: List<List<Int>>,
   onNavigation: (NavKey) -> Unit,
   onClearBackStack: () -> Unit
 ) {
 
-  val keyList = remember(oldQuizDTOList) {
-    oldQuizDTOList.map { it.getQuizKey() }
-  }
   val config by configViewModel.getConfigFlow().collectAsState(
     Config(language = LanguageConstant.EN)
   )
 
   val quizList by chapterQuizViewModel.findFlowByKeyList(
     language = config?.language ?: LanguageConstant.EN,
-    quizKeyList = keyList
+    quizKeyList = quizKeyList
   ).collectAsState(listOf())
   // val quizList by chapterQuizViewModel.findByIdList(idList).collectAsState(listOf())
 
   // 这是所有的题目
-  val quizDTOList = remember(quizList) {
-    quizList.map {
-      QuizDTO(
-        id = it.id,
-        chapterIndex = it.chapterIndex,
-        quizIndex = it.quizIndex,
-        question = it.question,
-        correctOption = it.correctOption,
-        wrongOption1 = it.wrongOption1,
-        wrongOption2 = it.wrongOption2,
-        wrongOption3 = it.wrongOption3,
-        explanation = it.explanation
-      )
-    }
-  }
+  val quizDTOList = quizList
   val listState = rememberLazyListState()
   var totalQuestionCount by remember { mutableStateOf(0) }
   var totalCorrectCount by remember { mutableStateOf(0) }
@@ -114,12 +98,12 @@ fun AnswerScreen(
 
     totalCorrectCount = 0
     for (quiz in quizDTOList) {
-      if (quiz.correctOption == chooseOptionMap[quiz.id]) {
+      if (quiz.correctOption == chooseOptionMap[quiz.getMapKey()]) {
         // 这题答对了
         totalCorrectCount++
       } else {
         // 这题答错了，需要记录答错次数
-        chapterQuizViewModel.incWrongAnswerCount(quiz.id)
+        chapterQuizViewModel.incWrongAnswerCount(quiz.chapterIndex, quiz.quizIndex)
       }
     }
   }
@@ -229,14 +213,14 @@ fun AnswerScreen(
       ) {
         if (quizList.isNotEmpty()) {
           quizOrderList.forEachIndexed { index, order ->
-            val quiz = quizList[order]
+            val quizDTO = quizList[order]
             val optionOrder = optionOrderList[order]
-            item(key = quiz.id) {
-              val selectOption = chooseOptionMap[quiz.id] ?: ""
+            item(key = quizDTO.getMapKey()) {
+              val selectOption = chooseOptionMap[quizDTO.getMapKey()] ?: ""
               QuizAnswerItem(
                 setFavorite = chapterQuizViewModel::setFavorite,
                 index = index,
-                quizEn = quiz,
+                quizDTO = quizDTO,
                 selectedOption = selectOption,
                 optionOrder = optionOrder
               )

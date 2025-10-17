@@ -197,13 +197,13 @@ fun MainScreen(
           }
 
           DestinationQuiz.FAVORITE_QUIZ -> {
-            // TODO 这里需要根据当前的语言，选择具体的 viewModel
             FavoriteQuizPanel(
+              language = configState.value?.language ?: LanguageConstant.EN,
               getChapterByIndex = chapterViewModel::findByIndex,
-              findByFavoriteOrderByChapterIndex = chapterQuizViewModel::findByFavoriteOrderByChapterIndex,
-              findByFavoriteOrderByFavoriteTime = chapterQuizViewModel::findByFavoriteOrderByFavoriteTime,
-              findByFavoriteOrderByWrongAnswerCount = chapterQuizViewModel::findByFavoriteOrderByWrongAnswerCount,
-              findQuizEnByFavorite = chapterQuizViewModel::findQuizListByFavorite,
+              findByFavoriteOrderByChapterIndex = chapterQuizViewModel::findDTOListByFavoriteOrderByChapterIndex,
+              findByFavoriteOrderByFavoriteTime = chapterQuizViewModel::findDTOListByFavoriteOrderByFavoriteTime,
+              findByFavoriteOrderByWrongAnswerCount = chapterQuizViewModel::findDTOListByFavoriteOrderByWrongAnswerCount,
+              findQuizDTOByFavorite = chapterQuizViewModel::findQuizListByFavorite,
               onNavigation = onNavigation
             )
           }

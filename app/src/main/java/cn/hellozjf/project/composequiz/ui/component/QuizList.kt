@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 
 /**
@@ -31,7 +30,7 @@ fun QuizList(
     if (quizDTOList.isNotEmpty()) {
       quizOrder.forEachIndexed { index, order ->
         val quizDTO = quizDTOList[order]
-        val key = quizDTO.getKey()
+        val key = quizDTO.getMapKey()
         item(key = key) {
           val selectOption = quizSelectedOptionMap[key] ?: ""
           val onSelectOptionChange: (String) -> Unit = { newSelectOption ->
