@@ -47,10 +47,16 @@ class ConfigViewModel(application: Application) : ViewModel() {
     }
   }
 
+  /**
+   * TODO 后续要确保 Config 一直能获取到
+   */
   suspend fun getConfig(): Config? {
     return repository.getConfig()
   }
 
+  /**
+   * TODO 后续要确保 Config 一直能获取到
+   */
   fun getConfigFlow(): Flow<Config?> {
     return repository.getConfigFlow()
   }

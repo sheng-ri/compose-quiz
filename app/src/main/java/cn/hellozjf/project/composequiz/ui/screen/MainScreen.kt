@@ -184,7 +184,6 @@ fun MainScreen(
         when (destination) {
           DestinationQuiz.CHAPTER_LIST -> {
             // 按章节号排序，查出所有的章节
-            // TODO 这里需要根据当前的语言，选择具体的 viewModel
             val language = configState.value?.language ?: LanguageConstant.EN
             val chapterList by chapterViewModel.findDTOFlowOrderByIndex(language).collectAsState(listOf())
             ChapterList(

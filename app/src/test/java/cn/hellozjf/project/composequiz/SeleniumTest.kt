@@ -122,7 +122,7 @@ class SeleniumTest {
 
     // 首先把 ChapterQuizConstant.PATH 文件变成一个章节列表，在这个文件中出现的章节，后面就不用打开URL搜索题库了
     val chatperSet = mutableSetOf<Int>()
-    FileReader("src/main/assets/${ChapterQuizConstant.PATH}").use { reader ->
+    FileReader("src/main/assets/${ChapterQuizConstant.PATH_EN}").use { reader ->
       val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
       val quizList = mutableListOf<Quiz>()
@@ -151,7 +151,7 @@ class SeleniumTest {
 
     // 读取章节 CSV，然后依次打开每章 URL，读取该章下面的题目
     try {
-      FileReader("src/main/assets/${ChapterConstant.PATH}").use { reader ->
+      FileReader("src/main/assets/${ChapterConstant.PATH_EN}").use { reader ->
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         for (record in csvParser) {
@@ -171,7 +171,7 @@ class SeleniumTest {
     }
 
     // 将所有章节下面的所有题目写入到 CSV 中
-    FileWriter("src/main/assets/${ChapterQuizConstant.PATH}").use { writer ->
+    FileWriter("src/main/assets/${ChapterQuizConstant.PATH_EN}").use { writer ->
       CSVPrinter(writer, CSVFormat.DEFAULT).use { printer ->
         val title = listOf(
           ChapterQuizConstant.CHAPTER_INDEX,
@@ -259,7 +259,7 @@ class SeleniumTest {
 //     val excelTest = ExcelTest()
 //     excelTest.writeToExcel(title, dataList)
 
-    FileWriter("src/main/assets/${ChapterConstant.PATH}").use { writer ->
+    FileWriter("src/main/assets/${ChapterConstant.PATH_EN}").use { writer ->
       CSVPrinter(writer, CSVFormat.DEFAULT).use { printer ->
         // 写入表头
         printer.printRecord(title)

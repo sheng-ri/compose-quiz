@@ -25,7 +25,7 @@ import cn.hellozjf.project.composequiz.database.entity.QuizZh
     QuizZh::class,
     QuizExt::class,
     Config::class
-  ], version = 13, exportSchema = false
+  ], version = 15, exportSchema = false
 )
 abstract class QuizRoomDatabase : RoomDatabase() {
 

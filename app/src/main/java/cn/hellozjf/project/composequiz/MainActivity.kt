@@ -118,23 +118,22 @@ class MainActivity : ComponentActivity() {
     // 读取章节信息
     coroutineScope.launch(context = Dispatchers.IO) {
 
-      val language = configViewModel.getConfig()?.language ?: LanguageConstant.EN
-      if (chapterQuizViewModel.getCount(language) == 0) {
-        // 初始化 QuizZh 或 QuizEn 表
-        if (language == LanguageConstant.ZH) {
-          readQuizZhCsv(chapterQuizViewModel)
-        } else {
-          readQuizEnCsv(chapterQuizViewModel)
-        }
+      if (chapterViewModel.getCount(LanguageConstant.EN) == 0) {
+        // 英文的章节表没有初始化过
+        readChapterEnCsv(chapterViewModel)
+      }
+      if (chapterViewModel.getCount(LanguageConstant.ZH) == 0) {
+        // 中文的章节表没有初始化过
+        readChapterZhCsv(chapterViewModel)
       }
 
-      if (chapterViewModel.getCount(language) == 0) {
-        // 初始化 ChapterZh 或 ChapterEn 表
-        if (language == LanguageConstant.ZH) {
-          readChapterZhCsv(chapterViewModel)
-        } else {
-          readChapterEnCsv(chapterViewModel)
-        }
+      if (chapterQuizViewModel.getCount(LanguageConstant.EN) == 0) {
+        // 英文的题目表没有初始化过
+        readQuizEnCsv(chapterQuizViewModel)
+      }
+      if (chapterQuizViewModel.getCount(LanguageConstant.ZH) == 0) {
+        // 中文的题目表没有初始化过
+        readQuizZhCsv(chapterQuizViewModel)
       }
     }
   }
@@ -143,7 +142,7 @@ class MainActivity : ComponentActivity() {
     chapterViewModel: ChapterViewModel
   ) {
     try {
-      this.assets.open(ChapterConstant.PATH).bufferedReader().use { reader ->
+      this.assets.open(ChapterConstant.PATH_EN).bufferedReader().use { reader ->
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         for (record in csvParser) {
@@ -166,7 +165,7 @@ class MainActivity : ComponentActivity() {
     chapterViewModel: ChapterViewModel
   ) {
     try {
-      this.assets.open(ChapterConstant.PATH).bufferedReader().use { reader ->
+      this.assets.open(ChapterConstant.PATH_ZH).bufferedReader().use { reader ->
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         for (record in csvParser) {
@@ -189,7 +188,7 @@ class MainActivity : ComponentActivity() {
     chapterQuizViewModel: ChapterQuizViewModel
   ) {
     try {
-      this.assets.open(ChapterQuizConstant.PATH).bufferedReader().use { reader ->
+      this.assets.open(ChapterQuizConstant.PATH_EN).bufferedReader().use { reader ->
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         // key 为 chapterIndex，value 为 quizIndex
@@ -221,7 +220,7 @@ class MainActivity : ComponentActivity() {
     chapterQuizViewModel: ChapterQuizViewModel
   ) {
     try {
-      this.assets.open(ChapterQuizConstant.PATH).bufferedReader().use { reader ->
+      this.assets.open(ChapterQuizConstant.PATH_ZH).bufferedReader().use { reader ->
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         // key 为 chapterIndex，value 为 quizIndex
