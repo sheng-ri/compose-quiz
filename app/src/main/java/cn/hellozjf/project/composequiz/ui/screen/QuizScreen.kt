@@ -38,6 +38,7 @@ import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
+import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.ui.component.QuizList
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
@@ -105,85 +106,12 @@ fun QuizScreen(
   Scaffold(
     modifier = Modifier.fillMaxSize(),
     topBar = {
-      TopAppBar(
-        title = {
-          Text(
-            text = "章节测试",
-            fontWeight = FontWeight.Bold
-          )
+      MyTopAppBar(
+        title = "章节测试",
+        toggleLanguage = {
+          configViewModel.toggleLanguage()
         },
-        navigationIcon = {
-          IconButton(onClick = { /* 处理导航菜单点击 */ }) {
-            Icon(
-              imageVector = Icons.Default.Menu,
-              contentDescription = "导航菜单"
-            )
-          }
-        },
-        actions = {
-          Row(
-            modifier = Modifier.clickable {
-              coroutineScope.launch {
-                configViewModel.toggleLanguage()
-              }
-            }
-          ) {
-            Icon(
-              painter = painterResource(R.drawable.outline_language_24),
-              contentDescription = "语言"
-            )
-            Text(
-              text = configState.value?.language ?: LanguageConstant.EN
-            )
-          }
-
-          // 更多选项按钮
-          IconButton(onClick = { showMenu = !showMenu }) {
-            Icon(
-              imageVector = Icons.Default.MoreVert,
-              contentDescription = "更多选项"
-            )
-          }
-
-          // 下拉菜单
-          DropdownMenu(
-            expanded = showMenu,
-            onDismissRequest = { showMenu = false }
-          ) {
-            DropdownMenuItem(
-              text = { Text("设置") },
-              onClick = {
-                showMenu = false
-                // 处理设置点击
-              },
-              leadingIcon = {
-                Icon(
-                  Icons.Default.Favorite,
-                  contentDescription = null
-                )
-              }
-            )
-            DropdownMenuItem(
-              text = { Text("分享") },
-              onClick = {
-                showMenu = false
-                // 处理分享点击
-              },
-              leadingIcon = {
-                Icon(
-                  Icons.Default.Share,
-                  contentDescription = null
-                )
-              }
-            )
-          }
-        },
-//        colors = TopAppBarDefaults.topAppBarColors(
-//          containerColor = MaterialTheme.colorScheme.primaryContainer,
-//          titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-//          actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-//          navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-//        )
+        language = configState.value?.language ?: LanguageConstant.EN
       )
     }
   ) { innerPadding ->
