@@ -22,8 +22,8 @@ fun QuizAnswerItem(
   index: Int,
   quizDTO: QuizDTO,
   selectedOption: String,
-  optionOrder: List<Int>,
-  modifier: Modifier = Modifier
+  modifier: Modifier = Modifier,
+  optionOrder: List<Int> = listOf(0, 1, 2, 3)
 ) {
   Card(
     colors = CardDefaults.cardColors(

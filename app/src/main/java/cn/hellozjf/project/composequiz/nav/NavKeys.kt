@@ -14,6 +14,12 @@ data class QuizScreenKey(
 ) : NavKey
 
 @Serializable
+data class ChapterQuizScreenKey(
+  val chapterIndex: Int,
+  val chapterSimpleTitle: String
+): NavKey
+
+@Serializable
 data class QuizAnswerScreenKey(
   val title: String,
   val quizKeyList: List<QuizKey>,

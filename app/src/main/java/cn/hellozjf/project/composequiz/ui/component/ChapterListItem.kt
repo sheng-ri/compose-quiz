@@ -20,6 +20,7 @@ import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
+import cn.hellozjf.project.composequiz.nav.ChapterQuizScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import kotlinx.coroutines.Dispatchers
@@ -54,15 +55,19 @@ fun ChapterListItem(
             findQuizDTOByChapterIndex(language, chapterDTO.index)
           }
           onNavigation(
-            QuizScreenKey(
-              title = chapterDTO.simpleTitle,
-              quizKeyList = quizDTOList.map {
-                QuizKey(
-                  chapterIndex = it.chapterIndex,
-                  quizIndex = it.quizIndex
-                )
-              }
+            ChapterQuizScreenKey(
+              chapterIndex = chapterDTO.index,
+              chapterSimpleTitle = chapterDTO.simpleTitle
             )
+//            QuizScreenKey(
+//              title = chapterDTO.simpleTitle,
+//              quizKeyList = quizDTOList.map {
+//                QuizKey(
+//                  chapterIndex = it.chapterIndex,
+//                  quizIndex = it.quizIndex
+//                )
+//              }
+//            )
           )
         }
       },

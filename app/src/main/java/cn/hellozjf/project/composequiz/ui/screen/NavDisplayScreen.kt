@@ -5,6 +5,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
+import cn.hellozjf.project.composequiz.nav.ChapterQuizScreenKey
 import cn.hellozjf.project.composequiz.nav.MainScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
@@ -80,6 +81,15 @@ fun NavDisplayScreen(
           optionOrderList = optionOrderList,
           onNavigation = onNavigation,
           onClearBackStack = onClearBackStack
+        )
+      }
+      entry<ChapterQuizScreenKey> { key: ChapterQuizScreenKey ->
+        ChapterQuizScreen(
+          chapterIndex = key.chapterIndex,
+          chapterSimpleTitle = key.chapterSimpleTitle,
+          configViewModel = configViewModel,
+          chapterQuizViewModel = chapterQuizViewModel,
+          onNavigation = onNavigation
         )
       }
     }

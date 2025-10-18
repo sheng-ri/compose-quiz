@@ -30,7 +30,6 @@ import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 
 /**
  * 答案列表屏幕
- * TODO 这里需要优化一下，oldQuizDTOList 改成 keyList
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
