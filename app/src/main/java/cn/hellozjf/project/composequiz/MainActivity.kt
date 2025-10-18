@@ -13,7 +13,6 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
-import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import cn.hellozjf.project.composequiz.ui.screen.NavDisplayScreen
@@ -110,7 +109,18 @@ class MainActivity : ComponentActivity() {
         // 中文的题目表没有初始化过
         readQuizZhCsv(chapterQuizViewModel)
       }
+      if (chapterQuizViewModel.getExtCount() == 0) {
+        // EXT表没有初始化过
+        initQuizExt(chapterQuizViewModel)
+      }
     }
+  }
+
+  private suspend fun initQuizExt(
+    chapterQuizViewModel: ChapterQuizViewModel
+  ) {
+    val quizKeyList = chapterQuizViewModel.findQuizKeyList(language = LanguageConstant.EN)
+    chapterQuizViewModel.initExtList(quizKeyList)
   }
 
   private fun readChapterEnCsv(

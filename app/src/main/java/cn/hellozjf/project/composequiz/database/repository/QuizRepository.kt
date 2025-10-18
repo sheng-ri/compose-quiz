@@ -4,6 +4,7 @@ import cn.hellozjf.project.composequiz.database.dao.QuizEnDao
 import cn.hellozjf.project.composequiz.database.dao.QuizExtDao
 import cn.hellozjf.project.composequiz.database.dao.QuizZhDao
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.database.entity.QuizExt
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
@@ -46,6 +47,10 @@ class QuizRepository(
     } else {
       quizEnDao.getCount()
     }
+  }
+
+  suspend fun getExtCount(): Int {
+    return quizExtDao.getCount()
   }
 
   /**
@@ -210,6 +215,18 @@ class QuizRepository(
       quizEnDao.findFlowByKeyList(
         quizKeyList = quizKeyList
       )
+    }
+  }
+
+  suspend fun insertQuizExt(quizExt: QuizExt) {
+    quizExtDao.insert(quizExt)
+  }
+
+  suspend fun findQuizDTOList(language: String): List<QuizDTO> {
+    return if (language == LanguageConstant.ZH) {
+      quizZhDao.findQuizDTOList()
+    } else {
+      quizEnDao.findQuizDTOList()
     }
   }
 }

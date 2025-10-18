@@ -332,4 +332,24 @@ interface QuizEnDao {
 
   @RawQuery(observedEntities = [QuizEn::class, QuizExt::class])
   fun findFlowByRawQuery(query: SupportSQLiteQuery): Flow<List<QuizDTO>>
+
+  @Query(
+    """
+    SELECT 
+        quiz_en.chapter_index chapterIndex,
+        quiz_en.quiz_index quizIndex,
+        quiz_en.question question,
+        quiz_en.correct_option correctOption,
+        quiz_en.wrong_option1 wrongOption1,
+        quiz_en.wrong_option2 wrongOption2,
+        quiz_en.wrong_option3 wrongOption3,
+        quiz_en.explanation explanation,
+        quiz_ext.favorite favorite,
+        quiz_ext.favorite_time favoriteTime,
+        quiz_ext.wrong_answer_count wrongAnswerCount
+    FROM quiz_en
+    LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
+  """
+  )
+  suspend fun findQuizDTOList(): List<QuizDTO>
 }

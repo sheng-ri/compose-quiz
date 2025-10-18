@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.hellozjf.project.composequiz.database.QuizRoomDatabase
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.database.entity.QuizExt
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import cn.hellozjf.project.composequiz.database.repository.QuizRepository
 import cn.hellozjf.project.composequiz.dto.QuizDTO
@@ -46,6 +47,23 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     return repository.getCount(language)
   }
 
+  suspend fun getExtCount(): Int {
+    return repository.getExtCount()
+  }
+
+  suspend fun initExtList(keyList: List<QuizKey>) {
+    for (key in keyList) {
+      val quizExt = QuizExt(
+        chapterIndex = key.chapterIndex,
+        quizIndex = key.quizIndex,
+        favorite = false,
+        favoriteTime = 0L,
+        wrongAnswerCount = 0
+      )
+      repository.insertQuizExt(quizExt)
+    }
+  }
+
   fun findQuizDTOFlowByChapterIndex(
     language: String,
     chapterIndex: Int
@@ -72,6 +90,17 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     return repository.findQuizDTOListByFavorite(
       language = language
     )
+  }
+
+  suspend fun findQuizKeyList(
+    language: String
+  ): List<QuizKey> {
+    return repository.findQuizDTOList(language).map {
+      QuizKey(
+        chapterIndex = it.chapterIndex,
+        quizIndex = it.quizIndex
+      )
+    }
   }
 
   suspend fun findByKey(

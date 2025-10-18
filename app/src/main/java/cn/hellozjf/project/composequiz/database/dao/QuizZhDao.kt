@@ -6,7 +6,6 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.sqlite.db.SimpleSQLiteQuery
 import androidx.sqlite.db.SupportSQLiteQuery
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizExt
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import cn.hellozjf.project.composequiz.dto.QuizDTO
@@ -329,6 +328,26 @@ interface QuizZhDao {
     return findFlowByRawQuery(query)
   }
 
-  @RawQuery(observedEntities = [QuizEn::class, QuizExt::class])
+  @RawQuery(observedEntities = [QuizZh::class, QuizExt::class])
   fun findFlowByRawQuery(query: SupportSQLiteQuery): Flow<List<QuizDTO>>
+
+  @Query(
+    """
+    SELECT 
+        quiz_zh.chapter_index chapterIndex,
+        quiz_zh.quiz_index quizIndex,
+        quiz_zh.question question,
+        quiz_zh.correct_option correctOption,
+        quiz_zh.wrong_option1 wrongOption1,
+        quiz_zh.wrong_option2 wrongOption2,
+        quiz_zh.wrong_option3 wrongOption3,
+        quiz_zh.explanation explanation,
+        quiz_ext.favorite favorite,
+        quiz_ext.favorite_time favoriteTime,
+        quiz_ext.wrong_answer_count wrongAnswerCount
+    FROM quiz_zh
+    LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
+  """
+  )
+  suspend fun findQuizDTOList(): List<QuizDTO>
 }
