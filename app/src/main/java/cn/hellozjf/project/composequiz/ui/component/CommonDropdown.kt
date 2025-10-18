@@ -24,16 +24,18 @@ fun CommonDropdown(
   items: List<String>,
   selectedItem: String,
   onSelectedItemChange: (String) -> Unit,
+  modifier: Modifier = Modifier
 ) {
   ExposedDropdownMenuBox(
     expanded = expanded,
-    onExpandedChange = onExpandedChange
+    onExpandedChange = onExpandedChange,
+    modifier = modifier
   ) {
     TextField(
       value = selectedItem,
       onValueChange = {},
       modifier = Modifier
-        .fillMaxWidth()
+//        .fillMaxWidth()
         .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable),
       readOnly = true,
       trailingIcon = {

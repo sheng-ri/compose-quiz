@@ -76,7 +76,8 @@ fun FavoriteTestRow(
         if (it != TestCountConstant.CUSTOM) {
           customTestCount = it.toInt()
         }
-      }
+      },
+      modifier = Modifier.weight(1f)
     )
     // 当下拉框选择自定义时，需要显示自定义的数量
     if (testCountSelectText == TestCountConstant.CUSTOM) {
@@ -90,7 +91,7 @@ fun FavoriteTestRow(
       )
     }
     // 定义空白占满剩余空间，以便把按钮定位到最右边
-    Spacer(modifier = Modifier.weight(1f))
+//    Spacer(modifier = Modifier.weight(1f))
     // 最右边是个测试按钮
     Button(
       onClick = {

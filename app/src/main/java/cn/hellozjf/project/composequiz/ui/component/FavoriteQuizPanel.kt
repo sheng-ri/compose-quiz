@@ -68,10 +68,10 @@ fun FavoriteQuizPanel(
   Column(
     modifier = modifier.fillMaxSize()
   ) {
-    Text(
-      text = "每日测试",
-      fontSize = 32.sp
-    )
+//    Text(
+//      text = "每日测试",
+//      fontSize = 32.sp
+//    )
     OrderMethod(
       dropdownExpand = orderMethodExpand,
       onDropdownExpandChange = onOrderMethodExpandChange,

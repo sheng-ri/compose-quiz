@@ -75,8 +75,7 @@ class MainActivity : ComponentActivity() {
           readCsvAndWriteToDB(
             coroutineScope = coroutineScope,
             chapterViewModel = chapterViewModel,
-            chapterQuizViewModel = chapterQuizViewModel,
-            configViewModel = configViewModel
+            chapterQuizViewModel = chapterQuizViewModel
           )
         }
       }
@@ -89,8 +88,7 @@ class MainActivity : ComponentActivity() {
   private fun readCsvAndWriteToDB(
     coroutineScope: CoroutineScope,
     chapterViewModel: ChapterViewModel,
-    chapterQuizViewModel: ChapterQuizViewModel,
-    configViewModel: ConfigViewModel
+    chapterQuizViewModel: ChapterQuizViewModel
   ) {
     // 读取章节信息
     coroutineScope.launch(context = Dispatchers.IO) {

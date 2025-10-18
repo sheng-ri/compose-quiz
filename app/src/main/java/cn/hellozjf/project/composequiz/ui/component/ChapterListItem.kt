@@ -72,7 +72,11 @@ fun ChapterListItem(
       verticalAlignment = Alignment.CenterVertically
     ) {
       Text(
-        text = "第 ${chapterDTO.index} 章",
+        text = if (language == LanguageConstant.ZH) {
+          "第 ${chapterDTO.index} 章"
+        } else {
+          "Ch. ${chapterDTO.index}"
+        },
         modifier = Modifier.width(75.dp)
       )
       Spacer(modifier = Modifier.width(8.dp))
