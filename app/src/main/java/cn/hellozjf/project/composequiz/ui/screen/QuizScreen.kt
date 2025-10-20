@@ -59,7 +59,7 @@ fun QuizScreen(
     }
   }
   // 问题ID选择的答案
-  val quizSelectOption = remember { mutableStateMapOf<String, String>() }
+  val quizSelectOption = remember(key1 = quizKeyList) { mutableStateMapOf<String, String>() }
 
   var showMenu by remember { mutableStateOf(false) }
   val config by configViewModel.getConfigFlow().collectAsState(

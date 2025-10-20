@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 
 /**
@@ -50,9 +51,14 @@ fun QuizListItem(
         quizDTO.wrongOption3
       )
       // 可以进行的选项
-      for (order in optionOrder) {
+      for ((index, order) in optionOrder.withIndex()) {
         RadioButtonAndText(
           option = options[order],
+          optionKey = OptionKey(
+            chapterIndex = quizDTO.chapterIndex,
+            quizIndex = quizDTO.quizIndex,
+            optionIndex = index
+          ),
           selectedOption = selectedOption,
           onSelectedOptionChange = onSelectedOptionChange
         )
@@ -66,7 +72,8 @@ fun QuizListItem(
 )
 @Composable
 fun QuizListItemPreview() {
-  var selectOption by remember { mutableStateOf("错误选项3") }
+  var selectOption by remember { mutableStateOf("0_1_0") }
+  val optionOrder = listOf(1, 0, 3, 2)
   QuizListItem(
     index = 0,
     quizDTO = QuizDTO(
@@ -83,6 +90,6 @@ fun QuizListItemPreview() {
     onSelectedOptionChange = {
       selectOption = it
     },
-    optionOrder = listOf(1, 0, 3, 2)
+    optionOrder = optionOrder
   )
 }

@@ -19,10 +19,6 @@ data class QuizDTO(
   val favoriteTime: Long = 0L,
   val wrongAnswerCount: Int = 0
 ) {
-  fun getMapKey(): String {
-    return "${chapterIndex}_${quizIndex}"
-  }
-
   fun getQuizKey(): QuizKey {
     return QuizKey(
       chapterIndex = chapterIndex,
