@@ -110,8 +110,8 @@ fun QuizScreen(
         quizDTOList = quizDTOList,
         quizOrder = quizOrder,
         quizSelectedOptionMap = quizSelectOption.toMap(),
-        onQuizSelectedOptionChange = { id, selectOption ->
-          quizSelectOption[id] = selectOption
+        onQuizSelectedOptionChange = { mapKey, selectOption ->
+          quizSelectOption[mapKey] = selectOption
         },
         optionOrderList = optionOrderList,
         modifier = Modifier.weight(1f)
