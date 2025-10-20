@@ -4,7 +4,7 @@ import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 
 /**
- * 一个不带 wrongAnswerCount 的 Quiz
+ *
  */
 data class QuizDTO(
   val chapterIndex: Int,

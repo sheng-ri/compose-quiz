@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Config
+import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
@@ -44,7 +45,7 @@ fun AnswerScreen(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
-  chooseOptionMap: Map<String, String>,
+  chooseOptionMap: Map<QuizKey, OptionKey>,
   quizOrderList: List<Int>,
   optionOrderList: List<List<Int>>,
   onNavigation: (NavKey) -> Unit,
@@ -84,8 +85,15 @@ fun AnswerScreen(
     totalQuestionCount = quizList.size
 
     totalCorrectCount = 0
-    for (quiz in quizList) {
-      if (quiz.correctOption == chooseOptionMap[quiz.getMapKey()]) {
+    for ((quizIndex, quiz) in quizList.withIndex()) {
+      val optionIndex = optionOrderList[quizIndex].indexOf(0)
+      val chapterIndex = quiz.chapterIndex
+      val correctOptionKey = OptionKey(
+        chapterIndex = chapterIndex,
+        quizIndex = quizIndex,
+        optionIndex = optionIndex
+      )
+      if (correctOptionKey == chooseOptionMap[quiz.getQuizKey()]) {
         // 这题答对了
         totalCorrectCount++
       } else {
@@ -123,13 +131,13 @@ fun AnswerScreen(
           quizOrderList.forEachIndexed { index, order ->
             val quizDTO = quizList[order]
             val optionOrder = optionOrderList[order]
-            item(key = quizDTO.getMapKey()) {
-              val selectOption = chooseOptionMap[quizDTO.getMapKey()] ?: ""
+            item(key = quizDTO.getQuizKey()) {
+              val selectOptionKey = chooseOptionMap[quizDTO.getQuizKey()]
               QuizAnswerItem(
                 setFavorite = chapterQuizViewModel::setFavorite,
                 index = index,
                 quizDTO = quizDTO,
-                selectedOption = selectOption,
+                selectedOptionKey = selectOptionKey,
                 optionOrder = optionOrder
               )
             }

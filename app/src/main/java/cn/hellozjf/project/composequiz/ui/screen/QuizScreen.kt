@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Config
+import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
@@ -59,7 +60,7 @@ fun QuizScreen(
     }
   }
   // 问题ID选择的答案
-  val quizSelectOption = remember(key1 = quizKeyList) { mutableStateMapOf<String, String>() }
+  val quizSelectOption = remember(key1 = quizKeyList) { mutableStateMapOf<QuizKey, OptionKey>() }
 
   var showMenu by remember { mutableStateOf(false) }
   val config by configViewModel.getConfigFlow().collectAsState(

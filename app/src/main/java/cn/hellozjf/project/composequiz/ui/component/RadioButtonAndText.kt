@@ -24,18 +24,18 @@ import cn.hellozjf.project.composequiz.dto.OptionKey
 fun RadioButtonAndText(
   option: String,
   optionKey: OptionKey,
-  selectedOption: OptionKey,
-  onSelectedOptionChange: (OptionKey) -> Unit,
+  selectedOptionKey: OptionKey?,
+  onSelectedOptionKeyChange: (OptionKey) -> Unit,
 ) {
   Row(
     modifier = Modifier
       .fillMaxWidth()
-      .clickable { onSelectedOptionChange(optionKey) },
+      .clickable { onSelectedOptionKeyChange(optionKey) },
     verticalAlignment = Alignment.CenterVertically
   ) {
     RadioButton(
-      selected = selectedOption == optionKey,
-      onClick = { onSelectedOptionChange(optionKey) }
+      selected = selectedOptionKey == optionKey,
+      onClick = { onSelectedOptionKeyChange(optionKey) }
     )
     Text(
       text = option,
@@ -51,14 +51,15 @@ fun RadioButtonAndText(
 @Composable
 fun RadioButtonAndTextPreview1() {
   var selectOption by remember { mutableStateOf(OptionKey(
-    chapterIndex = ,
-    quizIndex = ,
-    optionIndex = ,
+    chapterIndex = 1,
+    quizIndex = 1,
+    optionIndex = 0,
   )) }
   RadioButtonAndText(
     option = "正确答案",
-    selectedOption = selectOption,
-    onSelectedOptionChange = {
+    optionKey = selectOption,
+    selectedOptionKey = selectOption,
+    onSelectedOptionKeyChange = {
       selectOption = it
     }
   )
@@ -70,12 +71,17 @@ fun RadioButtonAndTextPreview1() {
 )
 @Composable
 fun RadioButtonAndTextPreview2() {
-  var selectOption by remember { mutableStateOf("正确答案") }
+  var selectOptionKey by remember { mutableStateOf(OptionKey(
+    chapterIndex = 1,
+    quizIndex = 1,
+    optionIndex = 0
+  )) }
   RadioButtonAndText(
     option = "正确答案",
-    selectedOption = selectOption,
-    onSelectedOptionChange = {
-      selectOption = it
+    optionKey = selectOptionKey,
+    selectedOptionKey = selectOptionKey,
+    onSelectedOptionKeyChange = {
+      selectOptionKey = it
     }
   )
 }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 
 @Composable
@@ -21,7 +22,7 @@ fun QuizAnswerItem(
   setFavorite: suspend (Int, Int, Boolean, Long) -> Unit,
   index: Int,
   quizDTO: QuizDTO,
-  selectedOption: String,
+  selectedOptionKey: OptionKey?,
   modifier: Modifier = Modifier,
   optionOrder: List<Int> = listOf(0, 1, 2, 3)
 ) {
@@ -50,8 +51,17 @@ fun QuizAnswerItem(
       for (order in optionOrder) {
         FavoriteQuizOption(
           option = optionList[order],
-          selectedOption = selectedOption,
-          correctOption = quizDTO.correctOption
+          optionKey = OptionKey(
+            chapterIndex = quizDTO.chapterIndex,
+            quizIndex = quizDTO.quizIndex,
+            optionIndex = optionOrder.indexOf(order)
+          ),
+          selectedOptionKey = selectedOptionKey,
+          correctOptionKey = OptionKey(
+            chapterIndex = quizDTO.chapterIndex,
+            quizIndex = quizDTO.quizIndex,
+            optionIndex = optionOrder.indexOf(0)
+          )
         )
       }
       Explanation(quizDTO.explanation)
@@ -81,7 +91,11 @@ fun QuizAnswerItemPreview() {
   QuizAnswerItem(
     index = 0,
     quizDTO = quizDTO,
-    selectedOption = "错误答案1",
+    selectedOptionKey = OptionKey(
+      chapterIndex = 0,
+      quizIndex = 1,
+      optionIndex = 1
+    ),
     optionOrder = listOf(3, 1, 2, 0),
     setFavorite = { chapterIndex, quizIndex, favorite, favoriteTime ->
       //if (index == 0) {

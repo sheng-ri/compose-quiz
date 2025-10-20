@@ -42,12 +42,12 @@ fun ChapterQuizList(
     ) {
       if (quizDTOList.isNotEmpty()) {
         quizDTOList.forEachIndexed { index, quizDTO ->
-          item(key = quizDTO.getMapKey()) {
+          item(key = quizDTO.getQuizKey()) {
             QuizAnswerItem(
               setFavorite = setFavorite,
               index = index,
               quizDTO = quizDTO,
-              selectedOption = ""
+              selectedOptionKey = null
             )
           }
         }

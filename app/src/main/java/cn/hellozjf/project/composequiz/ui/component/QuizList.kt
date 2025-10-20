@@ -7,7 +7,9 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.dto.QuizKey
 
 /**
  * 问答列表
@@ -16,8 +18,8 @@ import cn.hellozjf.project.composequiz.dto.QuizDTO
 fun QuizList(
   quizDTOList: List<QuizDTO>,
   quizOrder: List<Int>,
-  quizSelectedOptionMap: Map<String, String>,
-  onQuizSelectedOptionChange: (String, String) -> Unit,
+  quizSelectedOptionMap: Map<QuizKey, OptionKey>,
+  onQuizSelectedOptionChange: (QuizKey, OptionKey) -> Unit,
   optionOrderList: List<List<Int>>,
   modifier: Modifier = Modifier
 ) {
@@ -30,17 +32,17 @@ fun QuizList(
     if (quizDTOList.isNotEmpty()) {
       quizOrder.forEachIndexed { index, order ->
         val quizDTO = quizDTOList[order]
-        val mapKey = quizDTO.getQuizKey().toString()
-        item(key = mapKey) {
-          val selectOption = quizSelectedOptionMap[mapKey] ?: ""
-          val onSelectOptionChange: (String) -> Unit = { newSelectOption ->
-            onQuizSelectedOptionChange(mapKey, newSelectOption)
+        val quizKey = quizDTO.getQuizKey()
+        item(key = quizKey) {
+          val selectOptionKey = quizSelectedOptionMap[quizKey]
+          val onSelectOptionChange: (OptionKey) -> Unit = { newSelectOption ->
+            onQuizSelectedOptionChange(quizKey, newSelectOption)
           }
           QuizListItem(
             index = index,
             quizDTO = quizDTO,
-            selectedOption = selectOption,
-            onSelectedOptionChange = onSelectOptionChange,
+            selectedOptionKey = selectOptionKey,
+            onSelectedOptionKeyChange = onSelectOptionChange,
             optionOrder = optionOrderList[order]
           )
         }
@@ -89,10 +91,10 @@ fun QuizListPreview() {
   val quizOrder: List<Int> = listOf(2, 1, 0)
   val quizSelectOptionMap = remember {
     mutableStateMapOf(
-      "0_0" to "正确答案"
+      QuizKey(0,0) to OptionKey(0,0,0)
     )
   }
-  val onQuizSelectOptionChange: (String, String) -> Unit = { key, selectOption ->
+  val onQuizSelectOptionChange: (QuizKey, OptionKey) -> Unit = { key, selectOption ->
     quizSelectOptionMap[key] = selectOption
   }
   val optionOrderList: List<List<Int>> = listOf(

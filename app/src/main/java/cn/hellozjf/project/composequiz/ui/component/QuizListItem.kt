@@ -25,8 +25,8 @@ import cn.hellozjf.project.composequiz.dto.QuizDTO
 fun QuizListItem(
   index: Int,
   quizDTO: QuizDTO,
-  selectedOption: String,
-  onSelectedOptionChange: (String) -> Unit,
+  selectedOptionKey: OptionKey?,
+  onSelectedOptionKeyChange: (OptionKey) -> Unit,
   optionOrder: List<Int>,
   modifier: Modifier = Modifier
 ) {
@@ -59,8 +59,8 @@ fun QuizListItem(
             quizIndex = quizDTO.quizIndex,
             optionIndex = index
           ),
-          selectedOption = selectedOption,
-          onSelectedOptionChange = onSelectedOptionChange
+          selectedOptionKey = selectedOptionKey,
+          onSelectedOptionKeyChange = onSelectedOptionKeyChange
         )
       }
     }
@@ -72,7 +72,11 @@ fun QuizListItem(
 )
 @Composable
 fun QuizListItemPreview() {
-  var selectOption by remember { mutableStateOf("0_1_0") }
+  var selectOptionKey by remember { mutableStateOf(OptionKey(
+    chapterIndex = 0,
+    quizIndex = 1,
+    optionIndex = 0
+  )) }
   val optionOrder = listOf(1, 0, 3, 2)
   QuizListItem(
     index = 0,
@@ -86,9 +90,9 @@ fun QuizListItemPreview() {
       wrongOption3 = "错误选项3",
       explanation = "问题0解释"
     ),
-    selectedOption = selectOption,
-    onSelectedOptionChange = {
-      selectOption = it
+    selectedOptionKey = selectOptionKey,
+    onSelectedOptionKeyChange = {
+      selectOptionKey = it
     },
     optionOrder = optionOrder
   )
