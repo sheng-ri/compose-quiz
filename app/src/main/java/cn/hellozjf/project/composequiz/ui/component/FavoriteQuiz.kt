@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
+import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 
@@ -60,26 +61,35 @@ fun FavoriteQuiz(
       )
       if (expanded) {
         // 显示这题的所有选项，正确选项，解释，打错次数
+        val correctOptionKey = OptionKey(
+          chapterIndex = quizDTO.chapterIndex,
+          quizIndex = quizDTO.quizIndex,
+          optionIndex = 0
+        )
         Column {
           FavoriteQuizOption(
             option = quizDTO.correctOption,
-            selectedOption = quizDTO.correctOption,
-            correctOption = quizDTO.correctOption
+            optionKey = correctOptionKey.copy(optionIndex = 0),
+            selectedOptionKey = correctOptionKey,
+            correctOptionKey = correctOptionKey
           )
           FavoriteQuizOption(
             option = quizDTO.wrongOption1,
-            selectedOption = quizDTO.correctOption,
-            correctOption = quizDTO.correctOption
+            optionKey = correctOptionKey.copy(optionIndex = 1),
+            selectedOptionKey = correctOptionKey,
+            correctOptionKey = correctOptionKey
           )
           FavoriteQuizOption(
             option = quizDTO.wrongOption2,
-            selectedOption = quizDTO.correctOption,
-            correctOption = quizDTO.correctOption
+            optionKey = correctOptionKey.copy(optionIndex = 2),
+            selectedOptionKey = correctOptionKey,
+            correctOptionKey = correctOptionKey
           )
           FavoriteQuizOption(
             option = quizDTO.wrongOption3,
-            selectedOption = quizDTO.correctOption,
-            correctOption = quizDTO.correctOption
+            optionKey = correctOptionKey.copy(optionIndex = 3),
+            selectedOptionKey = correctOptionKey,
+            correctOptionKey = correctOptionKey
           )
           Explanation(quizDTO.explanation)
           chapterDTO?.let {
