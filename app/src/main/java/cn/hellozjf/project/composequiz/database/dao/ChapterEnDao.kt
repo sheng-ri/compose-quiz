@@ -32,7 +32,12 @@ interface ChapterEnDao {
   """)
   fun findDTOFlowOrderByIndex(): Flow<List<ChapterDTO>>
 
-  @Query("SELECT * FROM chapter_en where `index` = :index")
+  @Query("""
+    SELECT * 
+    FROM chapter_en 
+    WHERE `index` = :index
+    ORDER BY id
+  """)
   fun findByIndexFlow(index: Int): Flow<List<ChapterEn>>
 
   @Query("""
@@ -45,10 +50,16 @@ interface ChapterEnDao {
         chapter_en.full_url fullUrl
     FROM chapter_en
     WHERE `index` = :index
+    ORDER BY id
   """)
   fun findDTOFlowByIndex(index: Int): Flow<List<ChapterDTO>>
 
-  @Query("SELECT * FROM chapter_en where `index` = :index")
+  @Query("""
+    SELECT * 
+    FROM chapter_en 
+    WHERE `index` = :index
+    ORDER BY id
+  """)
   suspend fun findByIndex(index: Int): ChapterEn?
 
   @Query("""
@@ -61,6 +72,7 @@ interface ChapterEnDao {
         chapter_en.full_url fullUrl
     FROM chapter_en
     WHERE `index` = :index
+    ORDER BY id
   """)
   suspend fun findDTOByIndex(index: Int): ChapterDTO?
 

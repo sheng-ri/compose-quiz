@@ -22,7 +22,12 @@ interface QuizZhDao {
   @Insert
   suspend fun insertQuiz(quiz: QuizZh)
 
-  @Query("SELECT * FROM quiz_zh WHERE chapter_index = :chapterIndex")
+  @Query("""
+    SELECT * 
+    FROM quiz_zh 
+    WHERE chapter_index = :chapterIndex
+    ORDER BY create_time
+  """)
   fun findFlowByChapterIndex(chapterIndex: Int): Flow<List<QuizZh>>
 
   @Query(
@@ -42,11 +47,17 @@ interface QuizZhDao {
     FROM quiz_zh
     LEFT JOIN quiz_ext ON quiz_zh.chapter_index = quiz_ext.chapter_index AND quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_zh.chapter_index = :chapterIndex
+    ORDER BY quiz_zh.create_time
   """
   )
   fun findQuizDTOFlowByChapterIndex(chapterIndex: Int): Flow<List<QuizDTO>>
 
-  @Query("SELECT * FROM quiz_zh WHERE chapter_index = :chapterIndex")
+  @Query("""
+    SELECT * 
+    FROM quiz_zh 
+    WHERE chapter_index = :chapterIndex
+    ORDER BY create_time
+  """)
   suspend fun findByChapterIndex(chapterIndex: Int): List<QuizZh>
 
   @Query(
@@ -66,6 +77,7 @@ interface QuizZhDao {
     FROM quiz_zh
     LEFT JOIN quiz_ext ON quiz_zh.chapter_index = quiz_ext.chapter_index AND quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_zh.chapter_index = :chapterIndex
+    ORDER BY quiz_zh.create_time
   """
   )
   suspend fun findQuizDTOByChapterIndex(chapterIndex: Int): List<QuizDTO>
@@ -87,6 +99,7 @@ interface QuizZhDao {
     FROM quiz_zh 
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1
+    ORDER BY quiz_zh.create_time
   """
   )
   suspend fun findByFavorite(): List<QuizDTO>
@@ -322,6 +335,7 @@ interface QuizZhDao {
             LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index 
                               and quiz_zh.quiz_index = quiz_ext.quiz_index
             WHERE (quiz_zh.chapter_index, quiz_zh.quiz_index) IN ($placeholders)
+            ORDER BY quiz_zh.create_time
             """
     )
 
@@ -347,6 +361,7 @@ interface QuizZhDao {
         quiz_ext.wrong_answer_count wrongAnswerCount
     FROM quiz_zh
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
+    ORDER BY quiz_zh.create_time
   """
   )
   suspend fun findQuizDTOList(): List<QuizDTO>

@@ -28,9 +28,6 @@ interface QuizExtDao {
     quizIndex: Int
   ) : QuizExt?
 
-  @Query("SELECT * FROM quiz_ext WHERE favorite = 1")
-  suspend fun findByFavorite(): List<QuizExt>
-
   @Query("SELECT count(*) FROM quiz_ext")
   suspend fun getCount(): Int
 }
