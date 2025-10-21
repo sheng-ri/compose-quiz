@@ -15,9 +15,6 @@ import kotlinx.serialization.Serializable
 )
 data class QuizZh(
 
-  @ColumnInfo(name = "create_time")
-  val createTime: Long,
-
   @ColumnInfo(name = "chapter_index")
   val chapterIndex: Int,
 

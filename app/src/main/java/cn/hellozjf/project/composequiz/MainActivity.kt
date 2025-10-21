@@ -183,7 +183,6 @@ class MainActivity : ComponentActivity() {
           val quizIndex = map.getOrDefault(chapterIndex, 0)
           map.put(chapterIndex, quizIndex + 1)
           val quizEn = QuizEn(
-            createTime = System.currentTimeMillis(),
             chapterIndex = chapterIndex,
             quizIndex = quizIndex,
             question = record.get(ChapterQuizConstant.QUESTION),
@@ -216,7 +215,6 @@ class MainActivity : ComponentActivity() {
           val quizIndex = map.getOrDefault(chapterIndex, 0)
           map.put(chapterIndex, quizIndex + 1)
           val quiz = QuizZh(
-            createTime = System.currentTimeMillis(),
             chapterIndex = chapterIndex,
             quizIndex = quizIndex,
             question = record.get(ChapterQuizConstant.QUESTION),

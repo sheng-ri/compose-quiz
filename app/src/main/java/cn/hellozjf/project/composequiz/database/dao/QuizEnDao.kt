@@ -26,7 +26,7 @@ interface QuizEnDao {
     SELECT * 
     FROM quiz_en 
     WHERE chapter_index = :chapterIndex
-    ORDER BY create_time
+    ORDER BY chapter_index, quiz_index
   """)
   fun findFlowByChapterIndex(chapterIndex: Int): Flow<List<QuizEn>>
 
@@ -47,7 +47,7 @@ interface QuizEnDao {
     FROM quiz_en
     LEFT JOIN quiz_ext ON quiz_en.chapter_index = quiz_ext.chapter_index AND quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_en.chapter_index = :chapterIndex
-    ORDER BY quiz_en.create_time
+    ORDER BY quiz_en.chapter_index, quiz_en.quiz_index
   """
   )
   fun findQuizDTOFlowByChapterIndex(chapterIndex: Int): Flow<List<QuizDTO>>
@@ -56,7 +56,7 @@ interface QuizEnDao {
     SELECT * 
     FROM quiz_en 
     WHERE chapter_index = :chapterIndex
-    ORDER BY create_time
+    ORDER BY chapter_index, quiz_index
   """)
   suspend fun findByChapterIndex(chapterIndex: Int): List<QuizEn>
 
@@ -77,7 +77,7 @@ interface QuizEnDao {
     FROM quiz_en
     LEFT JOIN quiz_ext ON quiz_en.chapter_index = quiz_ext.chapter_index AND quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_en.chapter_index = :chapterIndex
-    ORDER BY quiz_en.create_time
+    ORDER BY quiz_en.chapter_index, quiz_en.quiz_index
   """
   )
   suspend fun findQuizDTOByChapterIndex(chapterIndex: Int): List<QuizDTO>
@@ -99,7 +99,7 @@ interface QuizEnDao {
     FROM quiz_en 
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1
-    ORDER BY quiz_en.create_time
+    ORDER BY quiz_en.chapter_index, quiz_en.quiz_index
   """
   )
   suspend fun findByFavorite(): List<QuizDTO>
@@ -341,7 +341,7 @@ interface QuizEnDao {
             LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index 
                               and quiz_en.quiz_index = quiz_ext.quiz_index
             WHERE (quiz_en.chapter_index, quiz_en.quiz_index) IN ($placeholders)
-            ORDER BY quiz_en.create_time
+            ORDER BY quiz_en.chapter_index, quiz_en.quiz_index
             """
     )
 
@@ -367,7 +367,7 @@ interface QuizEnDao {
         quiz_ext.wrong_answer_count wrongAnswerCount
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
-    ORDER BY quiz_en.create_time
+    ORDER BY quiz_en.chapter_index, quiz_en.quiz_index
   """
   )
   suspend fun findQuizDTOList(): List<QuizDTO>
