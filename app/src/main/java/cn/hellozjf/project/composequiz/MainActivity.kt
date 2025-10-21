@@ -180,8 +180,8 @@ class MainActivity : ComponentActivity() {
         val map = mutableMapOf<Int, Int>()
         for (record in csvParser) {
           val chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt()
-          val quizIndex = map.getOrDefault(chapterIndex, 0) + 1
-          map.put(chapterIndex, quizIndex)
+          val quizIndex = map.getOrDefault(chapterIndex, 0)
+          map.put(chapterIndex, quizIndex + 1)
           val quizEn = QuizEn(
             createTime = System.currentTimeMillis(),
             chapterIndex = chapterIndex,
@@ -213,8 +213,8 @@ class MainActivity : ComponentActivity() {
         val map = mutableMapOf<Int, Int>()
         for (record in csvParser) {
           val chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt()
-          val quizIndex = map.getOrDefault(chapterIndex, 0) + 1
-          map.put(chapterIndex, quizIndex)
+          val quizIndex = map.getOrDefault(chapterIndex, 0)
+          map.put(chapterIndex, quizIndex + 1)
           val quiz = QuizZh(
             createTime = System.currentTimeMillis(),
             chapterIndex = chapterIndex,

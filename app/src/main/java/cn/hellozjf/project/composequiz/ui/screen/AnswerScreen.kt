@@ -85,7 +85,8 @@ fun AnswerScreen(
     totalQuestionCount = quizList.size
 
     totalCorrectCount = 0
-    for ((quizIndex, quiz) in quizList.withIndex()) {
+    for (quiz in quizList) {
+      val quizIndex = quiz.quizIndex
       val optionIndex = optionOrderList[quizIndex].indexOf(0)
       val chapterIndex = quiz.chapterIndex
       val correctOptionKey = OptionKey(
