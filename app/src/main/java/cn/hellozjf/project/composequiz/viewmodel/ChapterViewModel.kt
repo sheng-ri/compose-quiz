@@ -2,14 +2,12 @@ package cn.hellozjf.project.composequiz.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import cn.hellozjf.project.composequiz.database.QuizRoomDatabase
 import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 import cn.hellozjf.project.composequiz.database.repository.ChapterRepository
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 
 class ChapterViewModel(application: Application) : ViewModel() {
   private val repository: ChapterRepository
@@ -24,16 +22,12 @@ class ChapterViewModel(application: Application) : ViewModel() {
     )
   }
 
-  fun insertChapter(chapterEn: ChapterEn) {
-    viewModelScope.launch {
-      repository.insertChapter(chapterEn)
-    }
+  suspend fun insertChapter(chapterEn: ChapterEn) {
+    repository.insertChapter(chapterEn)
   }
 
-  fun insertChapter(chapterZh: ChapterZh) {
-    viewModelScope.launch {
-      repository.insertChapter(chapterZh)
-    }
+  suspend fun insertChapter(chapterZh: ChapterZh) {
+    repository.insertChapter(chapterZh)
   }
 
   fun findDTOFlowOrderByIndex(

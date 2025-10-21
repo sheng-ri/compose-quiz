@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
     QuizZh::class,
     QuizExt::class,
     Config::class
-  ], version = 21, exportSchema = false
+  ], version = 23, exportSchema = false
 )
 abstract class QuizRoomDatabase : RoomDatabase() {
 

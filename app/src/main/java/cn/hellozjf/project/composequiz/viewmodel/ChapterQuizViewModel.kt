@@ -29,16 +29,12 @@ class ChapterQuizViewModel(application: Application) : ViewModel() {
     )
   }
 
-  fun insertQuiz(quizEn: QuizEn) {
-    viewModelScope.launch {
-      repository.insertQuiz(quizEn)
-    }
+  suspend fun insertQuiz(quizEn: QuizEn) {
+    repository.insertQuiz(quizEn)
   }
 
-  fun insertQuiz(quizZh: QuizZh) {
-    viewModelScope.launch {
-      repository.insertQuiz(quizZh)
-    }
+  suspend fun insertQuiz(quizZh: QuizZh) {
+    repository.insertQuiz(quizZh)
   }
 
   suspend fun getCount(

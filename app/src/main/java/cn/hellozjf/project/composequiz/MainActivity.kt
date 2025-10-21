@@ -123,7 +123,7 @@ class MainActivity : ComponentActivity() {
     chapterQuizViewModel.initExtList(quizKeyList)
   }
 
-  private fun readChapterEnCsv(
+  private suspend fun readChapterEnCsv(
     chapterViewModel: ChapterViewModel
   ) {
     try {
@@ -146,7 +146,7 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  private fun readChapterZhCsv(
+  private suspend fun readChapterZhCsv(
     chapterViewModel: ChapterViewModel
   ) {
     try {
@@ -169,7 +169,7 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  private fun readQuizEnCsv(
+  private suspend fun readQuizEnCsv(
     chapterQuizViewModel: ChapterQuizViewModel
   ) {
     try {
@@ -202,7 +202,7 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  private fun readQuizZhCsv(
+  private suspend fun readQuizZhCsv(
     chapterQuizViewModel: ChapterQuizViewModel
   ) {
     try {
