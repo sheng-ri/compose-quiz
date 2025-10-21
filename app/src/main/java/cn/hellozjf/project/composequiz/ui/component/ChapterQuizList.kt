@@ -42,7 +42,7 @@ fun ChapterQuizList(
     ) {
       if (quizDTOList.isNotEmpty()) {
         quizDTOList.forEachIndexed { index, quizDTO ->
-          item(key = quizDTO.getQuizKey()) {
+          item(key = quizDTO.getQuizKey().toString()) {
             QuizAnswerItem(
               setFavorite = setFavorite,
               index = index,

@@ -11,6 +11,7 @@ import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 
 /**
@@ -25,7 +26,7 @@ fun FavoriteQuizList(
   modifier: Modifier = Modifier
 ) {
   val listState = rememberLazyListState()
-  val questionExpandMap = remember { mutableStateMapOf<String, Boolean>() }
+  val questionExpandMap = remember { mutableStateMapOf<QuizKey, Boolean>() }
 
   LazyColumn(
     modifier = modifier,
@@ -33,11 +34,14 @@ fun FavoriteQuizList(
   ) {
     if (quizDTOList.isNotEmpty()) {
       quizDTOList.forEachIndexed { index, quizDTO ->
-        val key = "${quizDTO.chapterIndex}_${quizDTO.quizIndex}"
-        item(key = key) {
-          val expand = questionExpandMap[key] ?: false
+        val quizKey = QuizKey(
+          chapterIndex = quizDTO.chapterIndex,
+          quizIndex = quizDTO.quizIndex
+        )
+        item(key = quizKey.toString()) {
+          val expand = questionExpandMap[quizKey] ?: false
           val onExpandChange: (Boolean) -> Unit = {
-            questionExpandMap[key] = it
+            questionExpandMap[quizKey] = it
           }
           FavoriteQuiz(
             language = language,
