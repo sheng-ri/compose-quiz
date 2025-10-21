@@ -1,13 +1,14 @@
 package cn.hellozjf.project.composequiz.dto
 
-import kotlinx.serialization.Serializable
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-@Serializable
+@Parcelize
 data class OptionKey(
   val chapterIndex: Int,
   val quizIndex: Int,
   val optionIndex: Int,
-) {
+) : Parcelable {
   override fun toString(): String {
     return "${chapterIndex}_${quizIndex}_${optionIndex}"
   }

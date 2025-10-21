@@ -5,6 +5,7 @@ import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import kotlinx.serialization.Serializable
 
+
 @Serializable
 data object MainScreenKey : NavKey
 

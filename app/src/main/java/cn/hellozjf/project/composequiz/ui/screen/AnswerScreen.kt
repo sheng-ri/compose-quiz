@@ -132,7 +132,7 @@ fun AnswerScreen(
           quizOrderList.forEachIndexed { index, order ->
             val quizDTO = quizList[order]
             val optionOrder = optionOrderList[order]
-            item(key = quizDTO.getQuizKey().toString()) {
+            item(key = quizDTO.getQuizKey()) {
               val selectOptionKey = chooseOptionMap[quizDTO.getQuizKey()]
               QuizAnswerItem(
                 setFavorite = chapterQuizViewModel::setFavorite,

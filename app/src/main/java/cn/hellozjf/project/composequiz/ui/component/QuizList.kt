@@ -33,7 +33,7 @@ fun QuizList(
       quizOrder.forEachIndexed { index, order ->
         val quizDTO = quizDTOList[order]
         val quizKey = quizDTO.getQuizKey()
-        item(key = quizKey.toString()) {
+        item(key = quizKey) {
           val selectOptionKey = quizSelectedOptionMap[quizKey]
           val onSelectOptionChange: (OptionKey) -> Unit = { newSelectOption ->
             onQuizSelectedOptionChange(quizKey, newSelectOption)
