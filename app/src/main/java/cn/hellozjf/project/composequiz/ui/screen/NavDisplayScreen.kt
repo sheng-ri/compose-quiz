@@ -52,6 +52,7 @@ fun NavDisplayScreen(
         )
       }
       entry<QuizScreenKey> { key: QuizScreenKey ->
+        // 根据传入的 quizKeyList，进行题目测验
         val title = key.title
         val quizKeyList = key.quizKeyList
         QuizScreen(
@@ -84,6 +85,7 @@ fun NavDisplayScreen(
         )
       }
       entry<ChapterQuizScreenKey> { key: ChapterQuizScreenKey ->
+        // 展示某章所有的题目
         ChapterQuizScreen(
           chapterIndex = key.chapterIndex,
           chapterSimpleTitle = key.chapterSimpleTitle,
