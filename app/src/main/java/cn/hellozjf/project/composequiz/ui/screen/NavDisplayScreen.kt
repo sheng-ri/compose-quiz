@@ -58,6 +58,7 @@ fun NavDisplayScreen(
         val quizKeyList = key.quizKeyList
         QuizScreen(
           title = title,
+          seed = System.currentTimeMillis(),
           quizKeyList = quizKeyList,
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
