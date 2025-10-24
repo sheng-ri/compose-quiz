@@ -38,7 +38,7 @@ fun FavoriteQuizList(
           chapterIndex = quizDTO.chapterIndex,
           quizIndex = quizDTO.quizIndex
         )
-        item(key = quizKey) {
+        item(key = quizKey.toString()) {
           val expand = questionExpandMap[quizKey] ?: false
           val onExpandChange: (Boolean) -> Unit = {
             questionExpandMap[quizKey] = it

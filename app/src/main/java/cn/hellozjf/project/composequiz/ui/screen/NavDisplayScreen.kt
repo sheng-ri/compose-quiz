@@ -1,6 +1,7 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -12,6 +13,7 @@ import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizScreenViewModel
 
 /**
  * 这个是最顶层的 Screen，它会根据 NavKey 显示具体的 Screen
@@ -20,7 +22,8 @@ import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
-  configViewModel: ConfigViewModel
+  configViewModel: ConfigViewModel,
+  quizScreenViewModel: QuizScreenViewModel = viewModel()
 ) {
   val backStack = rememberNavBackStack(MainScreenKey)
   val onNavigation: (NavKey) -> Unit = {
@@ -61,6 +64,7 @@ fun NavDisplayScreen(
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           configViewModel = configViewModel,
+          quizScreenViewModel = quizScreenViewModel,
           onNavigation = onNavigation
         )
       }
