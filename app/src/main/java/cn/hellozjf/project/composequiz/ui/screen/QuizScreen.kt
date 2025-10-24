@@ -16,10 +16,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.listSaver
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateMap
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Config
@@ -33,7 +30,6 @@ import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
-import cn.hellozjf.project.composequiz.viewmodel.QuizScreenViewModel
 
 /**
  * 问答屏幕
@@ -47,7 +43,6 @@ fun QuizScreen(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
-  quizScreenViewModel: QuizScreenViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
 
@@ -57,11 +52,37 @@ fun QuizScreen(
     )
   )
 
-  val language by rememberSaveable {
+  val language by remember {
     derivedStateOf {
       config.language
     }
   }
+
+  // 这是问题列表，初始为空列表，当 LaunchedEffect 执行完毕之后，就能得到实际的问题列表了
+  var quizDTOList by remember { mutableStateOf<List<QuizDTO>>(listOf()) }
+
+  // 这是题目的顺序
+  val quizOrder by remember {
+    derivedStateOf {
+      List(quizDTOList.size) {
+        it
+      }.shuffled()
+    }
+  }
+
+  // 这是各个题目选项的顺序
+  val optionOrderList by remember {
+    derivedStateOf {
+      List(quizDTOList.size) {
+        List(4) { it }.shuffled()
+      }
+    }
+  }
+
+  // 问题ID选择的答案
+  var quizSelectOption = remember { mutableStateMapOf<QuizKey, OptionKey>() }
+
+  var showMenu by remember { mutableStateOf(false) }
 
   val coroutineScope = rememberCoroutineScope()
 
@@ -73,7 +94,7 @@ fun QuizScreen(
         quizKey = it
       )
     }
-    quizScreenViewModel.quizDTOList = dtoList
+    quizDTOList = dtoList
   }
 
   Scaffold(
@@ -96,13 +117,13 @@ fun QuizScreen(
 //      )
 
       QuizList(
-        quizDTOList = quizScreenViewModel.quizDTOList,
-        quizOrder = quizScreenViewModel.quizOrder,
-        quizSelectedOptionMap = quizScreenViewModel.quizSelectOption.toMap(),
+        quizDTOList = quizDTOList,
+        quizOrder = quizOrder,
+        quizSelectedOptionMap = quizSelectOption.toMap(),
         onQuizSelectedOptionChange = { mapKey, selectOption ->
-          quizScreenViewModel.quizSelectOption[mapKey] = selectOption
+          quizSelectOption[mapKey] = selectOption
         },
-        optionOrderList = quizScreenViewModel.optionOrderList,
+        optionOrderList = optionOrderList,
         modifier = Modifier.weight(1f)
       )
 
@@ -112,9 +133,9 @@ fun QuizScreen(
             QuizAnswerScreenKey(
               title = title,
               quizKeyList = quizKeyList,
-              chooseOptionMap = quizScreenViewModel.quizSelectOption.toMap(),
-              quizOrderList = quizScreenViewModel.quizOrder,
-              optionOrderList = quizScreenViewModel.optionOrderList
+              chooseOptionMap = quizSelectOption.toMap(),
+              quizOrderList = quizOrder,
+              optionOrderList = optionOrderList
             )
           )
         }
