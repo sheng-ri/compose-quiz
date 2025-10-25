@@ -19,6 +19,7 @@ private val TAG = "ChapterList"
 @Composable
 fun ChapterList(
   language: String,
+  lastTestChapterIndex: Int?,
   chapterDTOList: List<ChapterDTO>,
   findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO>,
   onNavigation: (NavKey) -> Unit,
@@ -35,6 +36,7 @@ fun ChapterList(
       item(key = chapterDTO.id) {
         ChapterListItem(
           language = language,
+          lastTestChapterIndex = lastTestChapterIndex,
           chapterDTO = chapterDTO,
           findQuizDTOByChapterIndex = findQuizDTOByChapterIndex,
           onNavigation = onNavigation
@@ -90,6 +92,7 @@ fun ChapterListPreview() {
 
   ChapterList(
     language = LanguageConstant.ZH,
+    lastTestChapterIndex = 0,
     chapterDTOList = chapterList,
     findQuizDTOByChapterIndex = findQuizDTOByChapterIndex,
     onNavigation = {}

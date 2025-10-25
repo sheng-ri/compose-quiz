@@ -52,6 +52,7 @@ fun ChapterQuizScreen(
         chapterIndex = chapterIndex,
         chapterSimpleTitle = chapterSimpleTitle,
         findQuizDTOFlowByChapterIndex = chapterQuizViewModel::findQuizDTOFlowByChapterIndex,
+        setLastTestChapterIndex = configViewModel::setLastTestChapterIndex,
         setFavorite = chapterQuizViewModel::setFavorite,
         onNavigation = onNavigation
       )

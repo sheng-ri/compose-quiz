@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
@@ -15,6 +16,7 @@ import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 /**
  * 章节测验列表
@@ -26,11 +28,13 @@ fun ChapterQuizList(
   chapterSimpleTitle: String,
   findQuizDTOFlowByChapterIndex: (String, Int) -> Flow<List<QuizDTO>>,
   setFavorite: suspend (Int, Int, Boolean, Long) -> Unit,
+  setLastTestChapterIndex: suspend (Int) -> Unit,
   onNavigation: (NavKey) -> Unit
 ) {
 
   val quizDTOList by findQuizDTOFlowByChapterIndex(language, chapterIndex).collectAsState(listOf())
   val listState = rememberLazyListState()
+  val coroutineScope = rememberCoroutineScope()
 
   Column(
     modifier = Modifier,
@@ -56,6 +60,7 @@ fun ChapterQuizList(
 
     Button(
       onClick = {
+        coroutineScope.launch { setLastTestChapterIndex(chapterIndex) }
         onNavigation(
           QuizScreenKey(
             title = chapterSimpleTitle,

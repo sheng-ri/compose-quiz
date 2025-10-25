@@ -25,12 +25,21 @@ class ConfigViewModel(application: Application) : ViewModel() {
   suspend fun toggleLanguage() {
     val config = getConfig()
     updateConfig(
-      Config(
+      config.copy(
         language = if (config.language == LanguageConstant.EN) {
           LanguageConstant.ZH
         } else {
           LanguageConstant.EN
         }
+      )
+    )
+  }
+
+  suspend fun setLastTestChapterIndex(chapterIndex: Int) {
+    val config = getConfig()
+    updateConfig(
+      config.copy(
+        lastTestChapterIndex = chapterIndex
       )
     )
   }

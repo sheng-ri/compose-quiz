@@ -14,18 +14,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
-import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.ChapterQuizScreenKey
-import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * 这是 章节测试 页面的章节列表项目 组件
@@ -33,13 +29,12 @@ import kotlinx.coroutines.withContext
 @Composable
 fun ChapterListItem(
   language: String,
+  lastTestChapterIndex: Int?,
   chapterDTO: ChapterDTO,
   findQuizDTOByChapterIndex: suspend (String, Int) -> List<QuizDTO>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
-
-  val coroutineScope = rememberCoroutineScope()
 
   Card(
     colors = CardDefaults.cardColors(
@@ -49,27 +44,12 @@ fun ChapterListItem(
       .padding(3.dp)
       .fillMaxWidth()
       .clickable {
-        coroutineScope.launch {
-          // 在 IO 线程执行数据库查询
-//          val quizDTOList = withContext(Dispatchers.IO) {
-//            findQuizDTOByChapterIndex(language, chapterDTO.index)
-//          }
-          onNavigation(
-            ChapterQuizScreenKey(
-              chapterIndex = chapterDTO.index,
-              chapterSimpleTitle = chapterDTO.simpleTitle
-            )
-//            QuizScreenKey(
-//              title = chapterDTO.simpleTitle,
-//              quizKeyList = quizDTOList.map {
-//                QuizKey(
-//                  chapterIndex = it.chapterIndex,
-//                  quizIndex = it.quizIndex
-//                )
-//              }
-//            )
+        onNavigation(
+          ChapterQuizScreenKey(
+            chapterIndex = chapterDTO.index,
+            chapterSimpleTitle = chapterDTO.simpleTitle
           )
-        }
+        )
       },
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
@@ -87,9 +67,21 @@ fun ChapterListItem(
       Spacer(modifier = Modifier.width(8.dp))
       Text(
         text = chapterDTO.simpleTitle,
+        color = if (lastTestChapterIndex == chapterDTO.index) {
+          MaterialTheme.colorScheme.primary
+        } else {
+          Color.Unspecified
+        },
         style = MaterialTheme.typography.headlineSmall,
         modifier = Modifier.padding(8.dp)
       )
+      Spacer(modifier = Modifier.weight(1f))
+//      if (lastTestChapterIndex == chapterDTO.index) {
+//        Text(
+//          text = "上次测试",
+//          modifier = Modifier.padding(8.dp)
+//        )
+//      }
     }
   }
 }
@@ -124,6 +116,7 @@ fun ChapterListItemPreview() {
     }
   ChapterListItem(
     language = LanguageConstant.ZH,
+    lastTestChapterIndex = 0,
     chapterDTO = chapterDTO,
     findQuizDTOByChapterIndex = findQuizDTOByChapterIndex,
     onNavigation = {}

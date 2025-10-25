@@ -12,5 +12,14 @@ import androidx.room.PrimaryKey
 data class Config(
   @PrimaryKey
   val id: Int = 1,
-  val language: String
+
+  /**
+   * 当前题目的语言
+   */
+  val language: String,
+
+  /**
+   * 上一次测试的章节序号
+   */
+  val lastTestChapterIndex: Int? = null
 )

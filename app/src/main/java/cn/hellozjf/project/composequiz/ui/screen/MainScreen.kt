@@ -93,10 +93,12 @@ fun MainScreen(
           DestinationQuiz.CHAPTER_LIST -> {
             // 按章节号排序，查出所有的章节
             val language = config.language
+            val lastTestChapterIndex = config.lastTestChapterIndex
             val chapterList by chapterViewModel.findDTOFlowOrderByIndex(language)
               .collectAsState(listOf())
             ChapterList(
               language = language,
+              lastTestChapterIndex = lastTestChapterIndex,
               chapterDTOList = chapterList,
               findQuizDTOByChapterIndex = chapterQuizViewModel::findQuizDTOListByChapterIndex,
               onNavigation = onNavigation
