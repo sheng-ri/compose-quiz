@@ -13,6 +13,7 @@ import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizScreenViewModel
 
 /**
  * 这个是最顶层的 Screen，它会根据 NavKey 显示具体的 Screen
@@ -22,6 +23,7 @@ fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
   configViewModel: ConfigViewModel,
+  quizScreenViewModel: QuizScreenViewModel = viewModel()
 ) {
   val backStack = rememberNavBackStack(MainScreenKey)
   val onNavigation: (NavKey) -> Unit = {
@@ -63,6 +65,7 @@ fun NavDisplayScreen(
           chapterViewModel = chapterViewModel,
           chapterQuizViewModel = chapterQuizViewModel,
           configViewModel = configViewModel,
+          quizScreenViewModel = quizScreenViewModel,
           onNavigation = onNavigation
         )
       }

@@ -18,26 +18,6 @@ class QuizScreenViewModel : ViewModel() {
   // 这是问题列表，初始为空列表，当 LaunchedEffect 执行完毕之后，就能得到实际的问题列表了
   var quizDTOList by mutableStateOf<List<QuizDTO>>(listOf())
 
-  var seed by mutableLongStateOf(0L)
-
-  val random by derivedStateOf {
-    Random(seed)
-  }
-
-  // 这是题目的顺序
-  val quizOrder by derivedStateOf {
-    List(quizDTOList.size) {
-      it
-    }.shuffled(random)
-  }
-
-  // 这是各个题目选项的顺序
-  val optionOrderList by derivedStateOf {
-    List(quizDTOList.size) {
-      List(4) { it }.shuffled(random)
-    }
-  }
-
   // 问题ID选择的答案
   var quizSelectOption = mutableStateMapOf<QuizKey, OptionKey>()
 
