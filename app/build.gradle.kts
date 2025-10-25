@@ -4,7 +4,6 @@ plugins {
   alias(libs.plugins.kotlin.compose)
   alias(libs.plugins.jetbrains.kotlin.serialization)
   alias(libs.plugins.devtoolsKsp)
-  id("kotlin-parcelize")
 }
 
 android {
@@ -15,8 +14,8 @@ android {
     applicationId = "cn.hellozjf.project.composequiz"
     minSdk = 26
     targetSdk = 36
-    versionCode = 1
-    versionName = "1.0"
+    versionCode = 2
+    versionName = "1.0.1"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
