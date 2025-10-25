@@ -15,6 +15,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Config
@@ -57,7 +59,13 @@ fun QuizScreen(
   }
 
   // 这是题目的顺序
-  val quizOrder by remember(key1 = quizKeyList) {
+  val quizOrder by rememberSaveable(
+    key = quizKeyList.joinToString(","),
+    stateSaver = Saver<List<Int>, String>(
+      save = { intList -> intList.joinToString(",") },
+      restore = { string -> string.split(",").map { s -> s.toInt() } }
+    )
+  ) {
     mutableStateOf(
       List(quizKeyList.size) {
         it
@@ -66,7 +74,23 @@ fun QuizScreen(
   }
 
   // 这是各个题目选项的顺序
-  val optionOrderList by remember(key1 = quizKeyList) {
+  val optionOrderList by rememberSaveable(
+    key = quizKeyList.joinToString(","),
+    stateSaver = Saver<List<List<Int>>, String>(
+      save = { intListList ->
+        intListList.joinToString("|") { intList ->
+          intList.joinToString(",")
+        }
+      },
+      restore = { string ->
+        string.split("|").map { sList ->
+          sList.split(",").map { s ->
+            s.toInt()
+          }
+        }
+      }
+    )
+  ) {
     mutableStateOf(
       List(quizKeyList.size) {
         List(4) { it }.shuffled()
