@@ -1,6 +1,7 @@
 package cn.hellozjf.project.composequiz.ui.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,7 +22,7 @@ import cn.hellozjf.project.composequiz.dto.OptionKey
  * 单选框和文本，答题时的选项
  */
 @Composable
-fun RadioButtonAndText(
+fun RadioButtonRow(
   option: String,
   optionKey: OptionKey,
   selectedOptionKey: OptionKey?,
@@ -31,11 +32,12 @@ fun RadioButtonAndText(
     modifier = Modifier
       .fillMaxWidth()
       .clickable { onSelectedOptionKeyChange(optionKey) },
-    verticalAlignment = Alignment.CenterVertically
+    verticalAlignment = Alignment.CenterVertically,
+    horizontalArrangement = Arrangement.Start
   ) {
     RadioButton(
       selected = selectedOptionKey == optionKey,
-      onClick = { onSelectedOptionKeyChange(optionKey) }
+      onClick = { onSelectedOptionKeyChange(optionKey) },
     )
     Text(
       text = option,
@@ -55,7 +57,7 @@ fun RadioButtonAndTextPreview1() {
     quizIndex = 1,
     optionIndex = 0,
   )) }
-  RadioButtonAndText(
+  RadioButtonRow(
     option = "正确答案",
     optionKey = selectOption,
     selectedOptionKey = selectOption,
@@ -76,7 +78,7 @@ fun RadioButtonAndTextPreview2() {
     quizIndex = 1,
     optionIndex = 0
   )) }
-  RadioButtonAndText(
+  RadioButtonRow(
     option = "正确答案",
     optionKey = selectOptionKey,
     selectedOptionKey = selectOptionKey,

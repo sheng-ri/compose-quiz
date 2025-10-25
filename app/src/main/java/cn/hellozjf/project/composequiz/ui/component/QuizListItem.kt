@@ -35,11 +35,13 @@ fun QuizListItem(
       containerColor = MaterialTheme.colorScheme.onPrimary
     ),
     modifier = modifier
-      .padding(3.dp)
+      .padding(4.dp)
       .fillMaxWidth(),
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
-    Column {
+    Column(
+      modifier = Modifier.padding(8.dp)
+    ) {
       // 题目
       Text(
         text = "${index + 1}. ${quizDTO.question}"
@@ -52,7 +54,7 @@ fun QuizListItem(
       )
       // 可以进行的选项
       for ((index, order) in optionOrder.withIndex()) {
-        RadioButtonAndText(
+        RadioButtonRow(
           option = options[order],
           optionKey = OptionKey(
             chapterIndex = quizDTO.chapterIndex,

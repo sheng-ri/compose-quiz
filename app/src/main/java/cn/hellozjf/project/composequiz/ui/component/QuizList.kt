@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.component
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -7,6 +8,7 @@ import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
@@ -26,7 +28,7 @@ fun QuizList(
   // 滚动状态
   val listState = rememberLazyListState()
   LazyColumn(
-    modifier = modifier,
+    modifier = modifier.padding(4.dp),
     state = listState
   ) {
     if (quizDTOList.isNotEmpty()) {

@@ -1,12 +1,10 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,7 +12,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -24,14 +21,12 @@ import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
-import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
-import cn.hellozjf.project.composequiz.ui.component.QuizList
+import cn.hellozjf.project.composequiz.ui.component.QuizListColumn
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
-import kotlinx.serialization.json.Json
 
 /**
  * 问答屏幕
@@ -40,7 +35,6 @@ import kotlinx.serialization.json.Json
 @Composable
 fun QuizScreen(
   title: String,
-  seed: Long,
   quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
   chapterQuizViewModel: ChapterQuizViewModel,
@@ -135,8 +129,6 @@ fun QuizScreen(
     )
   }
 
-  val coroutineScope = rememberCoroutineScope()
-
   LaunchedEffect(key1 = language) {
     // 根据 quizKeyList 查出 quizList
     val dtoList = quizKeyList.mapNotNull {
@@ -160,41 +152,21 @@ fun QuizScreen(
       )
     }
   ) { innerPadding ->
-    Column(
+    Box(
       modifier = Modifier.padding(innerPadding)
     ) {
-//      Text(
-//        text = title
-//      )
-
-      QuizList(
+      QuizListColumn(
         quizDTOList = quizDTOList,
         quizOrder = quizOrder,
-        quizSelectedOptionMap = quizSelectOption,
-        onQuizSelectedOptionChange = { mapKey, selectOption ->
-          val newMap = quizSelectOption.toMutableMap()
-          newMap[mapKey] = selectOption
-          quizSelectOption = newMap
+        quizSelectOption = quizSelectOption,
+        onQuizSelectOptionChange = {
+          quizSelectOption = it
         },
         optionOrderList = optionOrderList,
-        modifier = Modifier.weight(1f)
+        title = title,
+        quizKeyList = quizKeyList,
+        onNavigation = onNavigation
       )
-
-      Button(
-        onClick = {
-          onNavigation(
-            QuizAnswerScreenKey(
-              title = title,
-              quizKeyList = quizKeyList,
-              chooseOptionMap = quizSelectOption,
-              quizOrderList = quizOrder,
-              optionOrderList = optionOrderList
-            )
-          )
-        }
-      ) {
-        Text("提交")
-      }
     }
   }
 }
