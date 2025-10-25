@@ -31,11 +31,13 @@ fun QuizAnswerItem(
       containerColor = MaterialTheme.colorScheme.onPrimary
     ),
     modifier = modifier
-      .padding(3.dp)
+      .padding(4.dp)
       .fillMaxWidth(),
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
-    Column {
+    Column(
+      modifier = Modifier.padding(8.dp)
+    ) {
       QuestionAndFavoriteRow(
         index = index,
         quizDTO = quizDTO,

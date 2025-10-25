@@ -41,7 +41,7 @@ fun ChapterListItem(
       containerColor = MaterialTheme.colorScheme.onPrimary
     ),
     modifier = modifier
-      .padding(3.dp)
+      .padding(4.dp)
       .fillMaxWidth()
       .clickable {
         onNavigation(
@@ -54,6 +54,7 @@ fun ChapterListItem(
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
     Row(
+      modifier = Modifier.padding(horizontal = 8.dp),
       verticalAlignment = Alignment.CenterVertically
     ) {
       Text(

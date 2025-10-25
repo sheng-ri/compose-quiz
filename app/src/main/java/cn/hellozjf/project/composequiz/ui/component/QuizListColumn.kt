@@ -19,6 +19,7 @@ import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 
 @Composable
 fun QuizListColumn(
+  // TODO 这里不要传 quizDTOList，传一个 (QuizKey) -> QuizDTO 的 suspend fun
   quizDTOList: List<QuizDTO>,
   quizOrder: List<Int>,
   quizSelectOption: Map<QuizKey, OptionKey>,

@@ -10,7 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Config
-import cn.hellozjf.project.composequiz.ui.component.ChapterQuizList
+import cn.hellozjf.project.composequiz.ui.component.ChapterQuizColumn
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
@@ -47,7 +47,7 @@ fun ChapterQuizScreen(
     Box(
       modifier = Modifier.padding(innerPadding)
     ) {
-      ChapterQuizList(
+      ChapterQuizColumn(
         language = config.language,
         chapterIndex = chapterIndex,
         chapterSimpleTitle = chapterSimpleTitle,
