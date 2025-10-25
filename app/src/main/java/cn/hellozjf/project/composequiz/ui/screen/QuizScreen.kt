@@ -60,7 +60,7 @@ fun QuizScreen(
 
   // 这是题目的顺序
   val quizOrder by rememberSaveable(
-    key = quizKeyList.joinToString(","),
+    inputs = arrayOf(quizKeyList.joinToString(",")),
     stateSaver = Saver<List<Int>, String>(
       save = { intList -> intList.joinToString(",") },
       restore = { string -> string.split(",").map { s -> s.toInt() } }
@@ -75,7 +75,7 @@ fun QuizScreen(
 
   // 这是各个题目选项的顺序
   val optionOrderList by rememberSaveable(
-    key = quizKeyList.joinToString(","),
+    inputs = arrayOf(quizKeyList.joinToString(",")),
     stateSaver = Saver<List<List<Int>>, String>(
       save = { intListList ->
         intListList.joinToString("|") { intList ->
