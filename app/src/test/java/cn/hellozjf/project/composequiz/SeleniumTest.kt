@@ -2,6 +2,7 @@ package cn.hellozjf.project.composequiz
 
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
+import cn.hellozjf.project.composequiz.util.PdfUtils
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVPrinter
@@ -66,6 +67,15 @@ class SeleniumTest {
   }
 
   @Test
+  fun readPdf() {
+    println("正在获取PDF章节信息")
+    val allChapterInfoList = PdfUtils.getAllChapterInfoList()
+    for (chapterInfo in allChapterInfoList) {
+      println(chapterInfo)
+    }
+  }
+
+  @Test
   fun readPdfAndWriteExcel() {
 
     val timeoutSeconds = 10L
@@ -74,11 +84,10 @@ class SeleniumTest {
     val title = listOf("章节号", "章节标题", "简化标题", "习题网址", "实际网址")
     val dataList = mutableListOf<List<String>>()
 
-    val pdfTest = PdfTest()
-    val chapterInfoList = pdfTest.getAllChapterInfoList()
+    val chapterInfoList = PdfUtils.getAllChapterInfoList()
     for (chapterInfo in chapterInfoList) {
       // println(chapterInfo)
-      if (chapterInfo.number == 1) {
+      if (chapterInfo.index == 1) {
         // 第一章是所有测试的汇总地址，跳过
         continue
       }
@@ -95,11 +104,12 @@ class SeleniumTest {
           ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
         )
         // 获取本章简化标题
-        val elements = driver.findElements(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
+        val elements =
+          driver.findElements(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
         val title = elements[0].text
-        println("number: ${chapterInfo.number}, title: $title, url: ${driver.currentUrl}")
+        println("index: ${chapterInfo.index}, title: $title, url: ${driver.currentUrl}")
         val data = listOf(
-          chapterInfo.number.toString(),
+          chapterInfo.index.toString(),
           chapterInfo.title,
           title,
           it,
@@ -108,8 +118,8 @@ class SeleniumTest {
         dataList.add(data)
       }
     }
-     val excelTest = ExcelTest()
-     excelTest.writeToExcel(title, dataList)
+    val excelTest = ExcelTest()
+    excelTest.writeToExcel(title, dataList)
   }
 
   /**
@@ -136,13 +146,15 @@ class SeleniumTest {
         val explanation = record.get(ChapterQuizConstant.EXPLANATION)
 
         chatperSet.add(chapterIndex)
-        quizList.add(Quiz(
-          chapterIndex = chapterIndex,
-          question = question,
-          correctOption = correctOption,
-          wrongOptions = listOf(wrongOption1,wrongOption2,wrongOption3),
-          explanation = explanation
-        ))
+        quizList.add(
+          Quiz(
+            chapterIndex = chapterIndex,
+            question = question,
+            correctOption = correctOption,
+            wrongOptions = listOf(wrongOption1, wrongOption2, wrongOption3),
+            explanation = explanation
+          )
+        )
       }
       if (quizList.isNotEmpty()) {
         chapterQuizList.add(quizList)
@@ -219,14 +231,14 @@ class SeleniumTest {
       ChapterConstant.FULL_TITLE,
       ChapterConstant.SIMPLE_TITLE,
       ChapterConstant.SIMPLE_URL,
-      ChapterConstant.FULL_URL)
+      ChapterConstant.FULL_URL
+    )
     val dataList = mutableListOf<List<String>>()
 
-    val pdfTest = PdfTest()
-    val chapterInfoList = pdfTest.getAllChapterInfoList()
+    val chapterInfoList = PdfUtils.getAllChapterInfoList()
     for (chapterInfo in chapterInfoList) {
       // println(chapterInfo)
-      if (chapterInfo.number == 1) {
+      if (chapterInfo.index == 1) {
         // 第一章是所有测试的汇总地址，跳过
         continue
       }
@@ -243,11 +255,12 @@ class SeleniumTest {
           ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
         )
         // 获取本章简化标题
-        val elements = driver.findElements(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
+        val elements =
+          driver.findElements(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
         val title = elements[0].text
-        println("number: ${chapterInfo.number}, title: $title, url: ${driver.currentUrl}")
+        println("index: ${chapterInfo.index}, title: $title, url: ${driver.currentUrl}")
         val data = listOf(
-          chapterInfo.number.toString(),
+          chapterInfo.index.toString(),
           chapterInfo.title,
           title,
           it,
@@ -317,12 +330,14 @@ class SeleniumTest {
       val quizList = mutableListOf<Quiz>()
       val questions = driver.findElements(By.cssSelector("div.qmn_question_answer"))
       for (question in questions) {
-        val questionText = question.findElement(By.cssSelector("span.qsm-result-question-title")).text
+        val questionText =
+          question.findElement(By.cssSelector("span.qsm-result-question-title")).text
         val simpleOptions = mutableListOf<String>()
         question.findElements(By.cssSelector("span.qsm-text-simple-option")).forEach {
           simpleOptions.add(it.text)
         }
-        val correctOption = question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
+        val correctOption =
+          question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
         val explanation = question.text.split("\n").last().replace("Explanation: ", "")
 
         quizList.add(
