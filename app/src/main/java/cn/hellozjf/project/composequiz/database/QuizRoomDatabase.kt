@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import cn.hellozjf.project.composequiz.database.converter.Converters
 import cn.hellozjf.project.composequiz.database.dao.ChapterEnDao
 import cn.hellozjf.project.composequiz.database.dao.ChapterZhDao
 import cn.hellozjf.project.composequiz.database.dao.ConfigDao
@@ -30,8 +32,9 @@ import kotlinx.coroutines.launch
     QuizZh::class,
     QuizExt::class,
     Config::class
-  ], version = 25, exportSchema = false
+  ], version = 26, exportSchema = false
 )
+@TypeConverters(Converters::class)
 abstract class QuizRoomDatabase : RoomDatabase() {
 
   abstract fun quizEnDao(): QuizEnDao

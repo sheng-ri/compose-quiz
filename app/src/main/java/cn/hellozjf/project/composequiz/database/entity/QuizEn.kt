@@ -24,17 +24,11 @@ data class QuizEn(
   @ColumnInfo(name = "question")
   val question: String,
 
-  @ColumnInfo(name = "correct_option")
-  val correctOption: String,
+  @ColumnInfo(name = "options")
+  val options: List<String>,
 
-  @ColumnInfo(name = "wrong_option1")
-  val wrongOption1: String,
-
-  @ColumnInfo(name = "wrong_option2")
-  val wrongOption2: String,
-
-  @ColumnInfo(name = "wrong_option3")
-  val wrongOption3: String,
+  @ColumnInfo(name = "correct_option_index")
+  val correctOptionIndex: Int,
 
   @ColumnInfo(name = "explanation")
   val explanation: String,
