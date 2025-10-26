@@ -32,11 +32,6 @@ class SeleniumTest {
   // 声明 WebDriver 变量
   private lateinit var driver: WebDriver
 
-  private val ZIP_RESOURCE_PATH =
-    System.getProperty("user.dir")!! + "\\..\\other\\driver\\chromedriver.zip"
-  private val TARGET_DIR = System.getProperty("java.io.tmpdir")!! + "\\.chrome_driver"
-  private val DRIVER_FILE_NAME = "chromedriver.exe"
-
   /**
    * 在每个测试方法运行前执行 (对应 JUnit 4 的 @Before)。
    */
@@ -45,9 +40,9 @@ class SeleniumTest {
 
     // 解压 ChromeDriver
     val chromeDriverPath = ChromeDriverExtractor.extractChromeDriverFromFilepath(
-      zipFilePath = ZIP_RESOURCE_PATH,
-      targetDir = TARGET_DIR,
-      driverFileName = DRIVER_FILE_NAME
+      zipFilePath = SeleniumUtils.ZIP_RESOURCE_PATH,
+      targetDir = SeleniumUtils.TARGET_DIR,
+      driverFileName = SeleniumUtils.DRIVER_FILE_NAME
     )
 
     // 1. 设置 WebDriver 系统属性
@@ -68,6 +63,17 @@ class SeleniumTest {
     // 4. 最大化窗口（可选）
     driver.manage().window().maximize()
     println("ChromeDriver 初始化成功。")
+  }
+
+  /**
+   * 在每个测试方法运行后执行，用于清理资源 (对应 JUnit 4 的 @After)。
+   */
+  @After
+  fun tearDown() {
+    println("正在关闭浏览器...")
+    // 退出 WebDriver
+    driver.quit()
+    println("浏览器已关闭。")
   }
 
   @Test
@@ -164,7 +170,10 @@ class SeleniumTest {
 
     val chapterQuizList: MutableList<List<Quiz>> = mutableListOf()
 
-    // 首先把 ChapterQuizConstant.PATH 文件变成一个章节列表，在这个文件中出现的章节，后面就不用打开URL搜索题库了
+    // 首先把 ChapterQuizConstant.PATH 文件变成一个章节列表
+    // 在这个文件中出现的章节，后面就不用打开URL搜索题库了
+    // 这么写是因为我读取题库的时候，有时候会被服务器拒绝，导致异常
+    // 加了这段代码之后，就能跳过已经读过的题目了
     val chatperSet = mutableSetOf<Int>()
     FileReader("src/main/assets/${ChapterQuizConstant.PATH_EN}").use { reader ->
       val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
@@ -458,17 +467,6 @@ class SeleniumTest {
     }
     // println("所有定位策略都失败了")
     return false
-  }
-
-  /**
-   * 在每个测试方法运行后执行，用于清理资源 (对应 JUnit 4 的 @After)。
-   */
-  @After
-  fun tearDown() {
-    println("正在关闭浏览器...")
-    // 退出 WebDriver
-    driver.quit()
-    println("浏览器已关闭。")
   }
 }
 

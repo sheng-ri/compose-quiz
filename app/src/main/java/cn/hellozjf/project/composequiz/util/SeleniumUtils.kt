@@ -8,6 +8,12 @@ import java.time.Duration
 
 class SeleniumUtils {
   companion object {
+
+    val ZIP_RESOURCE_PATH =
+      (System.getProperty("user.dir") ?: "") + "\\..\\other\\driver\\chromedriver.zip"
+    val TARGET_DIR = (System.getProperty("java.io.tmpdir") ?: "") + "\\.chrome_driver"
+    val DRIVER_FILE_NAME = "chromedriver.exe"
+
     data class FullChapterInfo(
       val index: Int,
       val title: String,
