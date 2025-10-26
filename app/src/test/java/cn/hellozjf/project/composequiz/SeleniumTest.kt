@@ -3,6 +3,7 @@ package cn.hellozjf.project.composequiz
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
 import cn.hellozjf.project.composequiz.util.PdfUtils
+import cn.hellozjf.project.composequiz.util.SeleniumUtils
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVPrinter
@@ -76,47 +77,37 @@ class SeleniumTest {
   }
 
   @Test
+  fun readPdf2() {
+    val chapterInfoList = PdfUtils.getAllChapterInfoList()
+    val fullChapterInfoList = SeleniumUtils.getAllChapterInfoList(
+      chapterInfoList = chapterInfoList,
+      driver = driver,
+      timeoutSeconds = 10L
+    )
+    for (fullChapterInfo in fullChapterInfoList) {
+      println(fullChapterInfo)
+    }
+  }
+
+  @Test
   fun readPdfAndWriteExcel() {
 
     val timeoutSeconds = 10L
 
     // 把 chapterInfoList 写入到 excel 中
     val title = listOf("章节号", "章节标题", "简化标题", "习题网址", "实际网址")
-    val dataList = mutableListOf<List<String>>()
 
     val chapterInfoList = PdfUtils.getAllChapterInfoList()
-    for (chapterInfo in chapterInfoList) {
-      // println(chapterInfo)
-      if (chapterInfo.index == 1) {
-        // 第一章是所有测试的汇总地址，跳过
-        continue
-      }
-      chapterInfo.url?.let {
-        // 只记录有习题网址的章节
-        // 好像书升级之后，原来1.7版本书中的一些章节在1.8版本没有了，但是在习题网站中依旧有1.7版本书中的章节测试
-        // 这些仅在1.7版本书中的章节我就忽略了
-//        val data = listOf(chapterInfo.number.toString(), chapterInfo.title, it)
-//        dataList.add(data)
-
-        // 上面的内容还不够，我需要简化的标题和实际的习题网址
-        driver.get(it)
-        WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
-          ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
-        )
-        // 获取本章简化标题
-        val elements =
-          driver.findElements(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
-        val title = elements[0].text
-        println("index: ${chapterInfo.index}, title: $title, url: ${driver.currentUrl}")
-        val data = listOf(
-          chapterInfo.index.toString(),
-          chapterInfo.title,
-          title,
-          it,
-          driver.currentUrl ?: ""
-        )
-        dataList.add(data)
-      }
+    val fullChapterInfoList =
+      SeleniumUtils.getAllChapterInfoList(chapterInfoList, driver, timeoutSeconds)
+    val dataList = fullChapterInfoList.map {
+      listOf(
+        it.index.toString(),
+        it.title,
+        it.simpleTitle,
+        it.url,
+        it.actualUrl
+      )
     }
     val excelTest = ExcelTest()
     excelTest.writeToExcel(title, dataList)

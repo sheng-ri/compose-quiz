@@ -19,35 +19,35 @@ import java.io.File
  */
 class PdfUtils {
 
+  /**
+   * 书签信息类
+   */
+  private data class BookmarkContent(
+    val index: String,      // 序号，最后带.
+    val title: String,      // 书签标题，不带序号
+    val pageNumber: Int,    // 页码
+    val content: String,     // 页面内容
+    val level: Int         // 书签层级
+  )
+
+  /**
+   * 带有层级的书签信息类
+   */
+  private data class BookmarkLevelContent(
+    val index: String,      // 序号，最后带.
+    val title: String,      // 书签标题，不带序号
+    val pageNumber: Int,
+    val content: String,
+    val children: List<BookmarkLevelContent>
+  )
+
+  data class ChapterInfo(
+    val index: Int,
+    val title: String,
+    val url: String?
+  )
+
   companion object {
-
-    /**
-     * 书签信息类
-     */
-    private data class BookmarkContent(
-      val index: String,      // 序号，最后带.
-      val title: String,      // 书签标题，不带序号
-      val pageNumber: Int,    // 页码
-      val content: String,     // 页面内容
-      val level: Int         // 书签层级
-    )
-
-    /**
-     * 带有层级的书签信息类
-     */
-    private data class BookmarkLevelContent(
-      val index: String,      // 序号，最后带.
-      val title: String,      // 书签标题，不带序号
-      val pageNumber: Int,
-      val content: String,
-      val children: List<BookmarkLevelContent>
-    )
-
-    data class ChapterInfo(
-      val index: Int,
-      val title: String,
-      val url: String?
-    )
 
     /**
      * 从 PDF 文件中抽取书签信息
