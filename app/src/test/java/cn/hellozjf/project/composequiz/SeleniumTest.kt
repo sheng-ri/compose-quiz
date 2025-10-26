@@ -2,6 +2,7 @@ package cn.hellozjf.project.composequiz
 
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
+import cn.hellozjf.project.composequiz.util.CsvUtils
 import cn.hellozjf.project.composequiz.util.ExcelUtils
 import cn.hellozjf.project.composequiz.util.PdfUtils
 import cn.hellozjf.project.composequiz.util.SeleniumUtils
@@ -17,6 +18,7 @@ import org.openqa.selenium.chrome.ChromeDriver
 import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
+import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 import java.io.IOException
@@ -110,7 +112,48 @@ class SeleniumTest {
         it.actualUrl
       )
     }
-    ExcelUtils.writeToExcel(title, dataList)
+    ExcelUtils.writeToExcel(
+      file = File("output.xlsx"),
+      title = title,
+      dataList = dataList
+    )
+  }
+
+  /**
+   * 读取 PDF，并且将章节目录写入到 CSV 中
+   */
+  @Test
+  fun readPdfAndWriteCsv() {
+
+    val timeoutSeconds = 10L
+
+    // 把 chapterInfoList 写入到 excel 中
+    val header = listOf(
+      ChapterConstant.INDEX,
+      ChapterConstant.FULL_TITLE,
+      ChapterConstant.SIMPLE_TITLE,
+      ChapterConstant.SIMPLE_URL,
+      ChapterConstant.FULL_URL
+    )
+
+    val chapterInfoList = PdfUtils.getAllChapterInfoList()
+    val fullChapterInfoList =
+      SeleniumUtils.getAllChapterInfoList(chapterInfoList, driver, timeoutSeconds)
+    val dataList = fullChapterInfoList.map {
+      listOf(
+        it.index.toString(),
+        it.title,
+        it.simpleTitle,
+        it.url,
+        it.actualUrl
+      )
+    }
+
+    CsvUtils.writeToCsv(
+      file = File("src/main/assets/${ChapterConstant.PATH_EN}"),
+      header = header,
+      dataList = dataList
+    )
   }
 
   /**
@@ -202,75 +245,6 @@ class SeleniumTest {
             )
             printer.printRecord(data)
           }
-        }
-      }
-      println("CSV 文件写入完成！")
-    }
-  }
-
-  /**
-   * 读取 PDF，并且将章节目录写入到 CSV 中
-   */
-  @Test
-  fun readPdfAndWriteCsv() {
-
-    val timeoutSeconds = 10L
-
-    // 把 chapterInfoList 写入到 excel 中
-    val title = listOf(
-      ChapterConstant.INDEX,
-      ChapterConstant.FULL_TITLE,
-      ChapterConstant.SIMPLE_TITLE,
-      ChapterConstant.SIMPLE_URL,
-      ChapterConstant.FULL_URL
-    )
-    val dataList = mutableListOf<List<String>>()
-
-    val chapterInfoList = PdfUtils.getAllChapterInfoList()
-    for (chapterInfo in chapterInfoList) {
-      // println(chapterInfo)
-      if (chapterInfo.index == 1) {
-        // 第一章是所有测试的汇总地址，跳过
-        continue
-      }
-      chapterInfo.url?.let {
-        // 只记录有习题网址的章节
-        // 好像书升级之后，原来1.7版本书中的一些章节在1.8版本没有了，但是在习题网站中依旧有1.7版本书中的章节测试
-        // 这些仅在1.7版本书中的章节我就忽略了
-//        val data = listOf(chapterInfo.number.toString(), chapterInfo.title, it)
-//        dataList.add(data)
-
-        // 上面的内容还不够，我需要简化的标题和实际的习题网址
-        driver.get(it)
-        WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
-          ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
-        )
-        // 获取本章简化标题
-        val elements =
-          driver.findElements(By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title"))
-        val title = elements[0].text
-        println("index: ${chapterInfo.index}, title: $title, url: ${driver.currentUrl}")
-        val data = listOf(
-          chapterInfo.index.toString(),
-          chapterInfo.title,
-          title,
-          it,
-          driver.currentUrl ?: ""
-        )
-        dataList.add(data)
-      }
-    }
-//     val excelTest = ExcelTest()
-//     excelTest.writeToExcel(title, dataList)
-
-    FileWriter("src/main/assets/${ChapterConstant.PATH_EN}").use { writer ->
-      CSVPrinter(writer, CSVFormat.DEFAULT).use { printer ->
-        // 写入表头
-        printer.printRecord(title)
-
-        // 写入数据
-        for (data in dataList) {
-          printer.printRecord(data)
         }
       }
       println("CSV 文件写入完成！")
