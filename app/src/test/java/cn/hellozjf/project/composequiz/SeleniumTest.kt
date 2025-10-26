@@ -2,6 +2,7 @@ package cn.hellozjf.project.composequiz
 
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
+import cn.hellozjf.project.composequiz.util.ExcelUtils
 import cn.hellozjf.project.composequiz.util.PdfUtils
 import cn.hellozjf.project.composequiz.util.SeleniumUtils
 import org.apache.commons.csv.CSVFormat
@@ -109,8 +110,7 @@ class SeleniumTest {
         it.actualUrl
       )
     }
-    val excelTest = ExcelTest()
-    excelTest.writeToExcel(title, dataList)
+    ExcelUtils.writeToExcel(title, dataList)
   }
 
   /**

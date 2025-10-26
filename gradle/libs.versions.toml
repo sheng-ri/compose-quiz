@@ -48,7 +48,6 @@ androidx-room-room-compiler = { group = "androidx.room", name = "room-compiler",
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "roomRuntime" }
 androidx-runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
 pdfbox = { group = "org.apache.pdfbox", name = "pdfbox", version.ref = "pdfbox" }
-itext7-core = { group = "com.itextpdf", name = "itext7-core", version.ref = "itext7" }
 poi-core = { group = "org.apache.poi", name = "poi", version.ref = "poi" }
 poi-ooxml = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "poi" }
 commons-csv = { group = "org.apache.commons", name = "commons-csv", version.ref = "commonCsv" }
