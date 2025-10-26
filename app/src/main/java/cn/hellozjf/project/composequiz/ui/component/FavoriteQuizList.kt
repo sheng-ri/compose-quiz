@@ -8,7 +8,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
@@ -78,10 +77,13 @@ fun FavoriteQuizListPreview() {
         chapterIndex = i,
         quizIndex = 1,
         question = "问题$i",
-        correctOption = "问题${i}正确选项",
-        wrongOption1 = "问题${i}错误选项1",
-        wrongOption2 = "问题${i}错误选项2",
-        wrongOption3 = "问题${i}错误选项3",
+        options = listOf(
+          "问题${i}正确选项",
+          "问题${i}错误选项1",
+          "问题${i}错误选项2",
+          "问题${i}错误选项3",
+        ),
+        correctOptionIndex = 0,
         explanation = "问题${i}的解释"
       )
       result.add(quizDTO)

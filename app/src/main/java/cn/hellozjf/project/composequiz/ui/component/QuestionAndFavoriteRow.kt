@@ -70,10 +70,13 @@ fun QuestionAndFavoriteRowPreview() {
         chapterIndex = 0,
         quizIndex = 1,
         question = "问题0",
-        correctOption = "正确答案",
-        wrongOption1 = "错误答案1",
-        wrongOption2 = "错误答案2",
-        wrongOption3 = "错误答案3",
+        options = listOf(
+          "正确答案",
+          "错误答案1",
+          "错误答案2",
+          "错误答案3",
+        ),
+        correctOptionIndex = 0,
         explanation = "问题0解释",
         favorite = false,
         favoriteTime = 0L

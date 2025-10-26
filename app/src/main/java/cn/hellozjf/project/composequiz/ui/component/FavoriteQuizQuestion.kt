@@ -60,10 +60,13 @@ fun FavoriteQuizQuestionPreview() {
       chapterIndex = 0,
       quizIndex = 1,
       question = "第0章题目的标题",
-      correctOption = "题目正确选项",
-      wrongOption1 = "题目错误选项1",
-      wrongOption2 = "题目错误选项2",
-      wrongOption3 = "题目错误选项3",
+      options = listOf(
+        "题目正确选项",
+        "题目错误选项1",
+        "题目错误选项2",
+        "题目错误选项3",
+      ),
+      correctOptionIndex = 0,
       explanation = "题目的解释"
     )
   )

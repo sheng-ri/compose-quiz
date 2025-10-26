@@ -75,30 +75,39 @@ fun QuizListColumnPreview() {
       chapterIndex = 0,
       quizIndex = 1,
       question = "问题0",
-      correctOption = "正确选项",
-      wrongOption1 = "错误选项1",
-      wrongOption2 = "错误选项2",
-      wrongOption3 = "错误选项3",
+      options = listOf(
+        "正确选项",
+        "错误选项1",
+        "错误选项2",
+        "错误选项3",
+      ),
+      correctOptionIndex = 0,
       explanation = "问题0解释"
     ),
     QuizDTO(
       chapterIndex = 0,
       quizIndex = 2,
       question = "问题1",
-      correctOption = "正确选项",
-      wrongOption1 = "错误选项1",
-      wrongOption2 = "错误选项2",
-      wrongOption3 = "错误选项3",
+      options = listOf(
+        "正确选项",
+        "错误选项1",
+        "错误选项2",
+        "错误选项3",
+      ),
+      correctOptionIndex = 0,
       explanation = "问题1解释"
     ),
     QuizDTO(
       chapterIndex = 0,
       quizIndex = 3,
       question = "问题2",
-      correctOption = "正确选项",
-      wrongOption1 = "错误选项1",
-      wrongOption2 = "错误选项2",
-      wrongOption3 = "错误选项3",
+      options = listOf(
+        "正确选项",
+        "错误选项1",
+        "错误选项2",
+        "错误选项3",
+      ),
+      correctOptionIndex = 0,
       explanation = "问题2解释"
     ),
   )

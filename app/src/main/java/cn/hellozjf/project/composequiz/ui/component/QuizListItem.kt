@@ -46,12 +46,7 @@ fun QuizListItem(
       Text(
         text = "${index + 1}. ${quizDTO.question}"
       )
-      val options = listOf(
-        quizDTO.correctOption,
-        quizDTO.wrongOption1,
-        quizDTO.wrongOption2,
-        quizDTO.wrongOption3
-      )
+      val options = quizDTO.options
       // 可以进行的选项
       for ((index, order) in optionOrder.withIndex()) {
         RadioButtonRow(
@@ -86,10 +81,13 @@ fun QuizListItemPreview() {
       chapterIndex = 0,
       quizIndex = 1,
       question = "问题0",
-      correctOption = "正确选项",
-      wrongOption1 = "错误选项1",
-      wrongOption2 = "错误选项2",
-      wrongOption3 = "错误选项3",
+      options = listOf(
+        "正确选项",
+        "错误选项1",
+        "错误选项2",
+        "错误选项3",
+      ),
+      correctOptionIndex = 0,
       explanation = "问题0解释"
     ),
     selectedOptionKey = selectOptionKey,

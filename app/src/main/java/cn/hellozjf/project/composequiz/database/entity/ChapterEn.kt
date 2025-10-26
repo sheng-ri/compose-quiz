@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 
 /**
  * 章节实体
+ * todo 把id去掉，index直接当主键用
  */
 @Entity(
   tableName = "chapter_en"

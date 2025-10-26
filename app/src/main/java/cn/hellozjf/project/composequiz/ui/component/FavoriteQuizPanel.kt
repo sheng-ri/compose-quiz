@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -14,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
@@ -112,10 +110,13 @@ fun FavoriteQuizPanelPreview() {
     chapterIndex = 0,
     quizIndex = 1,
     question = "第0章问题0",
-    correctOption = "正确选项",
-    wrongOption1 = "错误选项1",
-    wrongOption2 = "错误选项2",
-    wrongOption3 = "错误选项3",
+    options = listOf(
+      "正确选项",
+      "错误选项1",
+      "错误选项2",
+      "错误选项3",
+    ),
+    correctOptionIndex = 0,
     explanation = "第0章问题0解释",
     favorite = true,
     favoriteTime = 20L,
@@ -125,10 +126,13 @@ fun FavoriteQuizPanelPreview() {
     chapterIndex = 0,
     quizIndex = 2,
     question = "第0章问题1",
-    correctOption = "正确选项",
-    wrongOption1 = "错误选项1",
-    wrongOption2 = "错误选项2",
-    wrongOption3 = "错误选项3",
+    options = listOf(
+      "正确选项",
+      "错误选项1",
+      "错误选项2",
+      "错误选项3",
+    ),
+    correctOptionIndex = 0,
     explanation = "第0章问题1解释",
     favorite = true,
     favoriteTime = 10L,
@@ -138,10 +142,13 @@ fun FavoriteQuizPanelPreview() {
     chapterIndex = 1,
     quizIndex = 1,
     question = "第1章问题0",
-    correctOption = "正确选项",
-    wrongOption1 = "错误选项1",
-    wrongOption2 = "错误选项2",
-    wrongOption3 = "错误选项3",
+    options = listOf(
+      "正确选项",
+      "错误选项1",
+      "错误选项2",
+      "错误选项3",
+    ),
+    correctOptionIndex = 0,
     explanation = "第1章问题0解释",
     favorite = true,
     favoriteTime = 40L,
@@ -151,10 +158,13 @@ fun FavoriteQuizPanelPreview() {
     chapterIndex = 1,
     quizIndex = 2,
     question = "第1章问题1",
-    correctOption = "正确选项",
-    wrongOption1 = "错误选项1",
-    wrongOption2 = "错误选项2",
-    wrongOption3 = "错误选项3",
+    options = listOf(
+      "正确选项",
+      "错误选项1",
+      "错误选项2",
+      "错误选项3",
+    ),
+    correctOptionIndex = 0,
     explanation = "第1章问题1解释",
     favorite = true,
     favoriteTime = 30L,
@@ -177,10 +187,13 @@ fun FavoriteQuizPanelPreview() {
         chapterIndex = i,
         quizIndex = 1,
         question = "问题$i",
-        correctOption = "正确答案",
-        wrongOption1 = "错误答案1",
-        wrongOption2 = "错误答案2",
-        wrongOption3 = "错误答案3",
+        options = listOf(
+          "正确选项",
+          "错误选项1",
+          "错误选项2",
+          "错误选项3",
+        ),
+        correctOptionIndex = 0,
         explanation = "问题${i}解释",
         favorite = true,
         favoriteTime = System.currentTimeMillis()

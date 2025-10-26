@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import cn.hellozjf.project.composequiz.database.converter.Converters
 import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
@@ -136,7 +137,7 @@ class MainActivity : ComponentActivity() {
           chapterEn.fullTitle = record.get(ChapterConstant.FULL_TITLE)
           chapterEn.simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
           chapterEn.simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-          chapterEn.fullUrl = record.get(ChapterConstant.FULL_URL)
+          chapterEn.fullUrl = record.get(ChapterConstant.ACTUAL_URL)
           chapterViewModel.insertChapter(chapterEn)
         }
 
@@ -159,7 +160,7 @@ class MainActivity : ComponentActivity() {
           chapter.fullTitle = record.get(ChapterConstant.FULL_TITLE)
           chapter.simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
           chapter.simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-          chapter.fullUrl = record.get(ChapterConstant.FULL_URL)
+          chapter.fullUrl = record.get(ChapterConstant.ACTUAL_URL)
           chapterViewModel.insertChapter(chapter)
         }
 
@@ -186,10 +187,8 @@ class MainActivity : ComponentActivity() {
             chapterIndex = chapterIndex,
             quizIndex = quizIndex,
             question = record.get(ChapterQuizConstant.QUESTION),
-            correctOption = record.get(ChapterQuizConstant.CORRECT_OPTION),
-            wrongOption1 = record.get(ChapterQuizConstant.WRONG_OPTION1),
-            wrongOption2 = record.get(ChapterQuizConstant.WRONG_OPTION2),
-            wrongOption3 = record.get(ChapterQuizConstant.WRONG_OPTION3),
+            options = Converters().fromString(record.get(ChapterQuizConstant.OPTIONS)),
+            correctOptionIndex = record.get(ChapterQuizConstant.CORRECT_OPTION_INDEX).toInt(),
             explanation = record.get(ChapterQuizConstant.EXPLANATION)
           )
           chapterQuizViewModel.insertQuiz(quizEn)
@@ -218,10 +217,8 @@ class MainActivity : ComponentActivity() {
             chapterIndex = chapterIndex,
             quizIndex = quizIndex,
             question = record.get(ChapterQuizConstant.QUESTION),
-            correctOption = record.get(ChapterQuizConstant.CORRECT_OPTION),
-            wrongOption1 = record.get(ChapterQuizConstant.WRONG_OPTION1),
-            wrongOption2 = record.get(ChapterQuizConstant.WRONG_OPTION2),
-            wrongOption3 = record.get(ChapterQuizConstant.WRONG_OPTION3),
+            options = Converters().fromString(record.get(ChapterQuizConstant.OPTIONS)),
+            correctOptionIndex = record.get(ChapterQuizConstant.CORRECT_OPTION_INDEX).toInt(),
             explanation = record.get(ChapterQuizConstant.EXPLANATION)
           )
           chapterQuizViewModel.insertQuiz(quiz)

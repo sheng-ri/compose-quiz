@@ -15,9 +15,11 @@ import kotlinx.serialization.Serializable
 )
 data class QuizEn(
 
+  // 这个是书中实际的章节号
   @ColumnInfo(name = "chapter_index")
   val chapterIndex: Int,
 
+  // 这个是问题序号，从0开始
   @ColumnInfo(name = "quiz_index")
   val quizIndex: Int,
 
@@ -27,6 +29,7 @@ data class QuizEn(
   @ColumnInfo(name = "options")
   val options: List<String>,
 
+  // 这个是选项序号，从0开始
   @ColumnInfo(name = "correct_option_index")
   val correctOptionIndex: Int,
 

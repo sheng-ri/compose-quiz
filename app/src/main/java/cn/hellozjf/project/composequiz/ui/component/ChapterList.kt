@@ -79,10 +79,13 @@ fun ChapterListPreview() {
           chapterIndex = chapterIndex,
           quizIndex = i + 1,
           question = "章节${chapterIndex}问题${i}",
-          correctOption = "问题${i}正确选项",
-          wrongOption1 = "问题${i}错误选项1",
-          wrongOption2 = "问题${i}错误选项2",
-          wrongOption3 = "问题${i}错误选项3",
+          options = listOf(
+            "问题${i}正确选项",
+            "问题${i}错误选项1",
+            "问题${i}错误选项2",
+            "问题${i}错误选项3",
+          ),
+          correctOptionIndex = 0,
           explanation = "章节${chapterIndex}问题${i}解释"
         )
         result.add(quizDTO)

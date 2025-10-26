@@ -1,5 +1,7 @@
 package cn.hellozjf.project.composequiz
 
+import cn.hellozjf.project.composequiz.database.converter.Converters
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
 import cn.hellozjf.project.composequiz.util.CsvUtils
@@ -8,7 +10,6 @@ import cn.hellozjf.project.composequiz.util.PdfUtils
 import cn.hellozjf.project.composequiz.util.SeleniumUtils
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
-import org.apache.commons.csv.CSVPrinter
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -20,7 +21,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.io.File
 import java.io.FileReader
-import java.io.FileWriter
 import java.io.IOException
 import java.time.Duration
 
@@ -139,7 +139,7 @@ class SeleniumTest {
       ChapterConstant.FULL_TITLE,
       ChapterConstant.SIMPLE_TITLE,
       ChapterConstant.SIMPLE_URL,
-      ChapterConstant.FULL_URL
+      ChapterConstant.ACTUAL_URL
     )
 
     val chapterInfoList = PdfUtils.getAllChapterInfoList()
@@ -168,41 +168,42 @@ class SeleniumTest {
   @Test
   fun readChapterAndWriteQuizToCsv() {
 
-    val chapterQuizList: MutableList<List<Quiz>> = mutableListOf()
+    val chapterQuizList: MutableList<List<QuizDTO>> = mutableListOf()
 
     // 首先把 ChapterQuizConstant.PATH 文件变成一个章节列表
     // 在这个文件中出现的章节，后面就不用打开URL搜索题库了
     // 这么写是因为我读取题库的时候，有时候会被服务器拒绝，导致异常
     // 加了这段代码之后，就能跳过已经读过的题目了
     val chatperSet = mutableSetOf<Int>()
-    FileReader("src/main/assets/${ChapterQuizConstant.PATH_EN}").use { reader ->
-      val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
-
-      val quizList = mutableListOf<Quiz>()
-      for (record in csvParser) {
-        val chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt()
-        val question = record.get(ChapterQuizConstant.QUESTION)
-        val correctOption = record.get(ChapterQuizConstant.CORRECT_OPTION)
-        val wrongOption1 = record.get(ChapterQuizConstant.WRONG_OPTION1)
-        val wrongOption2 = record.get(ChapterQuizConstant.WRONG_OPTION2)
-        val wrongOption3 = record.get(ChapterQuizConstant.WRONG_OPTION3)
-        val explanation = record.get(ChapterQuizConstant.EXPLANATION)
-
-        chatperSet.add(chapterIndex)
-        quizList.add(
-          Quiz(
-            chapterIndex = chapterIndex,
-            question = question,
-            correctOption = correctOption,
-            wrongOptions = listOf(wrongOption1, wrongOption2, wrongOption3),
-            explanation = explanation
-          )
-        )
-      }
-      if (quizList.isNotEmpty()) {
-        chapterQuizList.add(quizList)
-      }
-    }
+    // TODO 下面的代码记得加回来，不然没法断点重来了
+//    FileReader("src/main/assets/${ChapterQuizConstant.PATH_EN}").use { reader ->
+//      val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
+//
+//      val quizList = mutableListOf<Quiz>()
+//      for (record in csvParser) {
+//        val chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt()
+//        val question = record.get(ChapterQuizConstant.QUESTION)
+//        val correctOption = record.get(ChapterQuizConstant.CORRECT_OPTION)
+//        val wrongOption1 = record.get(ChapterQuizConstant.WRONG_OPTION1)
+//        val wrongOption2 = record.get(ChapterQuizConstant.WRONG_OPTION2)
+//        val wrongOption3 = record.get(ChapterQuizConstant.WRONG_OPTION3)
+//        val explanation = record.get(ChapterQuizConstant.EXPLANATION)
+//
+//        chatperSet.add(chapterIndex)
+//        quizList.add(
+//          Quiz(
+//            chapterIndex = chapterIndex,
+//            question = question,
+//            correctOption = correctOption,
+//            wrongOptions = listOf(wrongOption1, wrongOption2, wrongOption3),
+//            explanation = explanation
+//          )
+//        )
+//      }
+//      if (quizList.isNotEmpty()) {
+//        chapterQuizList.add(quizList)
+//      }
+//    }
 
     // 读取章节 CSV，然后依次打开每章 URL，读取该章下面的题目
     try {
@@ -210,13 +211,18 @@ class SeleniumTest {
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         for (record in csvParser) {
-          val index = record.get(ChapterConstant.INDEX).toInt()
-          if (chatperSet.contains(index)) {
+          val chapterIndex = record.get(ChapterConstant.INDEX).toInt()
+          if (chatperSet.contains(chapterIndex)) {
             continue
           }
-          val fullUrl = record.get(ChapterConstant.FULL_URL)
-          driver.get(fullUrl)
-          val quizList = getQuizList(driver, 1, 10, index)
+          val actualUrl = record.get(ChapterConstant.ACTUAL_URL)
+          driver.get(actualUrl)
+          val quizList = SeleniumUtils.getQuizList(
+            driver = driver,
+            shortTimeout = 1,
+            longTimeout = 10,
+            chapterIndex = chapterIndex
+          )
           chapterQuizList.add(quizList)
         }
 
@@ -226,112 +232,29 @@ class SeleniumTest {
     }
 
     // 将所有章节下面的所有题目写入到 CSV 中
-    FileWriter("src/main/assets/${ChapterQuizConstant.PATH_EN}").use { writer ->
-      CSVPrinter(writer, CSVFormat.DEFAULT).use { printer ->
-        val title = listOf(
-          ChapterQuizConstant.CHAPTER_INDEX,
-          ChapterQuizConstant.QUESTION,
-          ChapterQuizConstant.CORRECT_OPTION,
-          ChapterQuizConstant.WRONG_OPTION1,
-          ChapterQuizConstant.WRONG_OPTION2,
-          ChapterQuizConstant.WRONG_OPTION3,
-          ChapterQuizConstant.EXPLANATION,
-        )
-        // 写入表头
-        printer.printRecord(title)
-
-        // 写入数据
-        for (quizList in chapterQuizList) {
-          for (quiz in quizList) {
-            val data = listOf(
-              quiz.chapterIndex,
-              quiz.question,
-              quiz.correctOption,
-              quiz.wrongOptions[0],
-              quiz.wrongOptions[1],
-              quiz.wrongOptions[2],
-              quiz.explanation
-            )
-            printer.printRecord(data)
-          }
-        }
-      }
-      println("CSV 文件写入完成！")
-    }
-  }
-
-  private fun getQuizList(
-    driver: WebDriver,
-    shortTimeout: Long,
-    longTimeout: Long,
-    chapterIndex: Int = 0
-  ): List<Quiz> {
-    println("正在获取第${chapterIndex}章问答题目")
-    // 点击 Start Quiz 按钮
-    clickButtonWithMultipleStrategies(
-      driver, listOf(
-        "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_start"
-      ), shortTimeout
-    )
-
-    while (true) {
-      // 如果能找到 Next 按钮，就一直点 Next 按钮
-      if (!clickButtonWithMultipleStrategies(
-          driver, listOf(
-            "CSS" to ".qmn_btn.mlw_qmn_quiz_link.mlw_next.mlw_custom_next"
-          ), shortTimeout
-        )
-      ) {
-        break
-      }
-    }
-
-    // 点击 Submit 按钮
-    clickButtonWithMultipleStrategies(
-      driver, listOf(
-        "CSS" to ".qsm-btn.qsm-submit-btn.qmn_btn"
-      ), shortTimeout
-    )
-
-    // 等到答案出现
-    try {
-
-      WebDriverWait(driver, Duration.ofSeconds(longTimeout)).until(
-        ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.qsm-results-page"))
-      )
-
-      // 记录问题
-      val quizList = mutableListOf<Quiz>()
-      val questions = driver.findElements(By.cssSelector("div.qmn_question_answer"))
-      for (question in questions) {
-        val questionText =
-          question.findElement(By.cssSelector("span.qsm-result-question-title")).text
-        val simpleOptions = mutableListOf<String>()
-        question.findElements(By.cssSelector("span.qsm-text-simple-option")).forEach {
-          simpleOptions.add(it.text)
-        }
-        val correctOption =
-          question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
-        val explanation = question.text.split("\n").last().replace("Explanation: ", "")
-
-        quizList.add(
-          Quiz(
-            chapterIndex,
-            questionText,
-            simpleOptions.toList(),
-            correctOption,
-            explanation
+    CsvUtils.writeToCsv(
+      file = File("src/main/assets/${ChapterQuizConstant.PATH_EN}"),
+      header = listOf(
+        ChapterQuizConstant.CHAPTER_INDEX,
+        ChapterQuizConstant.QUESTION,
+        ChapterQuizConstant.OPTIONS,
+        ChapterQuizConstant.CORRECT_OPTION_INDEX,
+        ChapterQuizConstant.EXPLANATION,
+      ),
+      dataList = chapterQuizList
+        // 首先把 MutableList<List<QuizDTO>> 平铺成 List<QuizDTO>
+        .flatten()
+        // 然后把 QuizDTO 转换成 List<String>
+        .map {
+          listOf(
+            it.chapterIndex.toString(),
+            it.question,
+            Converters().fromList(it.options),
+            it.correctOptionIndex.toString(),
+            it.explanation
           )
-        )
-      }
-      println("获取第${chapterIndex}章数据成功")
-      return quizList.toList()
-
-    } catch (e: Exception) {
-      println("获取第${chapterIndex}章数据失败!!!!!!!")
-      return listOf()
-    }
-
+        }
+    )
   }
 
   /**

@@ -7,13 +7,14 @@ import cn.hellozjf.project.composequiz.database.entity.QuizZh
  *
  */
 data class QuizDTO(
+  // 这个是书中实际的章节号
   val chapterIndex: Int,
+  // 这个是问题序号，从0开始
   val quizIndex: Int,
   val question: String,
-  val correctOption: String,
-  val wrongOption1: String,
-  val wrongOption2: String,
-  val wrongOption3: String,
+  val options: List<String>,
+  // 这个是选项序号，从0开始
+  val correctOptionIndex: Int,
   val explanation: String,
   val favorite: Boolean = false,
   val favoriteTime: Long = 0L,
@@ -31,10 +32,8 @@ fun QuizEn.toDTO() = QuizDTO(
   chapterIndex = chapterIndex,
   quizIndex = quizIndex,
   question = question,
-  correctOption = correctOption,
-  wrongOption1 = wrongOption1,
-  wrongOption2 = wrongOption2,
-  wrongOption3 = wrongOption3,
+  options = options,
+  correctOptionIndex = correctOptionIndex,
   explanation = explanation
 )
 
@@ -42,9 +41,7 @@ fun QuizZh.toDTO() = QuizDTO(
   chapterIndex = chapterIndex,
   quizIndex = quizIndex,
   question = question,
-  correctOption = correctOption,
-  wrongOption1 = wrongOption1,
-  wrongOption2 = wrongOption2,
-  wrongOption3 = wrongOption3,
+  options = options,
+  correctOptionIndex = correctOptionIndex,
   explanation = explanation
 )
