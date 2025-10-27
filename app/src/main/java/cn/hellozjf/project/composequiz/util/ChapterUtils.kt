@@ -18,7 +18,8 @@ class ChapterUtils {
 
     val defaultPdfFilePath =
       "D:\\hellozjf\\code\\gitee\\ComposeQuiz\\other\\book\\JetpackCompose1.8Essentials\\JetpackCompose1.8Essentials.pdf"
-    val defaultCsvFilePath = "src/main/assets/${ChapterConstant.PATH_EN}"
+    val defaultEnCsvFilePath = "src/main/assets/${ChapterConstant.PATH_EN}"
+    val defaultZhCsvFilePath = "src/main/assets/${ChapterConstant.PATH_ZH}"
     val defaultExcelFilePath = "output.xlsx"
 
     /**
@@ -49,11 +50,24 @@ class ChapterUtils {
       return chapterInfoList
     }
 
+    fun writeChapterDTOListToCsv(
+      file: File = File(defaultEnCsvFilePath),
+      chapterDTOList: List<ChapterDTO>
+    ) {
+      CsvUtils.writeToCsv(
+        file = file,
+        header = getHeader(),
+        dataList = chapterDTOList.map {
+          it.toDataRow()
+        }
+      )
+    }
+
     /**
      * 从文件中读取章节信息
      */
     fun getChapterDTOListFromCsv(
-      file: File = File(defaultCsvFilePath)
+      file: File = File(defaultEnCsvFilePath)
     ): List<ChapterDTO> {
 
       val result = mutableListOf<ChapterDTO>()

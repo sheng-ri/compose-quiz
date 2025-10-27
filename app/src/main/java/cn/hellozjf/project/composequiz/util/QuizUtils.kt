@@ -13,7 +13,8 @@ import kotlin.text.toInt
 class QuizUtils {
   companion object {
 
-    val defaultCsvFilePath = "src/main/assets/${QuizConstant.PATH_EN}"
+    val defaultEnCsvFilePath = "src/main/assets/${QuizConstant.PATH_EN}"
+    val defaultZhCsvFilePath = "src/main/assets/${QuizConstant.PATH_ZH}"
 
     /**
      * 从网络读取题目信息
@@ -41,11 +42,25 @@ class QuizUtils {
       return result
     }
 
+    fun writeQuizDTOListToCsv(
+      file: File = File(defaultEnCsvFilePath),
+      quizDTOList: List<QuizDTO>
+    ) {
+      CsvUtils.writeToCsv(
+        file = file,
+        header = getHeader(),
+        dataList = quizDTOList
+          .map {
+            it.toDataRow()
+          }
+      )
+    }
+
     /**
      * 从文件中读取题目信息
      */
     fun getQuizDTOListFromCsv(
-      file: File = File(defaultCsvFilePath)
+      file: File = File(defaultEnCsvFilePath)
     ): List<QuizDTO> {
 
       val result = mutableListOf<QuizDTO>()

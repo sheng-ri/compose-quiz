@@ -2,7 +2,6 @@ package cn.hellozjf.project.composequiz
 
 import cn.hellozjf.project.composequiz.util.ChapterUtils
 import cn.hellozjf.project.composequiz.util.ChromeDriverUtils
-import cn.hellozjf.project.composequiz.util.CsvUtils
 import cn.hellozjf.project.composequiz.util.ExcelUtils
 import cn.hellozjf.project.composequiz.util.QuizUtils
 import org.junit.After
@@ -110,12 +109,9 @@ class SeleniumTest {
     val chapterDTOList = ChapterUtils.getChapterDTOListFromPdfFile(
       driver = driver
     )
-    CsvUtils.writeToCsv(
-      file = File(ChapterUtils.defaultCsvFilePath),
-      header = ChapterUtils.getHeader(),
-      dataList = chapterDTOList.map {
-        it.toDataRow()
-      }
+    ChapterUtils.writeChapterDTOListToCsv(
+      file = File(ChapterUtils.defaultEnCsvFilePath),
+      chapterDTOList = chapterDTOList
     )
   }
 
@@ -147,13 +143,9 @@ class SeleniumTest {
       compareBy({ it.chapterIndex }, { it.quizIndex })
     )
     // 将所有章节下面的所有题目写入到 CSV 中
-    CsvUtils.writeToCsv(
-      file = File(QuizUtils.defaultCsvFilePath),
-      header = QuizUtils.getHeader(),
-      dataList = sortedDataList
-        .map {
-          it.toDataRow()
-        }
+    QuizUtils.writeQuizDTOListToCsv(
+      file = File(QuizUtils.defaultEnCsvFilePath),
+      quizDTOList = sortedDataList
     )
   }
 
