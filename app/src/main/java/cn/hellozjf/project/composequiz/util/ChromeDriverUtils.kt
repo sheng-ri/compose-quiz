@@ -1,10 +1,9 @@
-package cn.hellozjf.project.composequiz
+package cn.hellozjf.project.composequiz.util
 
 import java.io.BufferedInputStream
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.InputStream
 import java.nio.file.Files
@@ -13,15 +12,23 @@ import java.nio.file.Paths
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-class ChromeDriverExtractor {
+class ChromeDriverUtils {
   companion object {
+
+    val ZIP_RESOURCE_PATH =
+      (System.getProperty("user.dir") ?: "") + "\\..\\other\\driver\\chromedriver.zip"
+    val TARGET_DIR = (System.getProperty("java.io.tmpdir") ?: "") + "\\.chrome_driver"
+    val DRIVER_FILE_NAME = "chromedriver.exe"
+    val PROPERTY_CHROME_DRIVER = "webdriver.chrome.driver"
+    val PROXY_SERVER = "--proxy-server=socks5://127.0.0.1:1080"
+
     /**
      * 从 classpath 解压 ChromeDriver 到目标目录
      */
     fun extractChromeDriverFromFilepath(
-      zipFilePath: String,
-      targetDir: String,
-      driverFileName: String = "chromedriver"
+      zipFilePath: String = ZIP_RESOURCE_PATH,
+      targetDir: String = TARGET_DIR,
+      driverFileName: String = DRIVER_FILE_NAME
     ): String {
       val targetPath = Paths.get(targetDir, driverFileName).toString()
 

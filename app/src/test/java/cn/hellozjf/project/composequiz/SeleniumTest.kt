@@ -1,10 +1,10 @@
 package cn.hellozjf.project.composequiz
 
 import cn.hellozjf.project.composequiz.util.ChapterUtils
+import cn.hellozjf.project.composequiz.util.ChromeDriverUtils
 import cn.hellozjf.project.composequiz.util.CsvUtils
 import cn.hellozjf.project.composequiz.util.ExcelUtils
 import cn.hellozjf.project.composequiz.util.QuizUtils
-import cn.hellozjf.project.composequiz.util.SeleniumUtils
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -28,22 +28,18 @@ class SeleniumTest {
   fun setUp() {
 
     // 解压 ChromeDriver
-    val chromeDriverPath = ChromeDriverExtractor.extractChromeDriverFromFilepath(
-      zipFilePath = SeleniumUtils.ZIP_RESOURCE_PATH,
-      targetDir = SeleniumUtils.TARGET_DIR,
-      driverFileName = SeleniumUtils.DRIVER_FILE_NAME
-    )
+    val chromeDriverPath = ChromeDriverUtils.extractChromeDriverFromFilepath()
 
     // 1. 设置 WebDriver 系统属性
     // 如果您使用 Selenium 4.6+ 并信任 Selenium Manager 自动管理驱动，可以省略这行。
     // 如果需要手动指定路径：
-    System.setProperty("webdriver.chrome.driver", chromeDriverPath)
+    System.setProperty(ChromeDriverUtils.PROPERTY_CHROME_DRIVER, chromeDriverPath)
 
     println("正在初始化 ChromeDriver...")
 
     // 2. 配置 Chrome 选项
     val options = ChromeOptions()
-    options.addArguments("--proxy-server=socks5://127.0.0.1:1080")
+    options.addArguments(ChromeDriverUtils.PROXY_SERVER)
     // options.addArguments("--headless") // 可选：如果不需要界面显示，请取消注释
 
     // 3. 创建 ChromeDriver 实例
