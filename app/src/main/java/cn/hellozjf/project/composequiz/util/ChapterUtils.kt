@@ -52,7 +52,7 @@ class ChapterUtils {
     /**
      * 从文件中读取章节信息
      */
-    fun readChapterDTOListFromCsv(
+    fun getChapterDTOListFromCsv(
       file: File = File(defaultCsvFilePath)
     ): List<ChapterDTO> {
 

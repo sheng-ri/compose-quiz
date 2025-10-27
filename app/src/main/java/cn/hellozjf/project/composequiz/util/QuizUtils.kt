@@ -19,12 +19,12 @@ class QuizUtils {
      * 从网络读取题目信息
      * 返回结果是一个 Map，key 是章节序号，value 是该章节下面的所有题目
      */
-    fun readChapterQuizDTOListFromNetwork(
+    fun getChapterQuizDTOListFromNetwork(
       driver: WebDriver,
       skipChapterIndexSet: Set<Int>
     ): Map<Int, List<QuizDTO>> {
       val result = mutableMapOf<Int, List<QuizDTO>>()
-      val chapterDTOList = ChapterUtils.getSimpleChapterDTOListFromPdfFile()
+      val chapterDTOList = ChapterUtils.getChapterDTOListFromCsv()
       for (chapterDTO in chapterDTOList) {
         if (skipChapterIndexSet.contains(chapterDTO.index)) {
           continue
@@ -44,7 +44,7 @@ class QuizUtils {
     /**
      * 从文件中读取题目信息
      */
-    fun readQuizDTOListFromCsv(
+    fun getQuizDTOListFromCsv(
       file: File = File(defaultCsvFilePath)
     ): List<QuizDTO> {
 

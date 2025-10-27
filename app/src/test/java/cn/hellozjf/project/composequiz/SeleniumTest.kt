@@ -106,7 +106,7 @@ class SeleniumTest {
    * 从 PDF 文件中读取章节信息，使用 selenium 完善章节信息，并写入到 csv 文件中
    */
   @Test
-  fun readPdfAndWriteCsv() {
+  fun readPdfAndWriteChapterToCsv() {
     val chapterDTOList = ChapterUtils.getChapterDTOListFromPdfFile(
       driver = driver
     )
@@ -121,6 +121,7 @@ class SeleniumTest {
 
   /**
    * 读取每章的URL，从URL中提取该章节所有题目，并写入CSV中
+   * 如果题目CSV文件已存在，会自动跳过已读过的章节
    */
   @Test
   fun readChapterAndWriteQuizToCsv() {
@@ -129,24 +130,27 @@ class SeleniumTest {
     // 在这个文件中出现的章节，后面就不用打开URL搜索题库了
     // 这么写是因为我读取题库的时候，有时候会被服务器拒绝，导致异常
     // 加了这段代码之后，就能跳过已经读过的题目了
-    val readedQuizDTOList = QuizUtils.readQuizDTOListFromCsv()
+    val readedQuizDTOList = QuizUtils.getQuizDTOListFromCsv()
     val skipChapterIndexSet = readedQuizDTOList
       .map { it.chapterIndex }
       .toSet()
 
     // 读取章节 CSV，然后依次打开每章 URL，读取该章下面的题目
-    val chapterQuizDTOListMap = QuizUtils.readChapterQuizDTOListFromNetwork(
+    val chapterQuizDTOListMap = QuizUtils.getChapterQuizDTOListFromNetwork(
       driver = driver,
       skipChapterIndexSet = skipChapterIndexSet
     )
 
     // 所有题目包含已经读过的题目，以及刚才读取的题目
     val dataList = readedQuizDTOList + chapterQuizDTOListMap.values.flatten()
+    val sortedDataList = dataList.sortedWith(
+      compareBy({ it.chapterIndex }, { it.quizIndex })
+    )
     // 将所有章节下面的所有题目写入到 CSV 中
     CsvUtils.writeToCsv(
       file = File(QuizUtils.defaultCsvFilePath),
       header = QuizUtils.getHeader(),
-      dataList = dataList
+      dataList = sortedDataList
         .map {
           it.toDataRow()
         }
