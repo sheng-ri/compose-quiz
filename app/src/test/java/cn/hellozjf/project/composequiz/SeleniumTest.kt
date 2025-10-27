@@ -155,7 +155,7 @@ class SeleniumTest {
 
   @Test
   fun test() {
-    val property = System.getProperty("JAVA_HOME")
+    val property = System.getenv("JAVA_HOME")
     println(property)
   }
 }
