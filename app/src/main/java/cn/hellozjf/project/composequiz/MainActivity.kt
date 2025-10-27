@@ -19,7 +19,7 @@ import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import cn.hellozjf.project.composequiz.ui.screen.NavDisplayScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import cn.hellozjf.project.composequiz.util.ChapterConstant
-import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
+import cn.hellozjf.project.composequiz.util.QuizConstant
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
@@ -174,22 +174,22 @@ class MainActivity : ComponentActivity() {
     chapterQuizViewModel: ChapterQuizViewModel
   ) {
     try {
-      this.assets.open(ChapterQuizConstant.PATH_EN).bufferedReader().use { reader ->
+      this.assets.open(QuizConstant.PATH_EN).bufferedReader().use { reader ->
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         // key 为 chapterIndex，value 为 quizIndex
         val map = mutableMapOf<Int, Int>()
         for (record in csvParser) {
-          val chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt()
+          val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
           val quizIndex = map.getOrDefault(chapterIndex, 0)
           map.put(chapterIndex, quizIndex + 1)
           val quizEn = QuizEn(
             chapterIndex = chapterIndex,
             quizIndex = quizIndex,
-            question = record.get(ChapterQuizConstant.QUESTION),
-            options = Converters().fromString(record.get(ChapterQuizConstant.OPTIONS)),
-            correctOptionIndex = record.get(ChapterQuizConstant.CORRECT_OPTION_INDEX).toInt(),
-            explanation = record.get(ChapterQuizConstant.EXPLANATION)
+            question = record.get(QuizConstant.QUESTION),
+            options = Converters().fromString(record.get(QuizConstant.OPTIONS)),
+            correctOptionIndex = record.get(QuizConstant.CORRECT_OPTION_INDEX).toInt(),
+            explanation = record.get(QuizConstant.EXPLANATION)
           )
           chapterQuizViewModel.insertQuiz(quizEn)
         }
@@ -204,22 +204,22 @@ class MainActivity : ComponentActivity() {
     chapterQuizViewModel: ChapterQuizViewModel
   ) {
     try {
-      this.assets.open(ChapterQuizConstant.PATH_ZH).bufferedReader().use { reader ->
+      this.assets.open(QuizConstant.PATH_ZH).bufferedReader().use { reader ->
         val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
 
         // key 为 chapterIndex，value 为 quizIndex
         val map = mutableMapOf<Int, Int>()
         for (record in csvParser) {
-          val chapterIndex = record.get(ChapterQuizConstant.CHAPTER_INDEX).toInt()
+          val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
           val quizIndex = map.getOrDefault(chapterIndex, 0)
           map.put(chapterIndex, quizIndex + 1)
           val quiz = QuizZh(
             chapterIndex = chapterIndex,
             quizIndex = quizIndex,
-            question = record.get(ChapterQuizConstant.QUESTION),
-            options = Converters().fromString(record.get(ChapterQuizConstant.OPTIONS)),
-            correctOptionIndex = record.get(ChapterQuizConstant.CORRECT_OPTION_INDEX).toInt(),
-            explanation = record.get(ChapterQuizConstant.EXPLANATION)
+            question = record.get(QuizConstant.QUESTION),
+            options = Converters().fromString(record.get(QuizConstant.OPTIONS)),
+            correctOptionIndex = record.get(QuizConstant.CORRECT_OPTION_INDEX).toInt(),
+            explanation = record.get(QuizConstant.EXPLANATION)
           )
           chapterQuizViewModel.insertQuiz(quiz)
         }

@@ -1,6 +1,8 @@
 package cn.hellozjf.project.composequiz.util
 
+import cn.hellozjf.project.composequiz.database.converter.Converters
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.apache.commons.csv.CSVPrinter
@@ -33,45 +35,6 @@ class CsvUtils {
         }
         println("CSV 文件写入完成！")
       }
-    }
-
-    /**
-     * 从文件中读取章节信息
-     */
-    fun readChapterDTOListFromCsv(
-      file: File
-    ): List<ChapterDTO> {
-
-      val result = mutableListOf<ChapterDTO>()
-
-      try {
-        FileReader(file).use { reader ->
-
-          val format = CSVFormat.Builder.create(CSVFormat.DEFAULT)
-            .setHeader()
-            .build()
-          val csvParser = CSVParser(reader, format)
-
-          for (record in csvParser) {
-            val chapterIndex = record.get(ChapterConstant.INDEX).toInt()
-            val fullTitle = record.get(ChapterConstant.FULL_TITLE)
-            val simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
-            val simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-            val actualUrl = record.get(ChapterConstant.FULL_URL)
-            result.add(ChapterDTO(
-              index = chapterIndex,
-              fullTitle = fullTitle,
-              simpleTitle = simpleTitle,
-              simpleUrl = simpleUrl,
-              fullUrl = actualUrl
-            ))
-          }
-        }
-      } catch (e: IOException) {
-        e.printStackTrace()
-      }
-
-      return result.toList()
     }
   }
 }

@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.dto
 
+import cn.hellozjf.project.composequiz.database.converter.Converters
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 
@@ -24,6 +25,20 @@ data class QuizDTO(
     return QuizKey(
       chapterIndex = chapterIndex,
       quizIndex = quizIndex
+    )
+  }
+
+  /**
+   * 生成用于 Excel 或 CSV 上面的数据行
+   */
+  fun toDataRow(): List<String> {
+    return listOf(
+      chapterIndex.toString(),
+      quizIndex.toString(),
+      question,
+      Converters().fromList(options),
+      correctOptionIndex.toString(),
+      explanation
     )
   }
 }

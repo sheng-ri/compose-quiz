@@ -62,12 +62,13 @@ class SeleniumUtils {
 
     /**
      * 根据提供的 chapterIndex，获取该章下面所有的问题列表
+     * 这些问题已经按照字母顺序排过序了，并且选项也是按字母顺序排过序的
      */
     fun getQuizList(
       driver: WebDriver,
-      shortTimeout: Long,
-      longTimeout: Long,
-      chapterIndex: Int = 0
+      chapterIndex: Int,
+      shortTimeout: Long = 1L,
+      longTimeout: Long = 10L
     ): List<QuizDTO> {
 
       println("正在获取第${chapterIndex}章问答题目")
