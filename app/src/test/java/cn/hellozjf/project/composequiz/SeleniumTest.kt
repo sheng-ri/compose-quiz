@@ -139,7 +139,7 @@ class SeleniumTest {
       ChapterConstant.FULL_TITLE,
       ChapterConstant.SIMPLE_TITLE,
       ChapterConstant.SIMPLE_URL,
-      ChapterConstant.ACTUAL_URL
+      ChapterConstant.FULL_URL
     )
 
     val chapterInfoList = PdfUtils.getAllChapterInfoList()
@@ -206,29 +206,20 @@ class SeleniumTest {
 //    }
 
     // 读取章节 CSV，然后依次打开每章 URL，读取该章下面的题目
-    try {
-      FileReader("src/main/assets/${ChapterConstant.PATH_EN}").use { reader ->
-        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
-
-        for (record in csvParser) {
-          val chapterIndex = record.get(ChapterConstant.INDEX).toInt()
-          if (chatperSet.contains(chapterIndex)) {
-            continue
-          }
-          val actualUrl = record.get(ChapterConstant.ACTUAL_URL)
-          driver.get(actualUrl)
-          val quizList = SeleniumUtils.getQuizList(
-            driver = driver,
-            shortTimeout = 1,
-            longTimeout = 10,
-            chapterIndex = chapterIndex
-          )
-          chapterQuizList.add(quizList)
-        }
-
+    val file = File("src/main/assets/${ChapterConstant.PATH_EN}")
+    val chapterList = CsvUtils.readChaptersFromCsv(file)
+    for (chapter in chapterList) {
+      if (chatperSet.contains(chapter.index)) {
+        continue
       }
-    } catch (e: IOException) {
-      e.printStackTrace()
+      driver.get(chapter.fullUrl)
+      val quizList = SeleniumUtils.getQuizList(
+        driver = driver,
+        shortTimeout = 1,
+        longTimeout = 10,
+        chapterIndex = chapter.index
+      )
+      chapterQuizList.add(quizList)
     }
 
     // 将所有章节下面的所有题目写入到 CSV 中

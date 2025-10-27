@@ -137,7 +137,7 @@ class MainActivity : ComponentActivity() {
           chapterEn.fullTitle = record.get(ChapterConstant.FULL_TITLE)
           chapterEn.simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
           chapterEn.simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-          chapterEn.fullUrl = record.get(ChapterConstant.ACTUAL_URL)
+          chapterEn.fullUrl = record.get(ChapterConstant.FULL_URL)
           chapterViewModel.insertChapter(chapterEn)
         }
 
@@ -160,7 +160,7 @@ class MainActivity : ComponentActivity() {
           chapter.fullTitle = record.get(ChapterConstant.FULL_TITLE)
           chapter.simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
           chapter.simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-          chapter.fullUrl = record.get(ChapterConstant.ACTUAL_URL)
+          chapter.fullUrl = record.get(ChapterConstant.FULL_URL)
           chapterViewModel.insertChapter(chapter)
         }
 
