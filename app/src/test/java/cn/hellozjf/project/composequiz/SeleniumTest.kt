@@ -4,12 +4,11 @@ import cn.hellozjf.project.composequiz.database.converter.Converters
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.util.ChapterConstant
 import cn.hellozjf.project.composequiz.util.ChapterQuizConstant
+import cn.hellozjf.project.composequiz.util.ChapterUtils
 import cn.hellozjf.project.composequiz.util.CsvUtils
 import cn.hellozjf.project.composequiz.util.ExcelUtils
 import cn.hellozjf.project.composequiz.util.PdfUtils
 import cn.hellozjf.project.composequiz.util.SeleniumUtils
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -20,8 +19,6 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.openqa.selenium.support.ui.ExpectedConditions
 import org.openqa.selenium.support.ui.WebDriverWait
 import java.io.File
-import java.io.FileReader
-import java.io.IOException
 import java.time.Duration
 
 /**
@@ -31,6 +28,9 @@ class SeleniumTest {
 
   // 声明 WebDriver 变量
   private lateinit var driver: WebDriver
+
+  private val defaultPdfFilePath =
+    "D:\\hellozjf\\code\\gitee\\ComposeQuiz\\other\\book\\JetpackCompose1.8Essentials\\JetpackCompose1.8Essentials.pdf"
 
   /**
    * 在每个测试方法运行前执行 (对应 JUnit 4 的 @Before)。
@@ -76,89 +76,66 @@ class SeleniumTest {
     println("浏览器已关闭。")
   }
 
+  /**
+   * 从 PDF 文件中读取章节信息，并打印章节信息
+   */
   @Test
-  fun readPdf() {
-    println("正在获取PDF章节信息")
-    val allChapterInfoList = PdfUtils.getAllChapterInfoList()
-    for (chapterInfo in allChapterInfoList) {
-      println(chapterInfo)
-    }
-  }
-
-  @Test
-  fun readPdf2() {
-    val chapterInfoList = PdfUtils.getAllChapterInfoList()
-    val fullChapterInfoList = SeleniumUtils.getAllChapterInfoList(
-      chapterInfoList = chapterInfoList,
-      driver = driver,
-      timeoutSeconds = 10L
+  fun readPdfAndPrintSimple() {
+    val chapterDTOList = PdfUtils.getChapterDTOList(
+      file = File(defaultPdfFilePath)
     )
-    for (fullChapterInfo in fullChapterInfoList) {
-      println(fullChapterInfo)
+    for (chapterDTO in chapterDTOList) {
+      println(chapterDTO)
     }
   }
 
+  /**
+   * 从 PDF 文件中读取章节信息，使用 selenium 完善章节信息，并打印章节信息
+   */
+  @Test
+  fun readPdfAndPrintFull() {
+    val chapterDTOList = ChapterUtils.getChapterDTOListFromPdfFile(
+      file = File(defaultPdfFilePath),
+      driver = driver
+    )
+    for (chapterDTO in chapterDTOList) {
+      println(chapterDTO)
+    }
+  }
+
+  /**
+   * 从 PDF 文件中读取章节信息，使用 selenium 完善章节信息，并写入到 excel 文件中
+   */
   @Test
   fun readPdfAndWriteExcel() {
-
-    val timeoutSeconds = 10L
-
-    // 把 chapterInfoList 写入到 excel 中
-    val title = listOf("章节号", "章节标题", "简化标题", "习题网址", "实际网址")
-
-    val chapterInfoList = PdfUtils.getAllChapterInfoList()
-    val fullChapterInfoList =
-      SeleniumUtils.getAllChapterInfoList(chapterInfoList, driver, timeoutSeconds)
-    val dataList = fullChapterInfoList.map {
-      listOf(
-        it.index.toString(),
-        it.title,
-        it.simpleTitle,
-        it.url,
-        it.actualUrl
-      )
-    }
+    val chapterDTOList = ChapterUtils.getChapterDTOListFromPdfFile(
+      file = File(defaultPdfFilePath),
+      driver = driver
+    )
     ExcelUtils.writeToExcel(
       file = File("output.xlsx"),
-      title = title,
-      dataList = dataList
+      header = ChapterUtils.getHeader(),
+      dataList = chapterDTOList.map {
+        it.toDataRow()
+      }
     )
   }
 
   /**
-   * 读取 PDF，并且将章节目录写入到 CSV 中
+   * 从 PDF 文件中读取章节信息，使用 selenium 完善章节信息，并写入到 csv 文件中
    */
   @Test
   fun readPdfAndWriteCsv() {
-
-    val timeoutSeconds = 10L
-
-    // 把 chapterInfoList 写入到 excel 中
-    val header = listOf(
-      ChapterConstant.INDEX,
-      ChapterConstant.FULL_TITLE,
-      ChapterConstant.SIMPLE_TITLE,
-      ChapterConstant.SIMPLE_URL,
-      ChapterConstant.FULL_URL
+    val chapterDTOList = ChapterUtils.getChapterDTOListFromPdfFile(
+      file = File(defaultPdfFilePath),
+      driver = driver
     )
-
-    val chapterInfoList = PdfUtils.getAllChapterInfoList()
-    val fullChapterInfoList =
-      SeleniumUtils.getAllChapterInfoList(chapterInfoList, driver, timeoutSeconds)
-    val dataList = fullChapterInfoList.map {
-      listOf(
-        it.index.toString(),
-        it.title,
-        it.simpleTitle,
-        it.url,
-        it.actualUrl
-      )
-    }
-
     CsvUtils.writeToCsv(
       file = File("src/main/assets/${ChapterConstant.PATH_EN}"),
-      header = header,
-      dataList = dataList
+      header = ChapterUtils.getHeader(),
+      dataList = chapterDTOList.map {
+        it.toDataRow()
+      }
     )
   }
 
@@ -206,8 +183,9 @@ class SeleniumTest {
 //    }
 
     // 读取章节 CSV，然后依次打开每章 URL，读取该章下面的题目
-    val file = File("src/main/assets/${ChapterConstant.PATH_EN}")
-    val chapterList = CsvUtils.readChaptersFromCsv(file)
+    val chapterList = CsvUtils.readChapterDTOListFromCsv(
+      file = File("src/main/assets/${ChapterConstant.PATH_EN}")
+    )
     for (chapter in chapterList) {
       if (chatperSet.contains(chapter.index)) {
         continue

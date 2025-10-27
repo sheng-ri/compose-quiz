@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.util
 
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import org.openqa.selenium.By
 import org.openqa.selenium.WebDriver
@@ -15,57 +16,46 @@ class SeleniumUtils {
     val TARGET_DIR = (System.getProperty("java.io.tmpdir") ?: "") + "\\.chrome_driver"
     val DRIVER_FILE_NAME = "chromedriver.exe"
 
-    data class FullChapterInfo(
-      val index: Int,
-      val title: String,
-      val simpleTitle: String,
-      val url: String,
-      val actualUrl: String
-    )
-
     /**
-     * TODO 这里返回 List<ChapterDTO>
+     * 填充 chapterDTOList 中的简化标题和实际习题网址
      */
-    fun getAllChapterInfoList(
-      chapterInfoList: List<PdfUtils.ChapterInfo>,
+    fun fillChapterDTOList(
+      chapterDTOList: List<ChapterDTO>,
       driver: WebDriver,
       timeoutSeconds: Long
-    ): List<FullChapterInfo> {
+    ): List<ChapterDTO> {
 
-      val result = mutableListOf<FullChapterInfo>()
+      val result = mutableListOf<ChapterDTO>()
 
-      for (chapterInfo in chapterInfoList) {
+      for (chapterDTO in chapterDTOList) {
         // println(chapterInfo)
-        if (chapterInfo.index == 1) {
+        if (chapterDTO.index == 1) {
           // 第一章是所有测试的汇总地址，跳过
           continue
         }
-        chapterInfo.url?.let {
-          // 上面的内容还不够，我需要简化的标题和实际的习题网址
-          // 所以需要用 selenium 打开网页，获取页面元素信息
-          driver.get(it)
-          WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
-            ExpectedConditions.presenceOfElementLocated(
-              By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title")
-            )
-          )
-          // 获取本章简化标题
-          val elements = driver.findElements(
+
+        // 上面的内容还不够，我需要简化的标题和实际的习题网址
+        // 所以需要用 selenium 打开网页，获取页面元素信息
+        driver.get(chapterDTO.simpleUrl)
+        WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds)).until(
+          ExpectedConditions.presenceOfElementLocated(
             By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title")
           )
-          val simpleTitle = elements[0].text
-          val actualUrl = driver.currentUrl ?: ""
-          println("index: ${chapterInfo.index}, title: $simpleTitle, url: ${driver.currentUrl}")
-          result.add(
-            FullChapterInfo(
-              index = chapterInfo.index,
-              title = chapterInfo.title,
-              simpleTitle = simpleTitle,
-              url = it,
-              actualUrl = actualUrl
-            )
+        )
+        // 获取本章简化标题
+        val elements = driver.findElements(
+          By.cssSelector("h1.has-text-align-center.alignwide.wp-block-post-title")
+        )
+        val simpleTitle = elements[0].text
+        val fullUrl = driver.currentUrl ?: ""
+        println("index: ${chapterDTO.index}, title: $simpleTitle, url: ${driver.currentUrl}")
+        result.add(
+          chapterDTO.copy(
+            simpleTitle = simpleTitle,
+            fullUrl = fullUrl
           )
-        }
+        )
+
       }
       return result
     }

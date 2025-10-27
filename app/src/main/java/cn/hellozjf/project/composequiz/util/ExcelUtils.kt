@@ -13,7 +13,7 @@ class ExcelUtils {
   companion object {
     fun writeToExcel(
       file: File,
-      title: List<String>,
+      header: List<String>,
       dataList: List<List<String>>
     ) {
       // 创建工作簿
@@ -25,7 +25,7 @@ class ExcelUtils {
         // 创建标题行
         val headerRow: Row = sheet.createRow(0)
 
-        title.forEachIndexed { index, header ->
+        header.forEachIndexed { index, header ->
           val cell = headerRow.createCell(index)
           cell.setCellValue(header)
 
@@ -47,7 +47,7 @@ class ExcelUtils {
         }
 
         // 自动调整列宽
-        title.indices.forEach { index ->
+        header.indices.forEach { index ->
           sheet.autoSizeColumn(index)
         }
 

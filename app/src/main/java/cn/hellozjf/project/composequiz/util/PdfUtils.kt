@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.util
 
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.action.PDActionGoTo
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination
@@ -39,12 +40,6 @@ class PdfUtils {
     val pageNumber: Int,
     val content: String,
     val children: List<BookmarkLevelContent>
-  )
-
-  data class ChapterInfo(
-    val index: Int,
-    val title: String,
-    val url: String?
   )
 
   companion object {
@@ -247,8 +242,8 @@ class PdfUtils {
      */
     private fun convert2(
       bookmarkLevelContentList: List<BookmarkLevelContent>
-    ): List<ChapterInfo> {
-      val chapterInfoList = mutableListOf<ChapterInfo>()
+    ): List<ChapterDTO> {
+      val chapterDTOList = mutableListOf<ChapterDTO>()
       for (bookmarkLevelContent in bookmarkLevelContentList) {
         // 把 index 的最后一个 . 去掉，转换为数字
         val oldIndex = bookmarkLevelContent.index
@@ -269,9 +264,20 @@ class PdfUtils {
             break
           }
         }
-        chapterInfoList.add(ChapterInfo(index, title, url))
+        url?.let {
+          chapterDTOList.add(
+            ChapterDTO(
+              id = 0,
+              index = index,
+              fullTitle = title,
+              simpleTitle = "",
+              simpleUrl = it,
+              fullUrl = ""
+            )
+          )
+        }
       }
-      return chapterInfoList
+      return chapterDTOList
     }
 
     private fun getBookmarkLevelContentList(
@@ -304,20 +310,19 @@ class PdfUtils {
       return result
     }
 
-    /**
-     * "D:\\hellozjf\\code\\gitee\\ComposeQuiz\\other\\book\\JetpackCompose1.8Essentials\\JetpackCompose1.8Essentials.pdf"
-     */
-    fun getAllChapterInfoList(
+    private fun getChapterDTOList(
       path: String = "D:\\hellozjf\\code\\gitee\\ComposeQuiz\\other\\book\\JetpackCompose1.8Essentials\\JetpackCompose1.8Essentials.pdf"
-    ): List<ChapterInfo> {
+    ): List<ChapterDTO> {
       val pdfFile = File(path)
-//      println(1)
-      val bookmarks = extractBookmarkContents(pdfFile)
-//      println(2)
+      return getChapterDTOList(pdfFile)
+    }
+
+    fun getChapterDTOList(
+      file: File
+    ): List<ChapterDTO> {
+      val bookmarks = extractBookmarkContents(file)
       val bookmarkLevelContentList = convert(bookmarks)
-//      println(3)
       val chapterInfoList = convert2(bookmarkLevelContentList)
-//      println(4)
       return chapterInfoList
     }
   }

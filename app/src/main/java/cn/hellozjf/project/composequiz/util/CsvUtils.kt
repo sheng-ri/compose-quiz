@@ -38,7 +38,7 @@ class CsvUtils {
     /**
      * 从文件中读取章节信息
      */
-    fun readChaptersFromCsv(
+    fun readChapterDTOListFromCsv(
       file: File
     ): List<ChapterDTO> {
 
