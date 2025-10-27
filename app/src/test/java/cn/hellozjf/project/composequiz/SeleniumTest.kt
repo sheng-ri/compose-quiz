@@ -152,4 +152,10 @@ class SeleniumTest {
         }
     )
   }
+
+  @Test
+  fun test() {
+    val property = System.getProperty("JAVA_HOME")
+    println(property)
+  }
 }

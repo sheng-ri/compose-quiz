@@ -56,15 +56,14 @@ fun ChapterListPreview() {
     for (i in 0 until 10) {
       result.add(
         run {
-          val chapterDTO = ChapterDTO(
+          ChapterDTO(
+            id = i,
             index = i,
             simpleTitle = "简单标题$i",
             fullTitle = "完全标题$i",
             simpleUrl = "http://xxx.com/sim/$i",
             fullUrl = "http://xxx.com/full/$i"
           )
-          chapterDTO.id = i
-          chapterDTO
         }
       )
     }
