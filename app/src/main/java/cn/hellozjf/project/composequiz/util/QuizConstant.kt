@@ -5,8 +5,6 @@ package cn.hellozjf.project.composequiz.util
  */
 class QuizConstant {
   companion object {
-    val PATH_EN = "csv/quiz.en.csv"
-    val PATH_ZH = "csv/quiz.zh.csv"
     val CHAPTER_INDEX = "章节序号"      // 实际书中的章节序号
     val QUIZ_INDEX = "题目序号"         // 从0开始的题目序号
     val QUESTION = "问题"

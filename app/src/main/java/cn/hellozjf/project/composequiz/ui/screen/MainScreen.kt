@@ -25,7 +25,7 @@ import cn.hellozjf.project.composequiz.ui.component.DailyQuiz
 import cn.hellozjf.project.composequiz.ui.component.FavoriteQuizPanel
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 
@@ -39,7 +39,7 @@ import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 @Composable
 fun MainScreen(
   chapterViewModel: ChapterViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  quizViewModel: QuizViewModel,
   configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
@@ -100,7 +100,7 @@ fun MainScreen(
               language = language,
               lastTestChapterIndex = lastTestChapterIndex,
               chapterDTOList = chapterList,
-              findQuizDTOByChapterIndex = chapterQuizViewModel::findQuizDTOListByChapterIndex,
+              findQuizDTOByChapterIndex = quizViewModel::findQuizDTOListByChapterIndex,
               onNavigation = onNavigation
             )
           }
@@ -109,10 +109,10 @@ fun MainScreen(
             FavoriteQuizPanel(
               language = config.language,
               getChapterDTOByIndex = chapterViewModel::findDTOByIndex,
-              findByFavoriteOrderByChapterIndex = chapterQuizViewModel::findDTOListByFavoriteOrderByChapterIndex,
-              findByFavoriteOrderByFavoriteTime = chapterQuizViewModel::findDTOListByFavoriteOrderByFavoriteTime,
-              findByFavoriteOrderByWrongAnswerCount = chapterQuizViewModel::findDTOListByFavoriteOrderByWrongAnswerCount,
-              findQuizDTOByFavorite = chapterQuizViewModel::findQuizListByFavorite,
+              findByFavoriteOrderByChapterIndex = quizViewModel::findDTOListByFavoriteOrderByChapterIndex,
+              findByFavoriteOrderByFavoriteTime = quizViewModel::findDTOListByFavoriteOrderByFavoriteTime,
+              findByFavoriteOrderByWrongAnswerCount = quizViewModel::findDTOListByFavoriteOrderByWrongAnswerCount,
+              findQuizDTOByFavorite = quizViewModel::findQuizListByFavorite,
               onNavigation = onNavigation
             )
           }

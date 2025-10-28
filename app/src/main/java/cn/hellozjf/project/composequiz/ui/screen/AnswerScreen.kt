@@ -27,7 +27,7 @@ import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 
@@ -43,7 +43,7 @@ fun AnswerScreen(
   // oldQuizDTOList: List<QuizDTO>,
   quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  quizViewModel: QuizViewModel,
   configViewModel: ConfigViewModel,
   chooseOptionMap: Map<QuizKey, OptionKey>,
   quizOrderList: List<Int>,
@@ -56,7 +56,7 @@ fun AnswerScreen(
     Config(language = LanguageConstant.EN)
   )
 
-  val quizList by chapterQuizViewModel.findFlowByKeyList(
+  val quizList by quizViewModel.findFlowByKeyList(
     language = config.language,
     quizKeyList = quizKeyList
   ).collectAsState(listOf())
@@ -99,7 +99,7 @@ fun AnswerScreen(
         totalCorrectCount++
       } else {
         // 这题答错了，需要记录答错次数
-        chapterQuizViewModel.incWrongAnswerCount(quiz.chapterIndex, quiz.quizIndex)
+        quizViewModel.incWrongAnswerCount(quiz.chapterIndex, quiz.quizIndex)
       }
     }
     Log.d(TAG, "totalCorrectCount = $totalCorrectCount")
@@ -135,7 +135,7 @@ fun AnswerScreen(
             item(key = quizDTO.getQuizKey().toString()) {
               val selectOptionKey = chooseOptionMap[quizDTO.getQuizKey()]
               QuizAnswerItem(
-                setFavorite = chapterQuizViewModel::setFavorite,
+                setFavorite = quizViewModel::setFavorite,
                 index = index,
                 quizDTO = quizDTO,
                 selectedOptionKey = selectOptionKey,

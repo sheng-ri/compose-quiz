@@ -84,5 +84,5 @@ interface ChapterZhDao {
   suspend fun deleteAll()
 
   @Query("SELECT count(*) FROM chapter_zh")
-  fun getCount(): Int
+  suspend fun getCount(): Int
 }

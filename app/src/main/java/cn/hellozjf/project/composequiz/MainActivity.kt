@@ -11,25 +11,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import cn.hellozjf.project.composequiz.database.converter.Converters
-import cn.hellozjf.project.composequiz.database.entity.ChapterEn
-import cn.hellozjf.project.composequiz.database.entity.ChapterZh
-import cn.hellozjf.project.composequiz.database.entity.QuizEn
-import cn.hellozjf.project.composequiz.database.entity.QuizZh
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.ui.screen.NavDisplayScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
-import cn.hellozjf.project.composequiz.util.ChapterConstant
-import cn.hellozjf.project.composequiz.util.QuizConstant
+import cn.hellozjf.project.composequiz.util.AssetUtils
+import cn.hellozjf.project.composequiz.util.ChapterUtils
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.util.QuizUtils
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
-import java.io.IOException
 
 class MainActivity : ComponentActivity() {
 
@@ -44,10 +39,10 @@ class MainActivity : ComponentActivity() {
         val coroutineScope = rememberCoroutineScope()
         val owner = LocalViewModelStoreOwner.current
         owner?.let {
-          val chapterQuizViewModel: ChapterQuizViewModel = viewModel(
+          val quizViewModel: QuizViewModel = viewModel(
             viewModelStoreOwner = it,
-            key = "ChapterQuizViewModel",
-            factory = ChapterQuizViewModelFactory(
+            key = "QuizViewModel",
+            factory = QuizViewModelFactory(
               LocalContext.current.applicationContext as Application
             )
           )
@@ -67,7 +62,7 @@ class MainActivity : ComponentActivity() {
           )
           NavDisplayScreen(
             chapterViewModel = chapterViewModel,
-            chapterQuizViewModel = chapterQuizViewModel,
+            quizViewModel = quizViewModel,
             configViewModel = configViewModel
           )
 
@@ -75,7 +70,7 @@ class MainActivity : ComponentActivity() {
           readCsvAndWriteToDB(
             coroutineScope = coroutineScope,
             chapterViewModel = chapterViewModel,
-            chapterQuizViewModel = chapterQuizViewModel
+            quizViewModel = quizViewModel
           )
         }
       }
@@ -88,154 +83,120 @@ class MainActivity : ComponentActivity() {
   private fun readCsvAndWriteToDB(
     coroutineScope: CoroutineScope,
     chapterViewModel: ChapterViewModel,
-    chapterQuizViewModel: ChapterQuizViewModel
+    quizViewModel: QuizViewModel
   ) {
     // 读取章节信息
     coroutineScope.launch(context = Dispatchers.IO) {
 
       if (chapterViewModel.getCount(LanguageConstant.EN) == 0) {
         // 英文的章节表没有初始化过
-        readChapterEnCsv(chapterViewModel)
+        readChapterEnCsvAndWriteToDB(chapterViewModel)
       }
       if (chapterViewModel.getCount(LanguageConstant.ZH) == 0) {
         // 中文的章节表没有初始化过
-        readChapterZhCsv(chapterViewModel)
+        readChapterZhCsvAndWriteToDB(chapterViewModel)
       }
 
-      if (chapterQuizViewModel.getCount(LanguageConstant.EN) == 0) {
+      if (quizViewModel.getCount(LanguageConstant.EN) == 0) {
         // 英文的题目表没有初始化过
-        readQuizEnCsv(chapterQuizViewModel)
+        readQuizEnCsvAndWriteToDB(quizViewModel)
       }
-      if (chapterQuizViewModel.getCount(LanguageConstant.ZH) == 0) {
+      if (quizViewModel.getCount(LanguageConstant.ZH) == 0) {
         // 中文的题目表没有初始化过
-        readQuizZhCsv(chapterQuizViewModel)
+        readQuizZhCsvAndWriteToDB(quizViewModel)
       }
-      if (chapterQuizViewModel.getExtCount() == 0) {
+      if (quizViewModel.getExtCount() == 0) {
         // EXT表没有初始化过
-        initQuizExt(chapterQuizViewModel)
+        initQuizExtAndWriteToDB(quizViewModel)
       }
     }
   }
 
-  private suspend fun initQuizExt(
-    chapterQuizViewModel: ChapterQuizViewModel
+  private suspend fun initQuizExtAndWriteToDB(
+    quizViewModel: QuizViewModel
   ) {
-    val quizKeyList = chapterQuizViewModel.findQuizKeyList(language = LanguageConstant.EN)
-    chapterQuizViewModel.initExtList(quizKeyList)
+    val quizKeyList = quizViewModel.findQuizKeyList(language = LanguageConstant.EN)
+    quizViewModel.initExtList(quizKeyList)
   }
 
-  private suspend fun readChapterEnCsv(
+  private suspend fun readChapterEnCsvAndWriteToDB(
     chapterViewModel: ChapterViewModel
   ) {
-    try {
-      this.assets.open(ChapterConstant.PATH_EN).bufferedReader().use { reader ->
-        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
-
-        for (record in csvParser) {
-          val chapterEn = ChapterEn()
-          chapterEn.index = record.get(ChapterConstant.INDEX).toInt()
-          chapterEn.fullTitle = record.get(ChapterConstant.FULL_TITLE)
-          chapterEn.simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
-          chapterEn.simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-          chapterEn.fullUrl = record.get(ChapterConstant.FULL_URL)
-          chapterViewModel.insertChapter(chapterEn)
-        }
-
+    var chapterDTOList: List<ChapterDTO>? = null
+    AssetUtils.openAndRead(
+      context = this,
+      path = AssetUtils.CHAPTER_EN_CSV
+    ) { reader ->
+      chapterDTOList = ChapterUtils.getChapterDTOListFromCsv(reader)
+    }
+    chapterDTOList?.let {
+      for (chapterDTO in it) {
+        val chapterEn = chapterDTO.toChapterEn()
+        chapterViewModel.insertChapter(chapterEn)
       }
-    } catch (e: IOException) {
-      e.printStackTrace()
     }
   }
 
-  private suspend fun readChapterZhCsv(
+  private suspend fun readChapterZhCsvAndWriteToDB(
     chapterViewModel: ChapterViewModel
   ) {
-    try {
-      this.assets.open(ChapterConstant.PATH_ZH).bufferedReader().use { reader ->
-        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
-
-        for (record in csvParser) {
-          val chapter = ChapterZh()
-          chapter.index = record.get(ChapterConstant.INDEX).toInt()
-          chapter.fullTitle = record.get(ChapterConstant.FULL_TITLE)
-          chapter.simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
-          chapter.simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-          chapter.fullUrl = record.get(ChapterConstant.FULL_URL)
-          chapterViewModel.insertChapter(chapter)
-        }
-
+    var chapterDTOList: List<ChapterDTO>? = null
+    AssetUtils.openAndRead(
+      context = this,
+      path = AssetUtils.CHAPTER_ZH_CSV
+    ) { reader ->
+      chapterDTOList = ChapterUtils.getChapterDTOListFromCsv(reader)
+    }
+    chapterDTOList?.let {
+      for (chapterDTO in it) {
+        val chapterZh = chapterDTO.toChapterZh()
+        chapterViewModel.insertChapter(chapterZh)
       }
-    } catch (e: IOException) {
-      e.printStackTrace()
     }
   }
 
-  private suspend fun readQuizEnCsv(
-    chapterQuizViewModel: ChapterQuizViewModel
+  private suspend fun readQuizEnCsvAndWriteToDB(
+    quizViewModel: QuizViewModel
   ) {
-    try {
-      this.assets.open(QuizConstant.PATH_EN).bufferedReader().use { reader ->
-        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
-
-        // key 为 chapterIndex，value 为 quizIndex
-        val map = mutableMapOf<Int, Int>()
-        for (record in csvParser) {
-          val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
-          val quizIndex = map.getOrDefault(chapterIndex, 0)
-          map.put(chapterIndex, quizIndex + 1)
-          val quizEn = QuizEn(
-            chapterIndex = chapterIndex,
-            quizIndex = quizIndex,
-            question = record.get(QuizConstant.QUESTION),
-            options = Converters().fromString(record.get(QuizConstant.OPTIONS)),
-            correctOptionIndex = record.get(QuizConstant.CORRECT_OPTION_INDEX).toInt(),
-            explanation = record.get(QuizConstant.EXPLANATION)
-          )
-          chapterQuizViewModel.insertQuiz(quizEn)
-        }
-
+    var quizDTOList: List<QuizDTO>? = null
+    AssetUtils.openAndRead(
+      context = this,
+      path = AssetUtils.QUIZ_EN_CSV
+    ) { reader ->
+      quizDTOList = QuizUtils.getQuizDTOListFromCsv(reader)
+    }
+    quizDTOList?.let {
+      for (quizDTO in it) {
+        val quizEn = quizDTO.toQuizEn()
+        quizViewModel.insertQuiz(quizEn)
       }
-    } catch (e: IOException) {
-      e.printStackTrace()
     }
   }
 
-  private suspend fun readQuizZhCsv(
-    chapterQuizViewModel: ChapterQuizViewModel
+  private suspend fun readQuizZhCsvAndWriteToDB(
+    quizViewModel: QuizViewModel
   ) {
-    try {
-      this.assets.open(QuizConstant.PATH_ZH).bufferedReader().use { reader ->
-        val csvParser = CSVParser(reader, CSVFormat.DEFAULT.withHeader())
-
-        // key 为 chapterIndex，value 为 quizIndex
-        val map = mutableMapOf<Int, Int>()
-        for (record in csvParser) {
-          val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
-          val quizIndex = map.getOrDefault(chapterIndex, 0)
-          map.put(chapterIndex, quizIndex + 1)
-          val quiz = QuizZh(
-            chapterIndex = chapterIndex,
-            quizIndex = quizIndex,
-            question = record.get(QuizConstant.QUESTION),
-            options = Converters().fromString(record.get(QuizConstant.OPTIONS)),
-            correctOptionIndex = record.get(QuizConstant.CORRECT_OPTION_INDEX).toInt(),
-            explanation = record.get(QuizConstant.EXPLANATION)
-          )
-          chapterQuizViewModel.insertQuiz(quiz)
-        }
-
+    var quizDTOList: List<QuizDTO>? = null
+    AssetUtils.openAndRead(
+      context = this,
+      path = AssetUtils.QUIZ_ZH_CSV
+    ) { reader ->
+      quizDTOList = QuizUtils.getQuizDTOListFromCsv(reader)
+    }
+    quizDTOList?.let {
+      for (quizDTO in it) {
+        val quizZh = quizDTO.toQuizZh()
+        quizViewModel.insertQuiz(quizZh)
       }
-    } catch (e: IOException) {
-      e.printStackTrace()
     }
   }
 }
 
-class ChapterQuizViewModelFactory(
+class QuizViewModelFactory(
   val application: Application
 ) : ViewModelProvider.Factory {
   override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    return ChapterQuizViewModel(application) as T
+    return QuizViewModel(application) as T
   }
 }
 

@@ -8,13 +8,14 @@ import org.openqa.selenium.WebDriver
 import java.io.File
 import java.io.FileReader
 import java.io.IOException
+import java.io.Reader
 import kotlin.text.toInt
 
 class QuizUtils {
   companion object {
 
-    val defaultEnCsvFilePath = "src/main/assets/${QuizConstant.PATH_EN}"
-    val defaultZhCsvFilePath = "src/main/assets/${QuizConstant.PATH_ZH}"
+    val defaultEnCsvFilePath = "src/main/assets/${AssetUtils.QUIZ_EN_CSV}"
+    val defaultZhCsvFilePath = "src/main/assets/${AssetUtils.QUIZ_ZH_CSV}"
 
     /**
      * 从网络读取题目信息
@@ -56,45 +57,50 @@ class QuizUtils {
       )
     }
 
+    fun getQuizDTOListFromCsv(
+      reader: Reader
+    ): List<QuizDTO> {
+      val result = mutableListOf<QuizDTO>()
+
+      val format = CSVFormat.Builder.create(CSVFormat.DEFAULT)
+        .setHeader()
+        .build()
+      val csvParser = CSVParser(reader, format)
+
+      for (record in csvParser) {
+        val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
+        val quizIndex = record.get(QuizConstant.QUIZ_INDEX).toInt()
+        val question = record.get(QuizConstant.QUESTION)
+        val options = record.get(QuizConstant.OPTIONS)
+        val correctOptionIndex = record.get(QuizConstant.CORRECT_OPTION_INDEX).toInt()
+        val explanation = record.get(QuizConstant.EXPLANATION)
+        result.add(QuizDTO(
+          chapterIndex = chapterIndex,
+          quizIndex = quizIndex,
+          question = question,
+          options = Converters().fromString(options),
+          correctOptionIndex = correctOptionIndex,
+          explanation = explanation
+        ))
+      }
+
+      return result.toList()
+    }
+
     /**
      * 从文件中读取题目信息
      */
     fun getQuizDTOListFromCsv(
       file: File = File(defaultEnCsvFilePath)
     ): List<QuizDTO> {
-
-      val result = mutableListOf<QuizDTO>()
-
       try {
         FileReader(file).use { reader ->
-
-          val format = CSVFormat.Builder.create(CSVFormat.DEFAULT)
-            .setHeader()
-            .build()
-          val csvParser = CSVParser(reader, format)
-
-          for (record in csvParser) {
-            val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
-            val quizIndex = record.get(QuizConstant.QUIZ_INDEX).toInt()
-            val question = record.get(QuizConstant.QUESTION)
-            val options = record.get(QuizConstant.OPTIONS)
-            val correctOptionIndex = record.get(QuizConstant.CORRECT_OPTION_INDEX).toInt()
-            val explanation = record.get(QuizConstant.EXPLANATION)
-            result.add(QuizDTO(
-              chapterIndex = chapterIndex,
-              quizIndex = quizIndex,
-              question = question,
-              options = Converters().fromString(options),
-              correctOptionIndex = correctOptionIndex,
-              explanation = explanation
-            ))
-          }
+          return getQuizDTOListFromCsv(reader)
         }
       } catch (e: IOException) {
         e.printStackTrace()
+        return listOf()
       }
-
-      return result.toList()
     }
 
     /**

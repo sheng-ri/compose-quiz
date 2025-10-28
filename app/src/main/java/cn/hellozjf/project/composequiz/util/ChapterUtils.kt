@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver
 import java.io.File
 import java.io.FileReader
 import java.io.IOException
-import kotlin.text.toInt
+import java.io.Reader
 
 /**
  * 章节工具
@@ -18,8 +18,8 @@ class ChapterUtils {
 
     val defaultPdfFilePath =
       "D:\\hellozjf\\code\\gitee\\ComposeQuiz\\other\\book\\JetpackCompose1.8Essentials\\JetpackCompose1.8Essentials.pdf"
-    val defaultEnCsvFilePath = "src/main/assets/${ChapterConstant.PATH_EN}"
-    val defaultZhCsvFilePath = "src/main/assets/${ChapterConstant.PATH_ZH}"
+    val defaultEnCsvFilePath = "src/main/assets/${AssetUtils.CHAPTER_EN_CSV}"
+    val defaultZhCsvFilePath = "src/main/assets/${AssetUtils.CHAPTER_ZH_CSV}"
     val defaultExcelFilePath = "output.xlsx"
 
     /**
@@ -63,43 +63,50 @@ class ChapterUtils {
       )
     }
 
+    fun getChapterDTOListFromCsv(
+      reader: Reader
+    ): List<ChapterDTO> {
+      val result = mutableListOf<ChapterDTO>()
+
+      val format = CSVFormat.Builder.create(CSVFormat.DEFAULT)
+        .setHeader()
+        .build()
+      val csvParser = CSVParser(reader, format)
+
+      for (record in csvParser) {
+        val chapterIndex = record.get(ChapterConstant.INDEX).toInt()
+        val fullTitle = record.get(ChapterConstant.FULL_TITLE)
+        val simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
+        val simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
+        val actualUrl = record.get(ChapterConstant.FULL_URL)
+        result.add(
+          ChapterDTO(
+            index = chapterIndex,
+            fullTitle = fullTitle,
+            simpleTitle = simpleTitle,
+            simpleUrl = simpleUrl,
+            fullUrl = actualUrl
+          )
+        )
+      }
+
+      return result.toList()
+    }
+
     /**
      * 从文件中读取章节信息
      */
     fun getChapterDTOListFromCsv(
       file: File = File(defaultEnCsvFilePath)
     ): List<ChapterDTO> {
-
-      val result = mutableListOf<ChapterDTO>()
-
       try {
         FileReader(file).use { reader ->
-
-          val format = CSVFormat.Builder.create(CSVFormat.DEFAULT)
-            .setHeader()
-            .build()
-          val csvParser = CSVParser(reader, format)
-
-          for (record in csvParser) {
-            val chapterIndex = record.get(ChapterConstant.INDEX).toInt()
-            val fullTitle = record.get(ChapterConstant.FULL_TITLE)
-            val simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
-            val simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-            val actualUrl = record.get(ChapterConstant.FULL_URL)
-            result.add(ChapterDTO(
-              index = chapterIndex,
-              fullTitle = fullTitle,
-              simpleTitle = simpleTitle,
-              simpleUrl = simpleUrl,
-              fullUrl = actualUrl
-            ))
-          }
+          return getChapterDTOListFromCsv(reader)
         }
       } catch (e: IOException) {
         e.printStackTrace()
+        return listOf()
       }
-
-      return result.toList()
     }
 
     /**

@@ -24,7 +24,7 @@ import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.ui.component.QuizListColumn
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 
@@ -37,7 +37,7 @@ fun QuizScreen(
   title: String,
   quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  quizViewModel: QuizViewModel,
   configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
@@ -132,7 +132,7 @@ fun QuizScreen(
   LaunchedEffect(key1 = language) {
     // 根据 quizKeyList 查出 quizList
     val dtoList = quizKeyList.mapNotNull {
-      chapterQuizViewModel.findByKey(
+      quizViewModel.findByKey(
         language = language,
         quizKey = it
       )

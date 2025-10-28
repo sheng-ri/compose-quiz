@@ -13,7 +13,7 @@ import cn.hellozjf.project.composequiz.dto.QuizKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class ChapterQuizViewModel(application: Application) : ViewModel() {
+class QuizViewModel(application: Application) : ViewModel() {
 
   private val repository: QuizRepository
 

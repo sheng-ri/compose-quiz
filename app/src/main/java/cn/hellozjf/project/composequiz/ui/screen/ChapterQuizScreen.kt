@@ -13,7 +13,7 @@ import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.ui.component.ChapterQuizColumn
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 
 /**
@@ -24,7 +24,7 @@ fun ChapterQuizScreen(
   chapterIndex: Int,
   chapterSimpleTitle: String,
   configViewModel: ConfigViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  quizViewModel: QuizViewModel,
   onNavigation: (NavKey) -> Unit,
 ) {
 
@@ -51,9 +51,9 @@ fun ChapterQuizScreen(
         language = config.language,
         chapterIndex = chapterIndex,
         chapterSimpleTitle = chapterSimpleTitle,
-        findQuizDTOFlowByChapterIndex = chapterQuizViewModel::findQuizDTOFlowByChapterIndex,
+        findQuizDTOFlowByChapterIndex = quizViewModel::findQuizDTOFlowByChapterIndex,
         setLastTestChapterIndex = configViewModel::setLastTestChapterIndex,
-        setFavorite = chapterQuizViewModel::setFavorite,
+        setFavorite = quizViewModel::setFavorite,
         onNavigation = onNavigation
       )
     }

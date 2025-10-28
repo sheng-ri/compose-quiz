@@ -1,5 +1,8 @@
 package cn.hellozjf.project.composequiz.dto
 
+import cn.hellozjf.project.composequiz.database.entity.ChapterEn
+import cn.hellozjf.project.composequiz.database.entity.ChapterZh
+
 data class ChapterDTO(
   val id: Int = 0,
   val index: Int = 0,
@@ -19,6 +22,26 @@ data class ChapterDTO(
       simpleTitle,
       simpleUrl,
       fullUrl
+    )
+  }
+
+  fun toChapterEn(): ChapterEn {
+    return ChapterEn(
+      index = index,
+      fullTitle = fullTitle,
+      simpleTitle = simpleTitle,
+      simpleUrl = simpleUrl,
+      fullUrl = fullUrl
+    )
+  }
+
+  fun toChapterZh(): ChapterZh {
+    return ChapterZh(
+      index = index,
+      fullTitle = fullTitle,
+      simpleTitle = simpleTitle,
+      simpleUrl = simpleUrl,
+      fullUrl = fullUrl
     )
   }
 }

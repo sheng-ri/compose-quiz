@@ -36,6 +36,14 @@ android {
   buildFeatures {
     compose = true
   }
+
+  // TODO 我把阿里云机器翻译库导入之后，会有报错，需要添加以下依赖，否则app跑不起来，后面要搞明白这有啥用
+  packaging {
+    resources {
+      pickFirst("META-INF/DEPENDENCIES")
+      pickFirst("META-INF/versions/9/OSGI-INF/MANIFEST.MF")
+    }
+  }
 }
 
 dependencies {

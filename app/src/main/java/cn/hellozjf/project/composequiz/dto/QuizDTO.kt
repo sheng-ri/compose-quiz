@@ -41,6 +41,28 @@ data class QuizDTO(
       explanation
     )
   }
+
+  fun toQuizEn(): QuizEn {
+    return QuizEn(
+      chapterIndex = chapterIndex,
+      quizIndex = quizIndex,
+      question = question,
+      options = options,
+      correctOptionIndex = correctOptionIndex,
+      explanation = explanation
+    )
+  }
+
+  fun toQuizZh(): QuizZh {
+    return QuizZh(
+      chapterIndex = chapterIndex,
+      quizIndex = quizIndex,
+      question = question,
+      options = options,
+      correctOptionIndex = correctOptionIndex,
+      explanation = explanation
+    )
+  }
 }
 
 fun QuizEn.toDTO() = QuizDTO(

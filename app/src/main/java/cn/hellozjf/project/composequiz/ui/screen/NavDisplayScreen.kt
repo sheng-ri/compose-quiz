@@ -1,7 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -10,7 +9,7 @@ import cn.hellozjf.project.composequiz.nav.ChapterQuizScreenKey
 import cn.hellozjf.project.composequiz.nav.MainScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
-import cn.hellozjf.project.composequiz.viewmodel.ChapterQuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 
@@ -20,7 +19,7 @@ import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 @Composable
 fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
-  chapterQuizViewModel: ChapterQuizViewModel,
+  quizViewModel: QuizViewModel,
   configViewModel: ConfigViewModel,
 ) {
   val backStack = rememberNavBackStack(MainScreenKey)
@@ -47,7 +46,7 @@ fun NavDisplayScreen(
       entry<MainScreenKey> {
         MainScreen(
           chapterViewModel = chapterViewModel,
-          chapterQuizViewModel = chapterQuizViewModel,
+          quizViewModel = quizViewModel,
           configViewModel = configViewModel,
           onNavigation = onNavigation
         )
@@ -60,7 +59,7 @@ fun NavDisplayScreen(
           title = title,
           quizKeyList = quizKeyList,
           chapterViewModel = chapterViewModel,
-          chapterQuizViewModel = chapterQuizViewModel,
+          quizViewModel = quizViewModel,
           configViewModel = configViewModel,
           onNavigation = onNavigation
         )
@@ -76,7 +75,7 @@ fun NavDisplayScreen(
           // oldQuizEnList = quizKeyList,
           quizKeyList = quizKeyList,
           chapterViewModel = chapterViewModel,
-          chapterQuizViewModel = chapterQuizViewModel,
+          quizViewModel = quizViewModel,
           configViewModel = configViewModel,
           chooseOptionMap = chooseOptionMap,
           quizOrderList = quizOrderList,
@@ -91,7 +90,7 @@ fun NavDisplayScreen(
           chapterIndex = key.chapterIndex,
           chapterSimpleTitle = key.chapterSimpleTitle,
           configViewModel = configViewModel,
-          chapterQuizViewModel = chapterQuizViewModel,
+          quizViewModel = quizViewModel,
           onNavigation = onNavigation
         )
       }

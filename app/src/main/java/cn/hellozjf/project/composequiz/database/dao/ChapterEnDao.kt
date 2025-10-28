@@ -80,5 +80,5 @@ interface ChapterEnDao {
   suspend fun deleteAll()
 
   @Query("SELECT count(*) FROM chapter_en")
-  fun getCount(): Int
+  suspend fun getCount(): Int
 }

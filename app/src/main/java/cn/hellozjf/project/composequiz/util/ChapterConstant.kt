@@ -5,8 +5,6 @@ package cn.hellozjf.project.composequiz.util
  */
 class ChapterConstant {
   companion object {
-    val PATH_EN = "csv/chapter.en.csv"
-    val PATH_ZH = "csv/chapter.zh.csv"
     val INDEX = "章节号"
     val FULL_TITLE = "章节标题"
     val SIMPLE_TITLE = "简化标题"
