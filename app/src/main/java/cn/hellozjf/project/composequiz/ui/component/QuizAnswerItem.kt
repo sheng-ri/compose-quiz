@@ -45,18 +45,19 @@ fun QuizAnswerItem(
       )
       val optionList = quizDTO.options
       for (order in optionOrder) {
+        val option = optionList[order]
         FavoriteQuizOption(
-          option = optionList[order],
+          option = option,
           optionKey = OptionKey(
             chapterIndex = quizDTO.chapterIndex,
             quizIndex = quizDTO.quizIndex,
-            optionIndex = optionOrder.indexOf(order)
+            optionIndex = optionList.indexOf(option)
           ),
           selectedOptionKey = selectedOptionKey,
           correctOptionKey = OptionKey(
             chapterIndex = quizDTO.chapterIndex,
             quizIndex = quizDTO.quizIndex,
-            optionIndex = optionOrder.indexOf(0)
+            optionIndex = quizDTO.correctOptionIndex
           )
         )
       }

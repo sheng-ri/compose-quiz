@@ -33,13 +33,13 @@ fun FavoriteQuizOption(
   ) {
     if (optionKey == selectedOptionKey) {
       Image(
-        painter = painterResource(R.drawable.baseline_check_circle_24),
+        painter = painterResource(R.drawable.outline_check_circle_24),
         contentDescription = "已选中", // 无障碍功能必需
         modifier = Modifier.size(32.dp)
       )
     } else {
       Image(
-        painter = painterResource(R.drawable.baseline_circle_24),
+        painter = painterResource(R.drawable.outline_circle_24),
         contentDescription = "未选中", // 无障碍功能必需
         modifier = Modifier.size(32.dp)
       )

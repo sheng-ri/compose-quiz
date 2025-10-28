@@ -49,16 +49,14 @@ fun ChapterQuizColumn(
       modifier = Modifier.weight(1f),
       state = listState
     ) {
-      if (quizDTOList.isNotEmpty()) {
-        quizDTOList.forEachIndexed { index, quizDTO ->
-          item(key = quizDTO.getQuizKey().toString()) {
-            QuizAnswerItem(
-              setFavorite = setFavorite,
-              index = index,
-              quizDTO = quizDTO,
-              selectedOptionKey = null
-            )
-          }
+      quizDTOList.forEach { quizDTO ->
+        item(key = quizDTO.getQuizKey().toString()) {
+          QuizAnswerItem(
+            setFavorite = setFavorite,
+            index = quizDTO.quizIndex,
+            quizDTO = quizDTO,
+            selectedOptionKey = null
+          )
         }
       }
     }
@@ -97,7 +95,7 @@ fun ChapterQuizColumnPreview() {
           listOf(
             QuizDTO(
               chapterIndex = 0,
-              quizIndex = 1,
+              quizIndex = 0,
               question = "问题0",
               options = listOf(
                 "正确选项",
@@ -110,28 +108,28 @@ fun ChapterQuizColumnPreview() {
             ),
             QuizDTO(
               chapterIndex = 0,
-              quizIndex = 2,
+              quizIndex = 1,
               question = "问题1",
               options = listOf(
-                "正确选项",
                 "错误选项1",
+                "正确选项",
                 "错误选项2",
                 "错误选项3"
               ),
-              correctOptionIndex = 0,
+              correctOptionIndex = 1,
               explanation = "问题1解释"
             ),
             QuizDTO(
               chapterIndex = 0,
-              quizIndex = 3,
+              quizIndex = 2,
               question = "问题2",
               options = listOf(
-                "正确选项",
                 "错误选项1",
                 "错误选项2",
+                "正确选项",
                 "错误选项3"
               ),
-              correctOptionIndex = 0,
+              correctOptionIndex = 2,
               explanation = "问题2解释"
             )
           )
