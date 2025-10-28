@@ -99,11 +99,11 @@ class QuizViewModel(application: Application) : ViewModel() {
     }
   }
 
-  suspend fun findByKey(
+  suspend fun findQuizDTOByKey(
     language: String,
     quizKey: QuizKey
   ): QuizDTO? {
-    return repository.findByKey(
+    return repository.findQuizDTOByKey(
       language = language,
       chapterIndex = quizKey.chapterIndex,
       quizIndex = quizKey.quizIndex

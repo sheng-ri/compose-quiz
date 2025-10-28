@@ -18,11 +18,9 @@ import cn.hellozjf.project.composequiz.dto.QuizKey
  */
 @Composable
 fun QuizList(
-  quizDTOList: List<QuizDTO>,
-  quizOrder: List<Int>,
-  quizSelectedOptionMap: Map<QuizKey, OptionKey>,
-  onQuizSelectedOptionChange: (QuizKey, OptionKey) -> Unit,
-  optionOrderList: List<List<Int>>,
+  quizDTOList: List<QuizDTO>,     // 已经改变过问题顺序和选项顺序的 quizDTOList
+  quizSelectedOptionMap: Map<QuizKey, OptionKey>,   // 问题已经选过的选项
+  onQuizSelectedOptionChange: (QuizKey, OptionKey) -> Unit,   // 问题进行了选项选择
   modifier: Modifier = Modifier
 ) {
   // 滚动状态
@@ -31,23 +29,19 @@ fun QuizList(
     modifier = modifier.padding(4.dp),
     state = listState
   ) {
-    if (quizDTOList.isNotEmpty()) {
-      quizOrder.forEachIndexed { index, order ->
-        val quizDTO = quizDTOList[order]
-        val quizKey = quizDTO.getQuizKey()
-        item(key = quizKey.toString()) {
-          val selectOptionKey = quizSelectedOptionMap[quizKey]
-          val onSelectOptionChange: (OptionKey) -> Unit = { newSelectOption ->
-            onQuizSelectedOptionChange(quizKey, newSelectOption)
-          }
-          QuizListItem(
-            index = index,
-            quizDTO = quizDTO,
-            selectedOptionKey = selectOptionKey,
-            onSelectedOptionKeyChange = onSelectOptionChange,
-            optionOrder = optionOrderList[order]
-          )
+    quizDTOList.forEachIndexed { index, quizDTO ->
+      val quizKey = quizDTO.getQuizKey()
+      item(key = quizKey.toString()) {
+        val selectOptionKey = quizSelectedOptionMap[quizKey]
+        val onSelectOptionKeyChange: (OptionKey) -> Unit = { newSelectOption ->
+          onQuizSelectedOptionChange(quizKey, newSelectOption)
         }
+        QuizListItem(
+          index = index,
+          quizDTO = quizDTO,
+          selectedOptionKey = selectOptionKey,
+          onSelectedOptionKeyChange = onSelectOptionKeyChange
+        )
       }
     }
   }
@@ -61,7 +55,20 @@ fun QuizListPreview() {
   val quizDTOLists: List<QuizDTO> = listOf(
     QuizDTO(
       chapterIndex = 0,
-      quizIndex = 1,
+      quizIndex = 2,
+      question = "问题2",
+      options = listOf(
+        "错误选项1",
+        "错误选项2",
+        "正确选项",
+        "错误选项3",
+      ),
+      correctOptionIndex = 0,
+      explanation = "问题2解释"
+    ),
+    QuizDTO(
+      chapterIndex = 0,
+      quizIndex = 0,
       question = "问题0",
       options = listOf(
         "正确选项",
@@ -74,50 +81,31 @@ fun QuizListPreview() {
     ),
     QuizDTO(
       chapterIndex = 0,
-      quizIndex = 2,
+      quizIndex = 1,
       question = "问题1",
       options = listOf(
-        "正确选项",
         "错误选项1",
+        "正确选项",
         "错误选项2",
         "错误选项3",
       ),
-      correctOptionIndex = 0,
+      correctOptionIndex = 1,
       explanation = "问题1解释"
     ),
-    QuizDTO(
-      chapterIndex = 0,
-      quizIndex = 3,
-      question = "问题2",
-      options = listOf(
-        "正确选项",
-        "错误选项1",
-        "错误选项2",
-        "错误选项3",
-      ),
-      correctOptionIndex = 0,
-      explanation = "问题2解释"
-    ),
   )
-  val quizOrder: List<Int> = listOf(2, 1, 0)
   val quizSelectOptionMap = remember {
     mutableStateMapOf(
-      QuizKey(0,0) to OptionKey(0,0,0)
+      QuizKey(0, 0) to OptionKey(0, 0, 0),
+      QuizKey(0, 1) to OptionKey(0, 1, 1),
+      QuizKey(0, 2) to OptionKey(0, 2, 2),
     )
   }
   val onQuizSelectOptionChange: (QuizKey, OptionKey) -> Unit = { key, selectOption ->
     quizSelectOptionMap[key] = selectOption
   }
-  val optionOrderList: List<List<Int>> = listOf(
-    listOf(0, 3, 1, 2),
-    listOf(3, 1, 2, 0),
-    listOf(0, 1, 3, 2),
-  )
   QuizList(
     quizDTOList = quizDTOLists,
-    quizOrder = quizOrder,
     quizSelectedOptionMap = quizSelectOptionMap,
     onQuizSelectedOptionChange = onQuizSelectOptionChange,
-    optionOrderList = optionOrderList
   )
 }

@@ -69,16 +69,16 @@ fun QuizScreen(
         val result: MutableMap<QuizKey, OptionKey> = mutableMapOf()
         string.split(",").map {
           val (key, value) = it.split(":")
-          val keys = key.split("_")
-          val values = value.split("_")
+          val (quizChapterIndex, quizQuizIndex) = key.split("_")
           val quizKey = QuizKey(
-            chapterIndex = keys[0].toInt(),
-            quizIndex = keys[1].toInt()
+            chapterIndex = quizChapterIndex.toInt(),
+            quizIndex = quizQuizIndex.toInt()
           )
+          val (optionChapterIndex, optionQuizIndex, optionOptionIndex) = value.split("_")
           val optionKey = OptionKey(
-            chapterIndex = values[0].toInt(),
-            quizIndex = values[1].toInt(),
-            optionIndex = values[2].toInt(),
+            chapterIndex = optionChapterIndex.toInt(),
+            quizIndex = optionQuizIndex.toInt(),
+            optionIndex = optionOptionIndex.toInt(),
           )
           result.put(quizKey, optionKey)
         }
@@ -131,19 +131,20 @@ fun QuizScreen(
 
   LaunchedEffect(key1 = language) {
     // 根据 quizKeyList 查出 quizList
-    val dtoList = quizKeyList.mapNotNull {
-      quizViewModel.findByKey(
+    val quizDtoList = quizKeyList.mapNotNull {
+      quizViewModel.findQuizDTOByKey(
         language = language,
         quizKey = it
       )
     }
-    quizDTOList = dtoList
+    quizDTOList = quizDtoList
   }
 
   Scaffold(
     modifier = Modifier.fillMaxSize(),
     topBar = {
       MyTopAppBar(
+        // TODO 把标题改成具体的章节序号和名称
         title = "章节测试",
         toggleLanguage = {
           configViewModel.toggleLanguage()
@@ -156,7 +157,7 @@ fun QuizScreen(
       modifier = Modifier.padding(innerPadding)
     ) {
       QuizListColumn(
-        quizDTOList = quizDTOList,
+        findQuizDTOByKey = quizViewModel::findQuizDTOByKey,
         quizOrder = quizOrder,
         quizSelectOption = quizSelectOption,
         onQuizSelectOptionChange = {

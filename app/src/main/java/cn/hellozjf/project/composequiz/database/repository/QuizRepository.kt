@@ -185,7 +185,7 @@ class QuizRepository(
     }
   }
 
-  suspend fun findByKey(
+  suspend fun findQuizDTOByKey(
     language: String,
     chapterIndex: Int,
     quizIndex: Int

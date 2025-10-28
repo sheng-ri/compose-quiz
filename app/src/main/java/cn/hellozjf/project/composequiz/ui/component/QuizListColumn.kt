@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -16,34 +17,35 @@ import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
+import cn.hellozjf.project.composequiz.util.QuizUtils
 
 @Composable
 fun QuizListColumn(
-  // TODO 这里不要传 quizDTOList，传一个 (QuizKey) -> QuizDTO 的 suspend fun
-  quizDTOList: List<QuizDTO>,
+  findQuizDTOByKey: suspend (String, QuizKey) -> QuizDTO?,
   quizOrder: List<Int>,
+  optionOrderList: List<List<Int>>,
   quizSelectOption: Map<QuizKey, OptionKey>,
   onQuizSelectOptionChange: (Map<QuizKey, OptionKey>) -> Unit,
-  optionOrderList: List<List<Int>>,
   title: String,
   quizKeyList: List<QuizKey>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
 ) {
+  var quizDTOList: List<QuizDTO> by remember {
+    mutableStateOf(listOf())
+  }
   Column(
     modifier = modifier,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     QuizList(
       quizDTOList = quizDTOList,
-      quizOrder = quizOrder,
       quizSelectedOptionMap = quizSelectOption,
       onQuizSelectedOptionChange = { mapKey, selectOption ->
         val newMap = quizSelectOption.toMutableMap()
         newMap[mapKey] = selectOption
         onQuizSelectOptionChange(newMap)
       },
-      optionOrderList = optionOrderList,
       modifier = Modifier.weight(1f)
     )
 
@@ -63,6 +65,17 @@ fun QuizListColumn(
       Text("提交")
     }
   }
+
+  LaunchedEffect(key1 = quizKeyList.joinToString(",")) {
+    val oldQuizDTOList = quizKeyList.mapNotNull {
+      findQuizDTOByKey("", it)
+    }
+    quizDTOList = QuizUtils.reorder(
+      oldQuizDTOList = oldQuizDTOList,
+      quizOrder = quizOrder,
+      optionOrders = optionOrderList
+    )
+  }
 }
 
 @Preview(
@@ -73,7 +86,7 @@ fun QuizListColumnPreview() {
   val quizDTOList: List<QuizDTO> = listOf(
     QuizDTO(
       chapterIndex = 0,
-      quizIndex = 1,
+      quizIndex = 0,
       question = "问题0",
       options = listOf(
         "正确选项",
@@ -86,31 +99,34 @@ fun QuizListColumnPreview() {
     ),
     QuizDTO(
       chapterIndex = 0,
-      quizIndex = 2,
+      quizIndex = 1,
       question = "问题1",
       options = listOf(
-        "正确选项",
         "错误选项1",
+        "正确选项",
         "错误选项2",
         "错误选项3",
       ),
-      correctOptionIndex = 0,
+      correctOptionIndex = 1,
       explanation = "问题1解释"
     ),
     QuizDTO(
       chapterIndex = 0,
-      quizIndex = 3,
+      quizIndex = 2,
       question = "问题2",
       options = listOf(
-        "正确选项",
         "错误选项1",
         "错误选项2",
+        "正确选项",
         "错误选项3",
       ),
-      correctOptionIndex = 0,
+      correctOptionIndex = 2,
       explanation = "问题2解释"
     ),
   )
+  val findQuizDTOByKey: suspend (String, QuizKey) -> QuizDTO? = { _, quizKey ->
+    quizDTOList[quizKey.quizIndex]
+  }
   val quizOrder: List<Int> = listOf(2, 1, 0)
   var quizSelectOption by remember {
     mutableStateOf(
@@ -126,16 +142,16 @@ fun QuizListColumnPreview() {
     listOf(0, 1, 3, 2),
   )
   QuizListColumn(
-    quizDTOList = quizDTOList,
+    findQuizDTOByKey = findQuizDTOByKey,
     quizOrder = quizOrder,
     quizSelectOption = quizSelectOption,
     onQuizSelectOptionChange = onQuizSelectOptionChange,
     optionOrderList = optionOrderList,
     title = "章节测试",
     quizKeyList = listOf(
+      QuizKey(chapterIndex = 0, quizIndex = 0),
       QuizKey(chapterIndex = 0, quizIndex = 1),
       QuizKey(chapterIndex = 0, quizIndex = 2),
-      QuizKey(chapterIndex = 0, quizIndex = 3),
     ),
     onNavigation = {}
   )

@@ -27,7 +27,6 @@ fun QuizListItem(
   quizDTO: QuizDTO,
   selectedOptionKey: OptionKey?,
   onSelectedOptionKeyChange: (OptionKey) -> Unit,
-  optionOrder: List<Int>,
   modifier: Modifier = Modifier
 ) {
   Card(
@@ -48,9 +47,9 @@ fun QuizListItem(
       )
       val options = quizDTO.options
       // 可以进行的选项
-      for ((index, order) in optionOrder.withIndex()) {
+      options.forEachIndexed { index, option ->
         RadioButtonRow(
-          option = options[order],
+          option = option,
           optionKey = OptionKey(
             chapterIndex = quizDTO.chapterIndex,
             quizIndex = quizDTO.quizIndex,
@@ -69,17 +68,20 @@ fun QuizListItem(
 )
 @Composable
 fun QuizListItemPreview() {
-  var selectOptionKey by remember { mutableStateOf(OptionKey(
-    chapterIndex = 0,
-    quizIndex = 1,
-    optionIndex = 0
-  )) }
-  val optionOrder = listOf(1, 0, 3, 2)
+  var selectOptionKey by remember {
+    mutableStateOf(
+      OptionKey(
+        chapterIndex = 0,
+        quizIndex = 0,
+        optionIndex = 0
+      )
+    )
+  }
   QuizListItem(
     index = 0,
     quizDTO = QuizDTO(
       chapterIndex = 0,
-      quizIndex = 1,
+      quizIndex = 0,
       question = "问题0",
       options = listOf(
         "正确选项",
@@ -93,7 +95,6 @@ fun QuizListItemPreview() {
     selectedOptionKey = selectOptionKey,
     onSelectedOptionKeyChange = {
       selectOptionKey = it
-    },
-    optionOrder = optionOrder
+    }
   )
 }

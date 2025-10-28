@@ -102,7 +102,7 @@ fun ChapterListItemPreview() {
       for (i in 0 until 10) {
         val quizDTO = QuizDTO(
           chapterIndex = chapterIndex,
-          quizIndex = i + 1,
+          quizIndex = i,
           question = "章节${chapterIndex}问题${i}",
           options = listOf(
             "问题${i}正确选项",

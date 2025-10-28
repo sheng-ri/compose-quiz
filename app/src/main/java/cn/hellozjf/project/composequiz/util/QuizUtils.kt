@@ -117,5 +117,43 @@ class QuizUtils {
       )
       return header
     }
+
+    /**
+     * 将 oldQuizDTOList 的题目按 quizOrder 重排序，题目的选项按 optionOrders 重排序
+     */
+    fun reorder(
+      oldQuizDTOList: List<QuizDTO>,
+      quizOrder: List<Int>,
+      optionOrders: List<List<Int>>
+    ): List<QuizDTO> {
+      val map = mutableMapOf<QuizDTO, QuizDTO>()
+      for ((index, quizDTO) in oldQuizDTOList.withIndex()) {
+        val newQuizDTO = reorder(quizDTO, optionOrders[index])
+        map.put(quizDTO, newQuizDTO)
+      }
+      val quizList = mutableListOf<QuizDTO>()
+      for (order in quizOrder) {
+        quizList.add(map[oldQuizDTOList[order]]!!)
+      }
+      return quizList.toList()
+    }
+
+    /**
+     * 将 oldQuizDTO 的选项按 optionOrder 重排序
+     */
+    private fun reorder(
+      oldQuiz: QuizDTO,
+      optionOrder: List<Int>
+    ): QuizDTO {
+      val options = mutableListOf<String>()
+      for (order in optionOrder) {
+        options.add(oldQuiz.options[order])
+      }
+      val correctOptionIndex = optionOrder.indexOf(oldQuiz.correctOptionIndex)
+      return oldQuiz.copy(
+        options = options,
+        correctOptionIndex = correctOptionIndex
+      )
+    }
   }
 }
