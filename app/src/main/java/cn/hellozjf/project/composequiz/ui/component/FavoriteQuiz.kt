@@ -47,12 +47,14 @@ fun FavoriteQuiz(
       containerColor = MaterialTheme.colorScheme.onPrimary
     ),
     modifier = modifier
-      .padding(3.dp)
+      .padding(8.dp)
       .fillMaxWidth(),
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
 
-    Column {
+    Column(
+      modifier = Modifier.padding(8.dp)
+    ) {
       FavoriteQuizQuestion(
         onExpandedChange = onExpandedChange,
         expanded = expanded,
