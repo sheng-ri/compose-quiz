@@ -413,6 +413,31 @@
 26,15,哪个对象是Compose中构建修改器的基础？,"[""ComposeModifier"",""修饰符"",""ModifierConfig"",""UIConfiguration""]",1,Modifier对象是一个内置的Compose对象，用于通过各种方法配置可组合体的外观和行为。
 26,16,为什么建议将修饰符支持添加到自定义composables？,"[""它确保更好的性能"",""它使composable更加灵活和可配置"",""它可以防止重新组合"",""它减少了所需的可组合体的数量""]",1,将修饰符支持添加到自定义可组合体允许开发人员调整可组合体的外观和行为，使其更适应不同的用例。
 26,17,为什么链接修饰符方法的顺序很重要？,"[""它会影响可组合渲染的顺序"",""它改变了修饰符应用于可组合的"",""它确定可组合的大小"",""它只适用于布局约束""]",1,修饰符方法的链接顺序可以更改可组合的最终外观。例如，在边框之前或之后应用填充将影响填充显示在边框内部还是外部。
+27,0,如何将多种颜色应用于单个文本的不同部分？,"[""通过将背景颜色应用于父布局"",""通过在buildAnnotatedString中使用具有不同颜色设置的SpanStyle"",""通过对每个可组合的文本使用TextStyle.color"",""通过为每种颜色使用单独的可组合""]",1,SpanStyle允许您将不同的颜色应用于buildAnnotatedString中文本的特定部分。
+27,1,如何使用SpanStyle在单个文本组合中创建一个多色单词？,"[""通过设置默认颜色"",""通过在可组合文本中使用循环"",""通过在buildAnnotatedString中使用withStyle() 和更改颜色"",""通过将每个字母包装在不同的可组合文本中""]",2,在buildAnnotatedString中使用withStyle() 允许您更改单词不同段的颜色，从而创建多种颜色的效果。
+27,2,如何在Compose中将不同的字体权重应用于字符串的各个部分？,"[""通过在buildAnnotatedString中应用具有特定fontWeight的SpanStyle"",""通过在父可组合中设置fontWeight"",""通过使用全局fontWeight设置"",""通过为每个权重使用不同的文本组合""]",0,SpanStyle允许您将不同的字体权重应用于字符串段，从而提供样式设置的灵活性。
+27,3,如何在带注释的字符串中组合不同的文本部分？,"[""通过调用append() 方法"",""通过设置textAlignment"",""通过使用join() 函数"",""通过使用merge() 函数""]",0,append() 方法用于在构建AnnotatedString时将不同样式的部分添加到一起。
+27,4,如何将径向渐变应用于文本组合？,"[""使用background属性"",""在TextStyle中使用brush属性"",""在文本中使用渐变属性"",""在SpanStyle中使用radialGradient() 方法""]",1,TextStyle中的brush属性允许您通过使用带有颜色列表的Brush.radialGradient() 将径向渐变应用于文本。
+27,5,ParagraphStyle的textIndent属性控制什么？,"[""段落的字体样式"",""段落中第一行和后续行的缩进"",""段落中第一行的缩进"",""线之间的空间""]",1,ParagraphStyle中的textIndent属性用于定义段落的第一行和其他行的缩进。
+27,6,在ParagraphStyle中为lineHeight设置高值有什么效果？,"[""它改变了背景颜色"",""它增加了字符之间的空间"",""它增加了文本行之间的空间"",""它使文本加粗""]",2,ParagraphStyle中的高lineHeight值会增加行之间的间距，从而使段落更具可读性。
+27,7,在Jetpack Compose中使用带注释的字符串的主要好处是什么？,"[""将不同的样式应用于文本的不同部分"",""更改整个字符串的字体类型"",""处理用户与文本的交互"",""管理布局中的文本可见性""]",0,带注释的字符串允许开发人员将不同的样式应用于文本的各个部分，提供比标准修饰符更多的灵活性。
+27,8,段落样式中TextAlign.End设置的目的是什么？,"[""将文本向左对齐"",""居中对齐文本"",""为文本辩护"",""右对齐文本""]",3,ParagraphStyle中的TextAlign.End用于右对齐段落中的文本，将文本的末尾对齐到右边缘。
+27,9,在文本样式中使用画笔的目的是什么？,"[""对齐列内的文本"",""将渐变或图案应用于文本"",""更改文本的阴影"",""动态修改文字大小的步骤""]",1,Brush允许您将渐变或其他图案应用于文本外观，例如为文本创建渐变填充。
+27,10,使用画笔效果时，buildAnnotatedString的作用是什么？,"[""它允许将画笔效果应用于特定的文本部分"",""它根据滚动改变文本大小"",""它修改了可组合的背景"",""它提供了内置的渐变颜色""]",0,buildAnnotatedString可与SpanStyle结合使用，以将画笔效果 (如渐变) 应用于选定的文本段。
+27,11,withStyle() 函数在buildAnnotatedString中的作用是什么？,"[""调整文本间距"",""将样式应用于文本的特定段"",""定义整个文本的样式"",""从线段中删除样式的步骤""]",1,withStyle() 在buildAnnotatedString中用于将特定样式应用于文本的一部分。
+27,12,您将使用什么属性将渐变效果应用于撰写中的文本？,"[""背景颜色"",""刷子"",""梯度样式"",""阴影效果""]",1,brush属性允许您使用各种画笔方法 (如linearGradient或radialGradient) 将渐变效果应用于Jetpack Compose中的文本。
+27,13,SpanStyle用于什么类型的样式？,"[""将样式应用于整个段落"",""将样式应用于字符串中的单个字符或部分"",""管理可组合的布局"",""设置文本的背景图像""]",1,SpanStyle用于将样式应用于文本的特定范围，例如更改选定文本段的颜色、字体粗细或大小。
+27,14,何时使用ParagraphStyle而不是SpanStyle？,"[""当您需要对整个段落应用对齐或行高时"",""当你想改变字体颜色"",""当您要更改单个单词的文本大小时"",""当您只想使字符串的一部分粗体时""]",0,ParagraphStyle非常适合将文本对齐或行高等样式应用于整个段落，从而影响文本的整体结构。
+27,15,哪个函数用于在Jetpack Compose中创建AnnotatedString？,"[""buildAnnotatedString()"",""buildString()"",""composeAnnotatedString()"",""createString()""]",0,buildAnnotatedString() 函数用于创建AnnotatedString，允许将样式应用于文本的不同部分。
+27,16,您将使用哪个函数在Jetpack Compose中创建缩进段落？,"[""applyIndent()"",""indentText()"",""setIndent()"",""withStyle() 和paragrapstyle与textIndent""]",3,若要创建缩进段落，请将withStyle() 与ParagraphStyle和textIndent属性结合使用。
+27,17,哪种方法用于在文本组合中呈现带有注释字符串的文本？,"[""annotateText()"",""buildAnnotatedString()"",""buildText()"",""textWithStyle()""]",1,buildAnnotatedString() 用于创建具有多种样式的复杂文本，这些样式可以在文本组合中呈现。
+27,18,以下哪一项是可以使用ParagraphStyle自定义的属性？,"[""颜色"",""字体大小"",""fontWeight"",""文本对齐""]",3,ParagraphStyle用于将样式应用于整个段落，它包括textAlign等属性，用于对齐段落中的文本。
+27,19,以下哪一项是可以使用SpanStyle自定义的属性？,"[""线条高度"",""阴影"",""Text方向"",""textIndent""]",1,SpanStyle支持shadow属性，允许开发人员向特定文本段添加阴影效果。
+27,20,ParagraphStyle直接支持以下哪种样式？,"[""fontFamily"",""字母间距"",""阴影"",""Text方向""]",3,ParagraphStyle包括对textDirection的支持，允许开发人员控制文本的显示方向，例如从左到右或从右到左。
+27,21,SpanStyle不支持哪个属性？,"[""颜色"",""字体大小"",""fontWeight"",""文本对齐""]",3,textAlign是ParagraphStyle的一个属性，而不是SpanStyle，后者侧重于单个字符级别的样式设置。
+27,22,SpanStyle的哪个属性可用于更改字体大小？,"[""字体"",""fontWeight"",""pointSize"",""文本大小""]",-1,SpanStyle的fontSize属性允许您指定该特定span的文本大小。
+27,23,如果要更改带注释字符串中特定字符的背景，应使用哪种样式？,"[""BrushStyle"",""段落样式"",""SpanStyle"",""文本样式""]",2,SpanStyle允许您将背景颜色应用于带注释的字符串中的特定字符或跨度。
+27,24,您将使用哪种样式将斜体应用于字符串的一部分？,"[""带渐变的BrushStyle"",""带fontStyle的段落样式"",""带fontStyle的SpanStyle"",""TextStyle与fontWeight""]",2,SpanStyle支持fontStyle属性，允许开发人员将斜体应用于特定的文本段。
 28,0,行和列组合在排列属性方面有何不同？,"[""排列属性仅适用于行"",""两者都使用相同的排列属性"",""行使用水平排列，而列使用垂直排列"",""行使用垂直排列，而列使用水平排列""]",2,行组合使用horizontalarrealing参数水平定位子项，而列组合使用verticalarrealing垂直定位子项。
 28,1,排列之间的空间如何影响元素在一行中的定位？,"[""在第一个元素之前和最后一个元素之后添加相等的间距"",""在元素之间添加相等的间距，而没有前导或尾随空格"",""在元素之间不添加空格"",""水平居中元素""]",1,Arrangement.SpaceBetween在元素之间添加相等的间距，但不会在一行中的第一个元素之前或最后一个元素之后添加空间。
 28,2,默认情况下，可组合列如何处理对齐？,"[""将内容与右下角对齐"",""将内容与左上角对齐"",""水平和垂直居中内容"",""在屏幕上均匀地传播内容""]",1,默认情况下，除非指定了其他对齐设置，否则可组合列的子项将与其内容区域的左上角对齐。
@@ -696,6 +721,48 @@
 45,22,哪个函数用于使可组合的淡入视线？,"[""expandIn()"",""fadeIn()"",""scaleIn()"",""slideIn()""]",1,fadeIn() 函数用于对具有淡入淡出效果的组合的外观进行动画处理。
 45,23,以下哪一项是Jetpack Compose中的预定义动画缓动选项？,"[""反弹"",""立方outeasing"",""LinearOutSlowInEasing"",""SpringOutEasing""]",2,LinearOutSlowInEasing是预定义的缓动选项之一，提供从线性到较慢速度的平滑过渡。
 45,24,使用AnimatedVisibility composable时，哪个参数是必需的？,"[""输入"",""退出"",""修饰符"",""可见""]",3,visible参数是必需的，因为它确定是否应该显示或隐藏子组合。
+46,0,如何调整构图中动画的持续时间？,"[""通过更改状态的初始值。"",""通过修改animationSpec属性。"",""通过使用modifier.Delay () 函数。"",""使用delay() 函数。""]",1,可以使用animationSpec参数 (如通过tween() 函数) 控制动画的持续时间和行为。
+46,1,你怎么能动画一个组合在屏幕上来回移动？,"[""通过使用animateColorAsState() 调整背景颜色。"",""通过使用animateDpAsState() 更改x偏移值。"",""通过使用位置之间的淡入淡出过渡。"",""通过使用循环翻译功能。""]",1,animateDpAsState() 函数允许composables x偏移量的平滑过渡，使其看起来在屏幕上移动。
+46,2,如何在Compose中创建基于spring的动画？,"[""通过直接调用springAnimation()。"",""通过将spring() 函数传递给animationSpec参数。"",""通过在animateAsState() 函数中设置springFactor。"",""通过使用animateSpring() 函数。""]",1,基于Spring的动画是使用spring() 函数创建的，该函数通过animate函数的animationSpec参数应用。
+46,3,在状态驱动动画的上下文中，targetValue参数用于什么？,"[""来调整动画的帧速率。"",""来定义动画的起始位置。"",""来确定动画的当前状态。"",""指定动画应达到的结束值。""]",3,状态驱动的动画中的targetValue参数指示动画所朝向的值。
+46,4,可组合视图的偏移修改器在运动动画中有什么影响？,"[""视图的背景色。"",""视图的不透明度。"",""视图沿x轴和y轴的位置。"",""视图的旋转角度。""]",-1,“偏移” 修改器沿x轴和y轴更改长方体的位置，从而实现平滑的动画移动。
+46,5,使用updatetrition () 时，过渡类提供了什么？,"[""重置状态值的函数。"",""一种调试网络问题的方法。"",""一种异步加载图像的方法。"",""一种并行运行多个动画的方法。""]",3,Transition类允许多个动画同时运行，所有动画都由共享状态值的更改触发。
+46,6,弹簧 () 函数的阻尼比控制什么？,"[""弹簧动画中的反弹量。"",""动画组件的颜色。"",""动画的初始速度。"",""动画重复的次数。""]",0,阻尼比控制弹簧动画到达其终点时发生的反弹量。较低的值会导致更多的反弹。
+46,7,Compose中状态驱动动画的关键特征是什么？,"[""动画是由状态值的变化触发的。"",""动画仅由用户手势触发。"",""动画只能使用布尔状态值。"",""动画需要复杂的线程管理。""]",0,Compose中的状态驱动动画基于对状态值的更改，从而允许组件在其状态更新时平滑地进行动画处理。
+46,8,animateFloatAsState() 函数的默认行为是什么？,"[""以有弹性的方式动画。"",""使用线性速度设置动画。"",""使用FastOutSlowInEasing进行动画处理。"",""立即跳转到目标值。""]",2,animateFloatAsState() 的默认缓动为FastOutSlowInEasing，它为动画创建平滑的开始和结束。
+46,9,Compose Animation API的主要用途是什么？,"[""向基于撰写的应用中的UI组件添加动画效果。"",""创建用于数据检索的网络请求。"",""在基于撰写的应用程序中处理用户输入。"",""管理应用主题和样式。""]",0,Compose Animation API旨在为动画用户界面组件提供广泛的动画选项，使交互更具视觉吸引力和响应性。
+46,10,撰写动画中的tween() 函数的目的是什么？,"[""调整动画的帧速率。"",""创建用于延迟状态更改的计时器。"",""在Compose中设置网络请求。"",""指定动画的持续时间和缓动。""]",3,tween() 函数允许您配置动画的持续时间和缓动行为，如线性或曲线过渡。
+46,11,在动画中使用keyframes() 的目的是什么？,"[""向动画组件添加阴影。"",""为动画创建多个时间线。"",""为动画中的更改定义特定的时间点。"",""减慢动画速度。""]",2,关键帧允许您在动画期间指定特定时间点的值，从而可以更好地控制动画的时间和行为。
+46,12,LocalConfiguration对象在运动动画中的作用是什么？,"[""它控制动画的缓动行为。"",""它处理动画的错误记录。"",""它用于从internet获取数据。"",""它提供有关屏幕属性 (如宽度和高度) 的信息。""]",3,LocalConfiguration提供对屏幕尺寸的访问，这对于创建适应不同屏幕尺寸的响应式动画很有用。
+46,13,什么类型的值可以使用animateDpAsState() 动画？,"[""颜色"",""与密度无关的像素"",""整数"",""字符串""]",1,animateDpAsState() 用于对以Dp表示的值进行动画处理，例如合成布局中的大小和位置调整。
+46,14,哪个缓动选项在整个动画过程中保持恒定的速度？,"[""CubicBezierEasing"",""EaseInEasing"",""FastOutSlowInEasing"",""划线""]",3,画线在整个动画过程中保持恒定的速度，不会加速或减速。
+46,15,哪个函数用于为float值的状态更改设置动画？,"[""animateColorAsState()"",""animateDpAsState()"",""animateFloatAsState()"",""animateIntAsState()""]",2,animateFloatAsState() 函数用于对Float值的更改进行动画处理，例如Compose中的旋转角度。
+46,16,哪个函数用于根据状态转换对颜色更改进行动画处理？,"[""animateBackgroundAsState()"",""animateColorAsState()"",""animateColorState()"",""animateFloatAsState()""]",1,animateColorAsState() 函数专门用于在状态更改时对颜色属性的更改进行动画处理。
+46,17,哪个函数用于基于单个状态更改创建多个动画？,"[""animateTogether()"",""combineAnimations()"",""mergeAnimations()"",""updateTransition()""]",3,updateTransition() 函数用于创建可基于状态更改同时运行多个动画的转换。
+46,18,以下哪种类型可以使用animate * AsState函数进行动画处理？,"[""边界和字符串"",""Color、Dp和Int"",""IntArray和列表"",""URL和JSON""]",1,Compose中的animate * AsState函数支持一系列类型，如Color、Dp、Int、Float和Size，使它们能够满足不同的动画需求。
+47,0,如何在路径中绘制贝塞尔曲线？,"[""使用arcTo() 函数"",""使用drawCurve()"",""使用lineTo() 函数"",""使用quadraticBezierTo() 或cubicTo()""]",3,贝塞尔曲线是使用quadraticBezierTo() (用于二次曲线) 和cubicTo() (用于三次曲线) 等函数绘制的。
+47,1,如何将与密度无关的像素 (dp) 转换为Compose中的像素 (px)？,"[""使用convertDpToPx() 函数"",""使用dpToPx() 方法"",""使用px() 方法"",""使用toPx() 方法""]",3,toPx() 方法用于将与密度无关的像素 (dp) 转换为Compose中的物理像素 (px)。
+47,2,如何在Compose中的画布上绘制弧线？,"[""使用带有角度和大小的arcTo()"",""使用带渐变色的drawArc()"",""将drawArc() 与起始角度和扫掠角度一起使用"",""使用带有arc参数的drawLine()""]",2,drawArc() 函数需要开始和扫描角度才能在指定的矩形内绘制圆弧。
+47,3,你如何在Compose的画布上绘制文本？,"[""使用drawLine() 函数"",""使用drawString() 函数"",""将drawText() 函数与TextMeasurer一起使用"",""使用textResource() 函数""]",2,使用drawText() 函数在画布上绘制文本，该函数需要TextMeasurer来计算文本的大小和布局。
+47,4,如何在Compose中指定画布的大小？,"[""使用Canvas.setSize() 方法"",""使用DrawScope.setSize() 方法"",""使用Modifier.size() 方法"",""使用DrawScope的size属性""]",2,画布的大小是使用Modifier.size() 方法设置的，该方法定义了绘图区域的尺寸。
+47,5,在Canvas的上下文中，Offset代表什么？,"[""颜色渐变"",""画布上的坐标"",""旋转角度"",""透明度水平""]",1,Offset表示用于指定画布上位置的x和y坐标。
+47,6,什么是drawLine() 函数需要画一条线？,"[""仅颜色"",""仅起点和终点"",""起点和终点以及旋转角度"",""起点和终点、颜色和描边宽度""]",3,drawLine() 函数需要由偏移量、颜色和描边宽度定义的起点和终点来绘制一条线。
+47,7,drawImage() 函数中ColorFilter的作用是什么？,"[""调整图像的位置"",""将颜色效果应用于图像"",""更改图像的大小"",""旋转图像""]",1,ColorFilter参数用于将颜色效果 (如色调) 应用于在画布上绘制的图像。
+47,8,绘制圆角矩形时，CornerRadius组件的用途是什么？,"[""定义矩形角的圆度"",""设置矩形的颜色"",""指定矩形的位置"",""指定描边宽度的步骤""]",0,角半径组件指定圆角矩形的角的圆度。
+47,9,drawPoints() 函数中pointMode参数的用途是什么？,"[""调整点的颜色"",""控制点的绘制方式 (单个、直线或多边形)"",""设定点的透明度"",""指定点的形状""]",1,drawPoints() 中的pointMode参数指定如何绘制点-单独绘制、绘制为线或连接为多边形。
+47,10,TextMeasurer在文本绘制中的作用是什么？,"[""调整文本透明度"",""将颜色渐变应用于文本"",""计算文本的大小和布局"",""更改字体样式""]",2,TextMeasurer计算文本的尺寸和布局，这有助于在画布中准确定位文本。
+47,11,inset() 函数在画布绘图中的作用是什么？,"[""调整画布中的绘图区域"",""应用阴影效果"",""更改形状的颜色"",""增加画布的大小""]",0,inset() 函数用于创建insets，修改画布中的绘图区域。
+47,12,drawText() 中AnnotatedString的用途是什么？,"[""调整文本对齐方式"",""使用绘图样式定义多格式文本"",""使用文本绘制图像"",""设置文本的颜色""]",1,AnnotatedString允许定义具有各种样式的文本，例如粗体、彩色或渐变填充，这些样式可以在画布上呈现。
+47,13,Canvas中的drawCircle() 函数有什么用？,"[""应用渐变"",""绘制圆形的步骤"",""绘制矩形框的步骤"",""绘制椭圆形状""]",1,drawCircle() 函数用于在画布上绘制圆形，具有中心和半径等属性。
+47,14,DrawScope的中心值代表什么属性？,"[""画布的右下角"",""画布区域的中心点"",""画布的左上角"",""画布的宽度""]",1,DrawScope的center属性提供画布区域中心的坐标。
+47,15,哪个函数用于在画布上绘制图像？,"[""drawBitmap()"",""drawImage()"",""drawPicture()"",""imageResource()""]",1,drawImage() 函数用于使用ImageBitmap资源将图像绘制到画布上。
+47,16,哪个函数用于在Compose中绘制路径？,"[""drawCurve()"",""拉线 ()"",""drawPath()"",""drawShape()""]",2,drawPath() 函数用于渲染路径，路径是由坐标定义的一系列直线或曲线。
+47,17,哪个函数用于在画布上绘制矩形？,"[""牵引箱 ()"",""drawRect()"",""drawRectangle()"",""drawSquare()""]",1,drawRect() 函数用于绘制矩形，指定其大小和在画布上的位置。
+47,18,哪个函数用于填充带有渐变图案的形状？,"[""刷子"",""梯度着色器"",""drawGradient()"",""fillWithGradient()""]",0,画笔组件用于使用渐变图案 (如水平、径向和垂直渐变) 填充形状。
+47,19,哪个函数用于在画布上旋转绘图元素？,"[""applyRotation()"",""drawRotate()"",""旋转 ()"",""rotateCanvas()""]",2,rotate() 函数用于旋转画布上的绘图元素，指定旋转角度。
+47,20,您将使用哪个函数创建圆角矩形轮廓？,"[""drawOutline()"",""drawRectangleOutline()"",""具有Stroke样式的drawRoundRect()"",""drawRoundedBorder()""]",2,使用带有笔触样式的drawRoundRect() 可以绘制圆角矩形的轮廓。
+47,21,使用哪种方法在画布中创建虚线？,"[""dashPathEffect()"",""drawDashedLine()"",""绘制效果 (虚线)"",""pathEffect()""]",0,dashPathEffect() 方法用于通过指定虚线模式间隔来创建虚线。
+47,22,以下哪一项不是Canvas组件提供的DrawScope的功能？,"[""访问大小维度"",""绘制形状和线条"",""处理胺化手势"",""执行旋转""]",-1,DrawScope提供用于绘制形状、线条和执行旋转的功能，但它不管理网络连接。
 48,0,如何一个ViewModel实例的行为时，一个活动被重新创建？,"[""它会自动将数据存储到共享首选项"",""它被销毁并与活动一起重新创建"",""它存储在设备的本地数据库中"",""它持续存在，维护状态数据""]",3,ViewModel实例在配置更改 (如活动娱乐) 中持续存在，从而允许它维护它所保存的数据。
 48,1,ViewModel如何帮助活动生命周期管理？,"[""它控制片段的生命周期"",""它直接处理活动娱乐"",""它确保即使在重新创建活动时也能保持数据"",""它防止活动被破坏""]",2,即使重新创建活动，ViewModel实例也会保留在内存中，从而确保在设备旋转等生命周期更改期间不会丢失数据。
 48,2,Compose中的MutableState与MutableLiveData有何不同？,"[""MutableLiveData只能与Compose一起使用"",""MutableState可以直接存储复杂的数据类型，如JSON"",""MutableState特定于composable，用于Composables中的状态管理"",""MutableState自动保存配置更改中的数据""]",2,MutableState是一种状态管理机制，设计用于Jetpack Compose中的可组合函数，而MutableLiveData用于观察Compose之外的状态。
@@ -893,6 +960,23 @@
 58,12,哪个生命周期状态与repeatOnLifecycle一起使用以开始收集SharedFlow？,"[""Lifecycle.State.CREATED"",""Lifecycle.State.INITIALIZED"",""生命周期.状态.恢复"",""Lifecycle.State.STARTED""]",3,Lifecycle.State.STARTED与repeatOnLifecycle一起使用，以便在应用程序可见时开始收集流，并在应用程序移动到后台时停止收集。
 58,13,为什么在收集SharedFlow时使用LaunchedEffect？,"[""将流转换为LiveData"",""确保集合与可组合的生命周期相关联"",""在屏幕旋转时重新启动流程"",""在收集期间暂停流""]",1,LaunchedEffect确保在可组合的生命周期内管理流集合，在可组合进入和退出组合时启动和停止集合。
 58,14,为什么使用asSharedFlow() 函数？,"[""将StateFlow转换为SharedFlow"",""将MutableSharedFlow公开为只读SharedFlow"",""重置SharedFlow"",""开始从SharedFlow发出值""]",1,asSharedFlow() 函数用于将MutableSharedFlow转换为只读SharedFlow，确保可以观察到该流而无需外部修改。
+59,0,如何从ImagenGenerationResponse访问生成的图像？,"[""作为images属性中的ImagenInlineImage对象的列表"",""通过解码响应中的Base64字符串"",""通过单独的Firebase存储下载"",""通过text属性""]",0,Imagenenerationresponse的images属性包含表示生成的图像的ImagenInlineImage实例。
+59,1,Android应用程序如何保持多个AI交互之间的上下文？,"[""通过在本地缓存响应并重用它们"",""通过使用startChat() 启动聊天会话"",""通过在generativeModel() 调用中设置上下文标志"",""通过对所有请求使用相同的内容对象""]",1,聊天会话 (通过startChat() 创建) 保留消息之间的上下文，这与独立的generateContent() 调用不同。
+59,2,ImagenGenerationConfig中的negativePrompt属性有什么作用？,"[""更积极地阻止不适当的内容"",""防止模型生成具有某些元素的图像"",""反转主提示的含义"",""指定生成反转颜色图像的提示""]",1,negativePrompt属性从生成的图像中排除特定元素 (例如，没有狗或汽车)。
+59,3,如果Imagen的personFilterLevel设置为BLOCK_ALL会发生什么？,"[""允许儿童的图像，但成人被阻止"",""不生成包含任何年龄的人的图像"",""生成的图像中只允许使用卡通人物"",""该模型拒绝所有图像生成请求""]",1,BLOCK_ALL防止生成包含人的图像，无论年龄大小。
+59,4,在Gemini AI的上下文中，什么是多模式输入内容？,"[""单个文本字符串输入"",""由多个AI模型同时生成的内容"",""包含多种语言的内容"",""组合不同数据类型 (例如，文本、图像、视频) 的输入""]",-1,说明:
+59,5,generateContent() 和generateContentStream() 之间的主要区别是什么？,"[""generateContent() 是免费的，而generateContentStream() 需要计费"",""generateContent() 支持多模式输入，而generateContentStream() 不支持"",""generateContentStream() 仅适用于顶点AI API"",""generateContentStream() 作为流增量返回响应，而generateContent() 返回单个响应""]",3,generateContentStream() 方法提供响应流，用于在继续处理时显示早期结果。
+59,6,使用Gemini Flash比Gemini Pro的主要优势是什么？,"[""它可以从文本输入生成视频"",""它在生成文本结果时更具成本效益"",""它提供实时交互功能"",""它支持比Gemini Pro更多的输入类型""]",1,Gemini Flash是一种经济高效的模型，用于响应各种输入生成文本结果。
+59,7,Imagen模型的主要功能是什么？,"[""从文本描述创建图像"",""生成对复杂查询的文本响应"",""提供与AI的实时交互"",""转录音频和视频输入""]",0,Imagen模型根据文本提示生成图像。
+59,8,使用Google的工具将AI集成到Android应用程序中的主要目的是什么？,"[""使用文本、图像和视频生成等AI功能增强应用功能"",""使应用程序独立于internet连接"",""在不添加功能的情况下降低应用开发成本"",""完全取代人类开发人员""]",0,Google提供了将AI集成到应用程序中的工具和api，支持文本生成、视频分析和图像生成等功能。
+59,9,哪种Gemini模型最适合解决涉及大数据量的复杂问题？,"[""双子座闪光灯"",""双子座Flash Live"",""双子座Pro"",""意象""]",2,Gemini Pro是最强大的模型，用于生成对复杂问题或大数据量的快速准确响应。
+59,10,哪个ImagenSafetyFilterLevel设置应用了最严格的可选内容过滤器？,"[""BLOCK_ALL"",""Block_low_and_a及以上"",""块_媒体_和_以上"",""BLOCK_ONLY_HIGH""]",1,Block_low_and_boning强制执行严格的过滤，阻止更多的请求，但最大限度地减少不良内容。
+59,11,建议使用哪种Kotlin构造来有效地创建具有多个输入的内容对象？,"[""Kotlin DSL构建器 (内容 {} 块)"",""密封的类层次结构"",""传统的Java风格的构建器模式"",""直接构造函数初始化""]",0,Kotlin DSL builder (content {}) 是创建具有多个输入的内容对象的更有效方法。
+59,12,哪个方法将ImagenInlineImage转换为可用的位图格式？,"[""asBitmap()"",""decodeImage()"",""renderBitmap()"",""toBitmap()""]",0,在ImagenInlineImage实例上调用asBitmap() 将其转换为应用程序中使用的位图。
+59,13,使用哪种方法在Kotlin中创建生成模型实例？,"[""generateContent()"",""generativeModel()"",""sendMessage()"",""startChat()""]",1,调用generativeModel() 方法以创建具有指定模型名称的GenerativeModel实例。
+59,14,在正在进行的聊天会话中使用哪种方法发送消息？,"[""continueChat()"",""generateContent()"",""postMessage()"",""sendMessage()""]",3,聊天对象sendMessage() 方法用于在保持对话上下文的同时发送输入内容。
+59,15,哪个模型是专门为从文本描述生成图像而设计的？,"[""双子座Flash Live"",""双子座Pro"",""意象"",""Veo""]",2,Imagen模型旨在根据文本描述生成图像。
+59,16,为什么要在协则中执行内容生成调用？,"[""因为Gemini AI仅适用于Kotlin协同程序"",""因为所有Firebase操作都需要协则"",""为了避免使用任何应用程序功能的主线程"",""在等待AI响应时确保UI响应""]",3,内容生成可能需要时间，因此使用协程 (使用Dispatchers.IO) 可以防止阻塞主线程并保持UI响应。
 60,0,在Firebase中注册应用程序后，需要将哪些文件添加到Android Studio项目中？,"[""ai-credentials.dat"",""firebase-keys.xml"",""gemini-config.json"",""google-services.json""]",3,必须将包含项目ID和API密钥的google-services.json文件添加到项目中。
 60,1,准备Gemini Firebase AI逻辑项目的第一步是什么？,"[""添加库依赖项"",""创建Google Cloud帐户"",""在AI Studio中生成API密钥"",""向Firebase注册应用""]",1,Gemini AI项目在Google Cloud帐户中存储和管理，必须先创建该帐户，然后再执行其他设置步骤。
 60,2,Gemini API的API密钥在哪里生成？,"[""Android Studio"",""Firebase控制台"",""Google AI Studio"",""Google Cloud Dashboard""]",2,必须使用Google AI Studio通过访问AI Studio仪表板生成API密钥。

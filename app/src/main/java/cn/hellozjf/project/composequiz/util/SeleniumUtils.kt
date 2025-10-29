@@ -111,13 +111,20 @@ class SeleniumUtils {
           question.findElements(By.cssSelector("span.qsm-text-simple-option")).forEach {
             simpleOptions.add(it.text)
           }
-          val correctOption =
-            question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
+          var correctOption: String?
+          try {
+            correctOption = question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
+          } catch (e: Exception) {
+            correctOption = null
+          }
+
           val explanation = question.text.split("\n").last().replace("Explanation: ", "")
 
           val options = mutableListOf<String>()
           options.addAll(simpleOptions)
-          options.add(correctOption)
+          correctOption?.let {
+            options.add(it)
+          }
           options.sort()
           val correctOptionIndex = options.binarySearch(correctOption)
 
@@ -144,6 +151,7 @@ class SeleniumUtils {
         return quizList.toList()
 
       } catch (e: Exception) {
+        e.printStackTrace()
         println("获取第${chapterIndex}章数据失败!!!!!!!")
         return listOf()
       }

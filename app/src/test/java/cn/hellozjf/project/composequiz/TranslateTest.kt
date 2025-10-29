@@ -42,18 +42,38 @@ class TranslateTest {
 
   @Test
   fun translateQuizCSV() {
-    val quizDTOList = QuizUtils.getQuizDTOListFromCsv()
-    val translatedQuizDTOList = quizDTOList.map { quizDTO ->
-      println("正在翻译 第${quizDTO.chapterIndex}章 第${quizDTO.quizIndex}题")
-      quizDTO.copy(
-        question = TranslateUtils.en2zh(client, quizDTO.question),
-        options = quizDTO.options.map { TranslateUtils.en2zh(client, it) },
-        explanation = TranslateUtils.en2zh(client, quizDTO.explanation)
-      )
+    val quizDTOEnList = QuizUtils.getQuizDTOListFromCsv(
+      file = File(QuizUtils.defaultEnCsvFilePath)
+    )
+    val quizDTOZhList = QuizUtils.getQuizDTOListFromCsv(
+      file = File(QuizUtils.defaultZhCsvFilePath)
+    )
+    val skipQuizKeyList = quizDTOZhList.map { it.getQuizKey() }
+    val translatedQuizDTOList = quizDTOEnList.mapNotNull { quizDTO ->
+      val quizKey = quizDTO.getQuizKey()
+      if (skipQuizKeyList.contains(quizKey)) {
+        // 这题已经翻译过了，不用再翻译了
+        null
+      } else {
+        println("正在翻译 第${quizDTO.chapterIndex}章 第${quizDTO.quizIndex}题")
+        quizDTO.copy(
+          question = TranslateUtils.en2zh(client, quizDTO.question),
+          options = quizDTO.options.map { TranslateUtils.en2zh(client, it) },
+          explanation = TranslateUtils.en2zh(client, quizDTO.explanation)
+        )
+      }
     }
+
+    val quizDTOList = quizDTOZhList + translatedQuizDTOList
+    val sortedQuizDTOList = quizDTOList.sortedWith(
+      compareBy(
+        { it.chapterIndex },
+        { it.quizIndex }
+      )
+    )
     QuizUtils.writeQuizDTOListToCsv(
       file = File(QuizUtils.defaultZhCsvFilePath),
-      quizDTOList = translatedQuizDTOList
+      quizDTOList = sortedQuizDTOList
     )
   }
 
