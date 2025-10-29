@@ -17,11 +17,13 @@ import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
+import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.util.QuizUtils
 
 @Composable
 fun QuizListColumn(
   findQuizDTOByKey: suspend (String, QuizKey) -> QuizDTO?,
+  language: String,
   quizOrder: List<Int>,
   optionOrderList: List<List<Int>>,
   quizSelectOption: Map<QuizKey, OptionKey>,
@@ -66,9 +68,12 @@ fun QuizListColumn(
     }
   }
 
-  LaunchedEffect(key1 = quizKeyList.joinToString(",")) {
+  LaunchedEffect(
+    key1 = quizKeyList.joinToString(","),
+    key2 = language
+  ) {
     val oldQuizDTOList = quizKeyList.mapNotNull {
-      findQuizDTOByKey("", it)
+      findQuizDTOByKey(language, it)
     }
     quizDTOList = QuizUtils.reorder(
       oldQuizDTOList = oldQuizDTOList,
@@ -143,6 +148,7 @@ fun QuizListColumnPreview() {
   )
   QuizListColumn(
     findQuizDTOByKey = findQuizDTOByKey,
+    language = LanguageConstant.ZH,
     quizOrder = quizOrder,
     quizSelectOption = quizSelectOption,
     onQuizSelectOptionChange = onQuizSelectOptionChange,

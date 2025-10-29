@@ -158,6 +158,7 @@ fun QuizScreen(
     ) {
       QuizListColumn(
         findQuizDTOByKey = quizViewModel::findQuizDTOByKey,
+        language = language,
         quizOrder = quizOrder,
         quizSelectOption = quizSelectOption,
         onQuizSelectOptionChange = {
