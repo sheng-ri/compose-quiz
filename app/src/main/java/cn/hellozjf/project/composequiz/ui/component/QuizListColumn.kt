@@ -45,7 +45,12 @@ fun QuizListColumn(
       quizSelectedOptionMap = quizSelectOption,
       onQuizSelectedOptionChange = { mapKey, selectOption ->
         val newMap = quizSelectOption.toMutableMap()
-        newMap[mapKey] = selectOption
+        if (newMap.containsKey(mapKey) && newMap[mapKey] == selectOption) {
+          // 选择同一个选项，取消选择
+          newMap.remove(mapKey)
+        } else {
+          newMap[mapKey] = selectOption
+        }
         onQuizSelectOptionChange(newMap)
       },
       modifier = Modifier.weight(1f)
