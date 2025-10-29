@@ -35,6 +35,7 @@ android {
   }
   buildFeatures {
     compose = true
+    buildConfig = true
   }
 
   // TODO 我把阿里云机器翻译库导入之后，会有报错，需要添加以下依赖，否则app跑不起来，后面要搞明白这有啥用
@@ -66,6 +67,7 @@ dependencies {
   implementation(libs.androidx.room.ktx)
   implementation(libs.androidx.runtime.livedata)
   implementation(libs.androidx.lifecycle.viewmodel.compose)
+  implementation(libs.ui.tooling)
   annotationProcessor(libs.androidx.room.room.compiler)
   ksp(libs.androidx.room.room.compiler)
   testImplementation(libs.junit)

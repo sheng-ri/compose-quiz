@@ -21,6 +21,7 @@ poi = "5.2.3"
 commonCsv = "1.9.0"
 alimt = "1.5.1"
 tea-openapi = "0.3.10"
+uiTooling = "1.9.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -55,6 +56,7 @@ poi-ooxml = { group = "org.apache.poi", name = "poi-ooxml", version.ref = "poi" 
 commons-csv = { group = "org.apache.commons", name = "commons-csv", version.ref = "commonCsv" }
 alimt = {group = "com.aliyun",name="alimt20181012",version.ref="alimt"}
 tea-openapi = {group = "com.aliyun",name="tea-openapi",version.ref="tea-openapi"}
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
