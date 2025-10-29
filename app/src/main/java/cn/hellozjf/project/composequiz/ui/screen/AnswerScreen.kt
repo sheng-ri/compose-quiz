@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Config
@@ -27,9 +28,10 @@ import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
+import cn.hellozjf.project.composequiz.util.QuizUtils
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 
 private val TAG = "AnswerScreen"
 
@@ -40,7 +42,6 @@ private val TAG = "AnswerScreen"
 @Composable
 fun AnswerScreen(
   title: String,
-  // oldQuizDTOList: List<QuizDTO>,
   quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
   quizViewModel: QuizViewModel,
@@ -60,13 +61,11 @@ fun AnswerScreen(
     language = config.language,
     quizKeyList = quizKeyList
   ).collectAsState(listOf())
-  // val quizList by chapterQuizViewModel.findByIdList(idList).collectAsState(listOf())
-
-  val quizWithoutWrongAnswerCountList by remember {
+  val reorderQuizList by remember(
+    key1 = quizList.map { it.getQuizKey() }.joinToString(",")
+  ) {
     derivedStateOf {
-      quizList.map {
-        it.copy(wrongAnswerCount = 0)
-      }
+      QuizUtils.reorder(quizList, quizOrderList, optionOrderList)
     }
   }
 
@@ -80,14 +79,16 @@ fun AnswerScreen(
   val coroutineScope = rememberCoroutineScope()
 
   // 下面这句话只会检查 quizDTOList 的内容，当内容不变（除 wrongAnswerCount 以外）时就不会重复执行
-  LaunchedEffect(key1 = quizWithoutWrongAnswerCountList.hashCode()) {
+  LaunchedEffect(
+    key1 = reorderQuizList.map { it.getQuizKey() }.joinToString(",")
+  ) {
     // 题目更新了，所以要计算一下正确和总的的题目数量
-    totalQuestionCount = quizList.size
+    totalQuestionCount = quizKeyList.size
 
     totalCorrectCount = 0
-    for (quiz in quizList) {
+    for (quiz in reorderQuizList) {
       val quizIndex = quiz.quizIndex
-      val optionIndex = optionOrderList[quizIndex].indexOf(0)
+      val optionIndex = quiz.correctOptionIndex
       val chapterIndex = quiz.chapterIndex
       val correctOptionKey = OptionKey(
         chapterIndex = chapterIndex,
@@ -118,7 +119,8 @@ fun AnswerScreen(
     }
   ) { innerPadding ->
     Column(
-      modifier = Modifier.padding(innerPadding)
+      modifier = Modifier.padding(innerPadding),
+      horizontalAlignment = Alignment.CenterHorizontally
     ) {
       Text(
         text = "你的总分是：$totalCorrectCount / $totalQuestionCount"
@@ -128,20 +130,15 @@ fun AnswerScreen(
         modifier = Modifier.weight(1f),
         state = listState
       ) {
-        if (quizList.isNotEmpty()) {
-          quizOrderList.forEachIndexed { index, order ->
-            val quizDTO = quizList[order]
-            val optionOrder = optionOrderList[order]
-            item(key = quizDTO.getQuizKey().toString()) {
-              val selectOptionKey = chooseOptionMap[quizDTO.getQuizKey()]
-              QuizAnswerItem(
-                setFavorite = quizViewModel::setFavorite,
-                index = index,
-                quizDTO = quizDTO,
-                selectedOptionKey = selectOptionKey,
-                optionOrder = optionOrder
-              )
-            }
+        reorderQuizList.forEachIndexed { index, quizDTO ->
+          item(key = quizDTO.getQuizKey().toString()) {
+            val selectOptionKey = chooseOptionMap[quizDTO.getQuizKey()]
+            QuizAnswerItem(
+              setFavorite = quizViewModel::setFavorite,
+              index = index,
+              quizDTO = quizDTO,
+              selectedOptionKey = selectOptionKey,
+            )
           }
         }
       }

@@ -23,8 +23,7 @@ fun QuizAnswerItem(
   index: Int,
   quizDTO: QuizDTO,
   selectedOptionKey: OptionKey?,
-  modifier: Modifier = Modifier,
-  optionOrder: List<Int> = listOf(0, 1, 2, 3)
+  modifier: Modifier = Modifier
 ) {
   Card(
     colors = CardDefaults.cardColors(
@@ -44,14 +43,13 @@ fun QuizAnswerItem(
         setFavorite = setFavorite
       )
       val optionList = quizDTO.options
-      for (order in optionOrder) {
-        val option = optionList[order]
+      for ((index, option) in optionList.withIndex()) {
         FavoriteQuizOption(
           option = option,
           optionKey = OptionKey(
             chapterIndex = quizDTO.chapterIndex,
             quizIndex = quizDTO.quizIndex,
-            optionIndex = optionList.indexOf(option)
+            optionIndex = index
           ),
           selectedOptionKey = selectedOptionKey,
           correctOptionKey = OptionKey(
@@ -73,15 +71,15 @@ fun QuizAnswerItemPreview() {
     mutableStateOf(
       QuizDTO(
         chapterIndex = 0,
-        quizIndex = 1,
+        quizIndex = 0,
         question = "问题0",
         options = listOf(
-          "正确答案",
-          "错误答案1",
-          "错误答案2",
           "错误答案3",
+          "错误答案1",
+          "正确答案",
+          "错误答案2",
         ),
-        correctOptionIndex = 0,
+        correctOptionIndex = 2,
         explanation = "问题0解释",
         favorite = false,
         favoriteTime = 0L
@@ -93,17 +91,14 @@ fun QuizAnswerItemPreview() {
     quizDTO = quizDTO,
     selectedOptionKey = OptionKey(
       chapterIndex = 0,
-      quizIndex = 1,
+      quizIndex = 0,
       optionIndex = 1
     ),
-    optionOrder = listOf(3, 1, 2, 0),
     setFavorite = { chapterIndex, quizIndex, favorite, favoriteTime ->
-      //if (index == 0) {
       quizDTO = quizDTO.copy(
         favorite = favorite,
         favoriteTime = favoriteTime
       )
-      //}
     }
   )
 }

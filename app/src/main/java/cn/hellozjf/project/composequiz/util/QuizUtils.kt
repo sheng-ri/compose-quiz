@@ -126,6 +126,9 @@ class QuizUtils {
       quizOrder: List<Int>,
       optionOrders: List<List<Int>>
     ): List<QuizDTO> {
+      if (oldQuizDTOList.isEmpty()) {
+        return listOf()
+      }
       val map = mutableMapOf<QuizDTO, QuizDTO>()
       for ((index, quizDTO) in oldQuizDTOList.withIndex()) {
         val newQuizDTO = reorder(quizDTO, optionOrders[index])

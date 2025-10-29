@@ -72,7 +72,6 @@ fun NavDisplayScreen(
         val optionOrderList = key.optionOrderList
         AnswerScreen(
           title = title,
-          // oldQuizEnList = quizKeyList,
           quizKeyList = quizKeyList,
           chapterViewModel = chapterViewModel,
           quizViewModel = quizViewModel,
