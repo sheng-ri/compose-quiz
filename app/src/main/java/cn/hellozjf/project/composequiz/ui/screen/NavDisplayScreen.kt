@@ -53,10 +53,12 @@ fun NavDisplayScreen(
       }
       entry<QuizScreenKey> { key: QuizScreenKey ->
         // 根据传入的 quizKeyList，进行题目测验
-        val title = key.title
+        val titleEn = key.titleEn
+        val titleZh = key.titleZh
         val quizKeyList = key.quizKeyList
         QuizScreen(
-          title = title,
+          titleEn = titleEn,
+          titleZh = titleZh,
           quizKeyList = quizKeyList,
           chapterViewModel = chapterViewModel,
           quizViewModel = quizViewModel,
@@ -65,13 +67,15 @@ fun NavDisplayScreen(
         )
       }
       entry<QuizAnswerScreenKey> { key: QuizAnswerScreenKey ->
-        val title = key.title
+        val titleEn = key.titleEn
+        val titleZh = key.titleZh
         val quizKeyList = key.quizKeyList
         val chooseOptionMap = key.chooseOptionMap
         val quizOrderList = key.quizOrderList
         val optionOrderList = key.optionOrderList
         AnswerScreen(
-          title = title,
+          titleEn = titleEn,
+          titleZh = titleZh,
           quizKeyList = quizKeyList,
           chapterViewModel = chapterViewModel,
           quizViewModel = quizViewModel,
@@ -87,8 +91,8 @@ fun NavDisplayScreen(
         // 展示某章所有的题目
         ChapterQuizScreen(
           chapterIndex = key.chapterIndex,
-          chapterSimpleTitle = key.chapterSimpleTitle,
           configViewModel = configViewModel,
+          chapterViewModel = chapterViewModel,
           quizViewModel = quizViewModel,
           onNavigation = onNavigation
         )

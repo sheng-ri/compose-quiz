@@ -122,5 +122,19 @@ class ChapterUtils {
       )
       return header
     }
+
+    /**
+     * 根据语言，获取 "第1章" 或 "Ch.1" 这样的字符串
+     */
+    fun getChapterIndexStr(
+      language: String,
+      chapterIndex: Int
+    ): String {
+      return if (language == LanguageConstant.ZH) {
+        "第${chapterIndex}章"
+      } else {
+        "Ch.${chapterIndex}"
+      }
+    }
   }
 }

@@ -11,7 +11,8 @@ data object MainScreenKey : NavKey
 
 @Serializable
 data class QuizScreenKey(
-  val title: String,
+  val titleEn: String,            // 语言为英文时的标题
+  val titleZh: String,            // 语言为中文时的标题
   val quizKeyList: List<QuizKey>
 ) : NavKey
 
@@ -23,7 +24,8 @@ data class ChapterQuizScreenKey(
 
 @Serializable
 data class QuizAnswerScreenKey(
-  val title: String,
+  val titleEn: String,            // 语言为英文时的标题
+  val titleZh: String,            // 语言为中文时的标题
   val quizKeyList: List<QuizKey>,
   val chooseOptionMap: Map<QuizKey, OptionKey>,
   val quizOrderList: List<Int>,

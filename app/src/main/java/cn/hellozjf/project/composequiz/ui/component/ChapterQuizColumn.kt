@@ -15,9 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
+import cn.hellozjf.project.composequiz.util.ChapterUtils
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -30,14 +32,16 @@ import kotlinx.coroutines.launch
 fun ChapterQuizColumn(
   language: String,
   chapterIndex: Int,
-  chapterSimpleTitle: String,
-  findQuizDTOFlowByChapterIndex: (String, Int) -> Flow<List<QuizDTO>>,
+  findQuizDTOListFlowByChapterIndex: (String, Int) -> Flow<List<QuizDTO>>,
+  findChapterDTOFlowByIndex: (language: String, index: Int) -> Flow<ChapterDTO?>,
   setFavorite: suspend (Int, Int, Boolean, Long) -> Unit,
   setLastTestChapterIndex: suspend (Int) -> Unit,
   onNavigation: (NavKey) -> Unit
 ) {
 
-  val quizDTOList by findQuizDTOFlowByChapterIndex(language, chapterIndex).collectAsState(listOf())
+  val quizDTOList by findQuizDTOListFlowByChapterIndex(language, chapterIndex).collectAsState(listOf())
+  val chapterEnDTO by findChapterDTOFlowByIndex(LanguageConstant.EN, chapterIndex).collectAsState(null)
+  val chapterZhDTO by findChapterDTOFlowByIndex(LanguageConstant.ZH, chapterIndex).collectAsState(null)
   val listState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
 
@@ -66,7 +70,14 @@ fun ChapterQuizColumn(
         coroutineScope.launch { setLastTestChapterIndex(chapterIndex) }
         onNavigation(
           QuizScreenKey(
-            title = chapterSimpleTitle,
+            titleEn = ChapterUtils.getChapterIndexStr(
+              language = LanguageConstant.EN,
+              chapterIndex = chapterIndex
+            ) + " " + chapterEnDTO?.simpleTitle,
+            titleZh = ChapterUtils.getChapterIndexStr(
+              language = LanguageConstant.ZH,
+              chapterIndex = chapterIndex
+            ) + " " + chapterZhDTO?.simpleTitle,
             quizKeyList = quizDTOList.map {
               QuizKey(
                 chapterIndex = it.chapterIndex,
@@ -88,8 +99,22 @@ fun ChapterQuizColumnPreview() {
   ChapterQuizColumn(
     language = LanguageConstant.ZH,
     chapterIndex = 0,
-    chapterSimpleTitle = "第0章",
-    findQuizDTOFlowByChapterIndex = { language, chapterIndex ->
+    findChapterDTOFlowByIndex = { language, chapterIndex ->
+      if (language == LanguageConstant.ZH) {
+        flowOf(
+          ChapterDTO(
+            simpleTitle = "I'm zero chapter"
+          )
+        )
+      } else {
+        flowOf(
+          ChapterDTO(
+            simpleTitle = "我是第0章标题"
+          )
+        )
+      }
+    },
+    findQuizDTOListFlowByChapterIndex = { language, chapterIndex ->
       if (language == LanguageConstant.ZH) {
         flowOf(
           listOf(

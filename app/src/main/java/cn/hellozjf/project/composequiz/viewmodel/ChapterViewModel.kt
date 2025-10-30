@@ -36,21 +36,21 @@ class ChapterViewModel(application: Application) : ViewModel() {
     return repository.findDTOFlowOrderByIndex(language)
   }
 
-  fun findDTOFlowByIndex(
+  fun findChapterDTOFlowByIndex(
     language: String,
     index: Int
-  ): Flow<List<ChapterDTO>> {
-    return repository.findDTOFlowByIndex(
+  ): Flow<ChapterDTO?> {
+    return repository.findChapterDTOFlowByIndex(
       language = language,
       index = index
     )
   }
 
-  suspend fun findDTOByIndex(
+  suspend fun findChapterDTOByIndex(
     language: String,
     index: Int
   ): ChapterDTO? {
-    return repository.findDTOByIndex(
+    return repository.findChapterDTOByIndex(
       language = language,
       index = index
     )

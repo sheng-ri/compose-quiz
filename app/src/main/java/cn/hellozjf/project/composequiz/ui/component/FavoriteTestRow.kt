@@ -104,7 +104,8 @@ fun FavoriteTestRow(
           // 触发数据库查询
           onNavigation(
             QuizScreenKey(
-              title = "收藏测试",
+              titleEn = "Custom Test",
+              titleZh = "自定义测试",
               quizKeyList = quizList.map {
                 QuizKey(
                   chapterIndex = it.chapterIndex,

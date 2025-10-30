@@ -12,9 +12,11 @@ import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.ui.component.ChapterQuizColumn
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
+import cn.hellozjf.project.composequiz.util.ChapterUtils
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
+import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 
 /**
  * 章节题目 Screen
@@ -22,8 +24,8 @@ import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 @Composable
 fun ChapterQuizScreen(
   chapterIndex: Int,
-  chapterSimpleTitle: String,
   configViewModel: ConfigViewModel,
+  chapterViewModel: ChapterViewModel,
   quizViewModel: QuizViewModel,
   onNavigation: (NavKey) -> Unit,
 ) {
@@ -32,11 +34,19 @@ fun ChapterQuizScreen(
     Config(language = LanguageConstant.EN)
   )
 
+  val chapterDTO by chapterViewModel.findChapterDTOFlowByIndex(
+    language = config.language,
+    index = chapterIndex
+  ).collectAsState(null)
+
   Scaffold(
     modifier = Modifier.fillMaxSize(),
     topBar = {
       MyTopAppBar(
-        title = "章节题目预览",
+        title = ChapterUtils.getChapterIndexStr(
+          language = config.language,
+          chapterIndex = chapterIndex
+        ) + " " + (chapterDTO?.simpleTitle ?: ""),
         toggleLanguage = {
           configViewModel.toggleLanguage()
         },
@@ -50,8 +60,8 @@ fun ChapterQuizScreen(
       ChapterQuizColumn(
         language = config.language,
         chapterIndex = chapterIndex,
-        chapterSimpleTitle = chapterSimpleTitle,
-        findQuizDTOFlowByChapterIndex = quizViewModel::findQuizDTOFlowByChapterIndex,
+        findChapterDTOFlowByIndex = chapterViewModel::findChapterDTOFlowByIndex,
+        findQuizDTOListFlowByChapterIndex = quizViewModel::findQuizDTOListFlowByChapterIndex,
         setLastTestChapterIndex = configViewModel::setLastTestChapterIndex,
         setFavorite = quizViewModel::setFavorite,
         onNavigation = onNavigation

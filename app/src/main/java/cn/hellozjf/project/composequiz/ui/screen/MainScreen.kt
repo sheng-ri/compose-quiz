@@ -108,7 +108,7 @@ fun MainScreen(
           DestinationQuiz.FAVORITE_QUIZ -> {
             FavoriteQuizPanel(
               language = config.language,
-              getChapterDTOByIndex = chapterViewModel::findDTOByIndex,
+              getChapterDTOByIndex = chapterViewModel::findChapterDTOByIndex,
               findByFavoriteOrderByChapterIndex = quizViewModel::findDTOListByFavoriteOrderByChapterIndex,
               findByFavoriteOrderByFavoriteTime = quizViewModel::findDTOListByFavoriteOrderByFavoriteTime,
               findByFavoriteOrderByWrongAnswerCount = quizViewModel::findDTOListByFavoriteOrderByWrongAnswerCount,

@@ -24,9 +24,9 @@ import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.ui.component.QuizListColumn
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 
 /**
  * 问答屏幕
@@ -34,7 +34,8 @@ import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizScreen(
-  title: String,
+  titleEn: String,
+  titleZh: String,
   quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
   quizViewModel: QuizViewModel,
@@ -144,8 +145,11 @@ fun QuizScreen(
     modifier = Modifier.fillMaxSize(),
     topBar = {
       MyTopAppBar(
-        // TODO 把标题改成具体的章节序号和名称
-        title = "章节测试",
+        title = if (language == LanguageConstant.ZH) {
+          titleZh
+        } else {
+          titleEn
+        },
         toggleLanguage = {
           configViewModel.toggleLanguage()
         },
@@ -165,7 +169,8 @@ fun QuizScreen(
           quizSelectOption = it
         },
         optionOrderList = optionOrderList,
-        title = title,
+        titleEn = titleEn,
+        titleZh = titleZh,
         quizKeyList = quizKeyList,
         onNavigation = onNavigation
       )

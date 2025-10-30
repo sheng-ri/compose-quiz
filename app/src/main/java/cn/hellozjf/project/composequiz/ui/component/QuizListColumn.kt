@@ -28,7 +28,8 @@ fun QuizListColumn(
   optionOrderList: List<List<Int>>,
   quizSelectOption: Map<QuizKey, OptionKey>,
   onQuizSelectOptionChange: (Map<QuizKey, OptionKey>) -> Unit,
-  title: String,
+  titleEn: String,
+  titleZh: String,
   quizKeyList: List<QuizKey>,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier
@@ -60,7 +61,8 @@ fun QuizListColumn(
       onClick = {
         onNavigation(
           QuizAnswerScreenKey(
-            title = title,
+            titleEn = titleEn,
+            titleZh = titleZh,
             quizKeyList = quizKeyList,
             chooseOptionMap = quizSelectOption,
             quizOrderList = quizOrder,
@@ -158,7 +160,8 @@ fun QuizListColumnPreview() {
     quizSelectOption = quizSelectOption,
     onQuizSelectOptionChange = onQuizSelectOptionChange,
     optionOrderList = optionOrderList,
-    title = "章节测试",
+    titleEn = "Chapter Test",
+    titleZh = "章节测试",
     quizKeyList = listOf(
       QuizKey(chapterIndex = 0, quizIndex = 0),
       QuizKey(chapterIndex = 0, quizIndex = 1),

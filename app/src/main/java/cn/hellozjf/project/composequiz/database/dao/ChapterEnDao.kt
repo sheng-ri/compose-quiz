@@ -52,7 +52,7 @@ interface ChapterEnDao {
     WHERE `index` = :index
     ORDER BY id
   """)
-  fun findDTOFlowByIndex(index: Int): Flow<List<ChapterDTO>>
+  fun findChapterDTOFlowByIndex(index: Int): Flow<ChapterDTO?>
 
   @Query("""
     SELECT * 
@@ -74,7 +74,7 @@ interface ChapterEnDao {
     WHERE `index` = :index
     ORDER BY id
   """)
-  suspend fun findDTOByIndex(index: Int): ChapterDTO?
+  suspend fun findChapterDTOByIndex(index: Int): ChapterDTO?
 
   @Query("DELETE FROM chapter_en")
   suspend fun deleteAll()

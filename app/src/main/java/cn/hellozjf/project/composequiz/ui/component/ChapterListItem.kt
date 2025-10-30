@@ -20,6 +20,7 @@ import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.nav.ChapterQuizScreenKey
+import cn.hellozjf.project.composequiz.util.ChapterUtils
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 
 /**
@@ -57,11 +58,10 @@ fun ChapterListItem(
       verticalAlignment = Alignment.CenterVertically
     ) {
       Text(
-        text = if (language == LanguageConstant.ZH) {
-          "第 ${chapterDTO.index} 章"
-        } else {
-          "Ch. ${chapterDTO.index}"
-        },
+        text = ChapterUtils.getChapterIndexStr(
+          language = language,
+          chapterIndex = chapterDTO.index
+        ),
         modifier = Modifier.width(75.dp)
       )
       Spacer(modifier = Modifier.width(8.dp))

@@ -60,7 +60,7 @@ class QuizViewModel(application: Application) : ViewModel() {
     }
   }
 
-  fun findQuizDTOFlowByChapterIndex(
+  fun findQuizDTOListFlowByChapterIndex(
     language: String,
     chapterIndex: Int
   ): Flow<List<QuizDTO>> {

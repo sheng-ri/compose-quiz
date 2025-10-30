@@ -41,7 +41,8 @@ private val TAG = "AnswerScreen"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnswerScreen(
-  title: String,
+  titleEn: String,
+  titleZh: String,
   quizKeyList: List<QuizKey>,
   chapterViewModel: ChapterViewModel,
   quizViewModel: QuizViewModel,
@@ -110,7 +111,11 @@ fun AnswerScreen(
     modifier = Modifier.fillMaxSize(),
     topBar = {
       MyTopAppBar(
-        title = "答案",
+        title = if (config.language == LanguageConstant.ZH) {
+          titleZh
+        } else {
+          titleEn
+        },
         toggleLanguage = {
           configViewModel.toggleLanguage()
         },

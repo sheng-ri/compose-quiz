@@ -38,25 +38,25 @@ class ChapterRepository(
     }
   }
 
-  fun findDTOFlowByIndex(
+  fun findChapterDTOFlowByIndex(
     language: String,
     index: Int
-  ): Flow<List<ChapterDTO>> {
+  ): Flow<ChapterDTO?> {
     return if (language == LanguageConstant.ZH) {
-      chapterZhDao.findDTOFlowByIndex(index)
+      chapterZhDao.findChapterDTOFlowByIndex(index)
     } else {
-      chapterEnDao.findDTOFlowByIndex(index)
+      chapterEnDao.findChapterDTOFlowByIndex(index)
     }
   }
 
-  suspend fun findDTOByIndex(
+  suspend fun findChapterDTOByIndex(
     language: String,
     index: Int
   ): ChapterDTO? {
     return if (language == LanguageConstant.ZH) {
-      chapterZhDao.findDTOByIndex(index)
+      chapterZhDao.findChapterDTOByIndex(index)
     } else {
-      chapterEnDao.findDTOByIndex(index)
+      chapterEnDao.findChapterDTOByIndex(index)
     }
   }
 
