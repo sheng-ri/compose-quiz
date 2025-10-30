@@ -12,10 +12,8 @@ import androidx.room.PrimaryKey
   tableName = "chapter_zh"
 )
 data class ChapterZh(
-  @PrimaryKey(autoGenerate = true)
-  @ColumnInfo(name = "id")
-  var id: Int = 0,
 
+  @PrimaryKey
   @ColumnInfo(name = "index")
   var index: Int = 0,
 

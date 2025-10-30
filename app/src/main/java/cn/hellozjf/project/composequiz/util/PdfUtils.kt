@@ -267,7 +267,6 @@ class PdfUtils {
         url?.let {
           chapterDTOList.add(
             ChapterDTO(
-              id = 0,
               index = index,
               fullTitle = title,
               simpleTitle = "",

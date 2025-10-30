@@ -33,7 +33,7 @@ fun ChapterList(
     state = lazyListState
   ) {
     chapterDTOList.forEach { chapterDTO ->
-      item(key = chapterDTO.id) {
+      item(key = chapterDTO.index) {
         ChapterListItem(
           language = language,
           lastTestChapterIndex = lastTestChapterIndex,
@@ -57,7 +57,6 @@ fun ChapterListPreview() {
       result.add(
         run {
           ChapterDTO(
-            id = i,
             index = i,
             simpleTitle = "简单标题$i",
             fullTitle = "完全标题$i",

@@ -4,7 +4,6 @@ import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 
 data class ChapterDTO(
-  val id: Int = 0,
   val index: Int = 0,
   val fullTitle: String = "",
   val simpleTitle: String = "",
