@@ -1,19 +1,16 @@
 package cn.hellozjf.project.composequiz.ui.component
 
-import androidx.activity.result.launch
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
@@ -27,10 +24,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import cn.hellozjf.project.composequiz.BuildConfig
 import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import kotlinx.coroutines.launch
-import cn.hellozjf.project.composequiz.BuildConfig
 
 /**
  * 问答列表项目
@@ -46,6 +43,7 @@ fun QuizListItem(
 ) {
 
   val coroutineScope = rememberCoroutineScope()
+  val tooltipState = rememberTooltipState(isPersistent = false)
 
   Card(
     colors = CardDefaults.cardColors(
@@ -63,35 +61,28 @@ fun QuizListItem(
       Row(
         verticalAlignment = Alignment.CenterVertically
       ) {
-        Text(
-          text = "${index + 1}. ${quizDTO.question}",
-          modifier = Modifier.weight(1f)
-        )
-
-        if (BuildConfig.DEBUG) {
-          // isPersistent=true 允许多次点击显示/隐藏
-          val tooltipState = rememberTooltipState(isPersistent = true)
-          TooltipBox(
-            positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-            tooltip = {
-              // 这是气泡内显示的内容
-              PlainTooltip {
-                Text("${quizDTO.chapterIndex}-${quizDTO.quizIndex}")
-              }
-            },
-            state = tooltipState,
-          ) {
-            // 这是一个文本按钮，点击时显示气泡
-            TextButton(
-              onClick = {
-                coroutineScope.launch {
-                  tooltipState.show()
-                }
-              },
-            ) {
-              Text("序号")
+        TooltipBox(
+          positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+          tooltip = {
+            // 这是气泡内显示的内容
+            PlainTooltip {
+              Text("${quizDTO.chapterIndex}-${quizDTO.quizIndex}")
             }
-          }
+          },
+          state = tooltipState,
+        ) {
+          Text(
+            text = "${index + 1}. ${quizDTO.question}",
+            modifier = Modifier
+              .weight(1f)
+              .clickable {
+                if (BuildConfig.DEBUG) {
+                  coroutineScope.launch {
+                    tooltipState.show()
+                  }
+                }
+              }
+          )
         }
       }
       val options = quizDTO.options

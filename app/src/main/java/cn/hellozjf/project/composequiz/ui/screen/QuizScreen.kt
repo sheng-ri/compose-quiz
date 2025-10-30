@@ -55,11 +55,6 @@ fun QuizScreen(
     }
   }
 
-  // 这是问题列表，初始为空列表，当 LaunchedEffect 执行完毕之后，就能得到实际的问题列表了
-  var quizDTOList by remember {
-    mutableStateOf<List<QuizDTO>>(listOf())
-  }
-
   var quizSelectOption by rememberSaveable(
     inputs = arrayOf(quizKeyList.joinToString(",")),
     stateSaver = Saver<Map<QuizKey, OptionKey>, String>(
@@ -128,17 +123,6 @@ fun QuizScreen(
         List(4) { it }.shuffled()
       }
     )
-  }
-
-  LaunchedEffect(key1 = language) {
-    // 根据 quizKeyList 查出 quizList
-    val quizDtoList = quizKeyList.mapNotNull {
-      quizViewModel.findQuizDTOByKey(
-        language = language,
-        quizKey = it
-      )
-    }
-    quizDTOList = quizDtoList
   }
 
   Scaffold(
