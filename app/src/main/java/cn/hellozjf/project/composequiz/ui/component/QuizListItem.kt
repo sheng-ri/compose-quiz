@@ -88,7 +88,7 @@ fun QuizListItem(
       val options = quizDTO.options
       // 可以进行的选项
       options.forEachIndexed { index, option ->
-        RadioButtonRow(
+        CheckboxRow(
           option = option,
           optionKey = OptionKey(
             chapterIndex = quizDTO.chapterIndex,
@@ -96,7 +96,8 @@ fun QuizListItem(
             optionIndex = index
           ),
           selectedOptionKey = selectedOptionKey,
-          onSelectedOptionKeyChange = onSelectedOptionKeyChange
+          onSelectedOptionKeyChange = onSelectedOptionKeyChange,
+          modifier = Modifier.padding(top = 8.dp)
         )
       }
     }
@@ -108,14 +109,8 @@ fun QuizListItem(
 )
 @Composable
 fun QuizListItemPreview() {
-  var selectOptionKey by remember {
-    mutableStateOf(
-      OptionKey(
-        chapterIndex = 0,
-        quizIndex = 0,
-        optionIndex = 0
-      )
-    )
+  var selectOptionKey: OptionKey? by remember {
+    mutableStateOf(null)
   }
   QuizListItem(
     index = 0,
@@ -124,7 +119,7 @@ fun QuizListItemPreview() {
       quizIndex = 0,
       question = "问题0",
       options = listOf(
-        "正确选项",
+        "正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项",
         "错误选项1",
         "错误选项2",
         "错误选项3",
@@ -134,7 +129,11 @@ fun QuizListItemPreview() {
     ),
     selectedOptionKey = selectOptionKey,
     onSelectedOptionKeyChange = {
-      selectOptionKey = it
+      selectOptionKey = if (selectOptionKey == it) {
+        null
+      } else {
+        it
+      }
     }
   )
 }
