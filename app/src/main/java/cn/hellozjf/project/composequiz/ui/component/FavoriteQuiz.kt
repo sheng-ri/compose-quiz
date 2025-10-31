@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
-import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
@@ -53,7 +53,8 @@ fun FavoriteQuiz(
   ) {
 
     Column(
-      modifier = Modifier.padding(8.dp)
+      modifier = Modifier.padding(8.dp),
+      verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
       FavoriteQuizQuestion(
         onExpandedChange = onExpandedChange,
@@ -62,41 +63,28 @@ fun FavoriteQuiz(
         modifier = Modifier
       )
       if (expanded) {
-        // 显示这题的所有选项，正确选项，解释，打错次数
+        // 显示这题的所有选项，正确选项，解释，答错次数
         val correctOptionKey = OptionKey(
           chapterIndex = quizDTO.chapterIndex,
           quizIndex = quizDTO.quizIndex,
-          optionIndex = 0
+          optionIndex = quizDTO.correctOptionIndex
         )
+        for (i in 0 until quizDTO.options.size) {
+          CheckboxRow(
+            option = quizDTO.options[i],
+            optionKey = correctOptionKey.copy(optionIndex = i),
+            selectedOptionKey = correctOptionKey,
+            correctOptionKey = correctOptionKey,
+            showColor = true,
+            enabled = false
+          )
+        }
         Column {
-          FavoriteQuizOption(
-            option = quizDTO.options[0],
-            optionKey = correctOptionKey.copy(optionIndex = 0),
-            selectedOptionKey = correctOptionKey,
-            correctOptionKey = correctOptionKey
-          )
-          FavoriteQuizOption(
-            option = quizDTO.options[1],
-            optionKey = correctOptionKey.copy(optionIndex = 1),
-            selectedOptionKey = correctOptionKey,
-            correctOptionKey = correctOptionKey
-          )
-          FavoriteQuizOption(
-            option = quizDTO.options[2],
-            optionKey = correctOptionKey.copy(optionIndex = 2),
-            selectedOptionKey = correctOptionKey,
-            correctOptionKey = correctOptionKey
-          )
-          FavoriteQuizOption(
-            option = quizDTO.options[3],
-            optionKey = correctOptionKey.copy(optionIndex = 3),
-            selectedOptionKey = correctOptionKey,
-            correctOptionKey = correctOptionKey
-          )
           Explanation(quizDTO.explanation)
           chapterDTO?.let {
             QuizFromChapter(
-              chapterDTO = it
+              chapterDTO = it,
+              quizDTO = quizDTO
             )
           }
           WrongAnswerCount(quizDTO.wrongAnswerCount)
@@ -111,7 +99,7 @@ fun FavoriteQuiz(
 )
 @Composable
 fun FavoriteQuizPreview() {
-  var expand by remember { mutableStateOf(false) }
+  var expand by remember { mutableStateOf(true) }
   val onExpandChange: (Boolean) -> Unit = {
     expand = it
   }
