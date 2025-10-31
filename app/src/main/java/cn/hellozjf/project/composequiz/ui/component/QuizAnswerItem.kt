@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,7 +36,8 @@ fun QuizAnswerItem(
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
     Column(
-      modifier = Modifier.padding(8.dp)
+      modifier = Modifier.padding(8.dp),
+      verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
       QuestionAndFavoriteRow(
         index = index,
@@ -43,8 +45,13 @@ fun QuizAnswerItem(
         setFavorite = setFavorite
       )
       val optionList = quizDTO.options
+      val correctOptionKey = OptionKey(
+        chapterIndex = quizDTO.chapterIndex,
+        quizIndex = quizDTO.quizIndex,
+        optionIndex = quizDTO.correctOptionIndex
+      )
       for ((index, option) in optionList.withIndex()) {
-        FavoriteQuizOption(
+        CheckboxRow(
           option = option,
           optionKey = OptionKey(
             chapterIndex = quizDTO.chapterIndex,
@@ -52,11 +59,9 @@ fun QuizAnswerItem(
             optionIndex = index
           ),
           selectedOptionKey = selectedOptionKey,
-          correctOptionKey = OptionKey(
-            chapterIndex = quizDTO.chapterIndex,
-            quizIndex = quizDTO.quizIndex,
-            optionIndex = quizDTO.correctOptionIndex
-          )
+          correctOptionKey = correctOptionKey,
+          showColor = true,
+          enabled = false
         )
       }
       Explanation(quizDTO.explanation)

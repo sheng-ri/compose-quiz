@@ -1,6 +1,7 @@
 package cn.hellozjf.project.composequiz.ui.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -55,7 +56,8 @@ fun QuizListItem(
     elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
   ) {
     Column(
-      modifier = Modifier.padding(8.dp)
+      modifier = Modifier.padding(8.dp),
+      verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
       // 题目
       Row(
@@ -96,8 +98,7 @@ fun QuizListItem(
             optionIndex = index
           ),
           selectedOptionKey = selectedOptionKey,
-          onSelectedOptionKeyChange = onSelectedOptionKeyChange,
-          modifier = Modifier.padding(top = 8.dp)
+          onSelectedOptionKeyChange = onSelectedOptionKeyChange
         )
       }
     }
