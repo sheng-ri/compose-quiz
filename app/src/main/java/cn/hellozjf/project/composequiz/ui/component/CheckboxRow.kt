@@ -1,18 +1,16 @@
 package cn.hellozjf.project.composequiz.ui.component
 
 import android.content.res.Configuration
+import android.graphics.Color
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -112,8 +110,8 @@ fun CheckboxRowPreview() {
   )
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "浅色模式")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "深色模式")
+@Preview(showBackground = true, backgroundColor = Color.WHITE.toLong(), uiMode = Configuration.UI_MODE_NIGHT_NO, name = "浅色模式")
+@Preview(showBackground = true, backgroundColor = Color.BLACK.toLong(), uiMode = Configuration.UI_MODE_NIGHT_YES, name = "深色模式")
 @Composable
 fun CheckboxRowListPreview() {
   val chapterIndex = 0
@@ -123,36 +121,33 @@ fun CheckboxRowListPreview() {
   }
 
   ComposeQuizTheme {
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-      Column(
-        modifier = Modifier
-          .padding(innerPadding)
-          .fillMaxWidth()
-      ) {
-        for (i in 0 until 4) {
-          CheckboxRow(
-            option = "选项$i",
-            optionKey = OptionKey(
-              chapterIndex = chapterIndex,
-              quizIndex = quizIndex,
-              optionIndex = i
-            ),
-            selectedOptionKey = selectedOptionKey,
-            onSelectedOptionKeyChange = { newSelectedOptionKey ->
-              selectedOptionKey = if (selectedOptionKey != newSelectedOptionKey) {
-                newSelectedOptionKey
-              } else {
-                null
-              }
-            },
-            correctOptionKey = OptionKey(
-              chapterIndex = chapterIndex,
-              quizIndex = quizIndex,
-              optionIndex = 0
-            ),
-            showColor = true
-          )
-        }
+    Column(
+      modifier = Modifier
+        .fillMaxWidth()
+    ) {
+      for (i in 0 until 4) {
+        CheckboxRow(
+          option = "选项$i",
+          optionKey = OptionKey(
+            chapterIndex = chapterIndex,
+            quizIndex = quizIndex,
+            optionIndex = i
+          ),
+          selectedOptionKey = selectedOptionKey,
+          onSelectedOptionKeyChange = { newSelectedOptionKey ->
+            selectedOptionKey = if (selectedOptionKey != newSelectedOptionKey) {
+              newSelectedOptionKey
+            } else {
+              null
+            }
+          },
+          correctOptionKey = OptionKey(
+            chapterIndex = chapterIndex,
+            quizIndex = quizIndex,
+            optionIndex = 0
+          ),
+          showColor = true
+        )
       }
     }
   }

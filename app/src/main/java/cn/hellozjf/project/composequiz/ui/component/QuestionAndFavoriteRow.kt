@@ -1,13 +1,23 @@
 package cn.hellozjf.project.composequiz.ui.component
 
-import androidx.compose.foundation.Image
+import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
@@ -20,13 +30,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import cn.hellozjf.project.composequiz.BuildConfig
-import cn.hellozjf.project.composequiz.R
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import kotlinx.coroutines.launch
+
+private val TAG = "QuestionAndFavoriteRow"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,46 +49,43 @@ fun QuestionAndFavoriteRow(
   val coroutineScope = rememberCoroutineScope()
   val tooltipState = rememberTooltipState(isPersistent = false)
 
-  Row(
-    modifier = Modifier.fillMaxWidth(),
-    verticalAlignment = Alignment.CenterVertically
-  ) {
-    Box(
-      modifier = Modifier
-        .weight(1f)
-        .clickable {
-          if (BuildConfig.DEBUG) {
-            coroutineScope.launch {
-              tooltipState.show()
+  Surface {
+
+    Row(
+      modifier = Modifier.fillMaxWidth(),
+      verticalAlignment = Alignment.CenterVertically
+    ) {
+      Box(
+        modifier = Modifier
+          .weight(1f)
+          .clickable {
+            if (BuildConfig.DEBUG) {
+              coroutineScope.launch {
+                tooltipState.show()
+              }
             }
           }
-        }
-    ) {
-      TooltipBox(
-        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-        tooltip = {
-          // 这是气泡内显示的内容
-          PlainTooltip {
-            Text("${quizDTO.chapterIndex}-${quizDTO.quizIndex}")
-          }
-        },
-        state = tooltipState,
       ) {
-        Text(
-          text = "${index + 1}. ${quizDTO.question}",
-        )
+        TooltipBox(
+          positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+          tooltip = {
+            // 这是气泡内显示的内容
+            PlainTooltip {
+              Text("${quizDTO.chapterIndex}-${quizDTO.quizIndex}")
+            }
+          },
+          state = tooltipState,
+        ) {
+          val color = LocalContentColor.current
+          Log.d(TAG, "color = $color")
+          Text(
+            text = "${index + 1}. ${quizDTO.question}",
+          )
+        }
       }
-    }
-    Image(
-      painter = if (quizDTO.favorite) {
-        painterResource(R.drawable.baseline_favorite_24)
-      } else {
-        painterResource(R.drawable.baseline_favorite_border_24)
-      },
-      contentDescription = if (quizDTO.favorite) "已收藏" else "未收藏", // 无障碍功能必需
-      modifier = Modifier
-        .size(32.dp)
-        .clickable {
+      FavoriteButton(
+        isFavorite = quizDTO.favorite,
+        onFavoriteChange = {
           coroutineScope.launch {
             setFavorite(
               quizDTO.chapterIndex,
@@ -88,12 +95,75 @@ fun QuestionAndFavoriteRow(
             )
           }
         }
+      )
+    }
+  }
+}
+
+@Composable
+fun FavoriteButton(
+  isFavorite: Boolean,
+  onFavoriteChange: (Boolean) -> Unit
+) {
+  Surface {
+    IconButton(
+      onClick = { onFavoriteChange(!isFavorite) }
+    ) {
+      Icon(
+        imageVector = if (isFavorite) {
+          Icons.Filled.Favorite
+        } else {
+          Icons.Filled.FavoriteBorder
+        },
+        contentDescription = if (isFavorite) "取消收藏" else "收藏",
+        tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+      )
+    }
+  }
+//  Row {
+//    Icon(
+//      imageVector = Icons.Outlined.Favorite,
+//      contentDescription = "轮廓",
+//      tint = Color.Red
+//    )
+//    Icon(
+//      imageVector = Icons.Filled.FavoriteBorder,
+//      contentDescription = "填充",
+//      tint = Color.Red
+//    )
+//  }
+}
+
+@Preview(
+  uiMode = Configuration.UI_MODE_NIGHT_NO,
+  name = "浅色模式"
+)
+@Preview(
+  uiMode = Configuration.UI_MODE_NIGHT_YES,
+  name = "深色模式"
+)
+@Composable
+fun FavoriteButtonPreview() {
+  var isFavorite by remember { mutableStateOf(false) }
+  val onFavoriteChange: (Boolean) -> Unit = {
+    isFavorite = it
+  }
+  ComposeQuizTheme {
+    FavoriteButton(
+      isFavorite = isFavorite,
+      onFavoriteChange = onFavoriteChange
     )
   }
 }
 
+
 @Preview(
-  showBackground = true
+  uiMode = Configuration.UI_MODE_NIGHT_NO,
+  name = "浅色模式"
+)
+@Preview(
+  uiMode = Configuration.UI_MODE_NIGHT_YES,
+  name = "深色模式"
 )
 @Composable
 fun QuestionAndFavoriteRowPreview() {
@@ -116,16 +186,47 @@ fun QuestionAndFavoriteRowPreview() {
       )
     )
   }
-  QuestionAndFavoriteRow(
-    index = 0,
-    quizDTO = quizDTO,
-    setFavorite = { chapterIndex, quizIndex, favorite, favoriteTime ->
-      //if (index == 0) {
-      quizDTO = quizDTO.copy(
-        favorite = favorite,
-        favoriteTime = favoriteTime
-      )
-      //}
+  ComposeQuizTheme {
+    QuestionAndFavoriteRow(
+      index = 0,
+      quizDTO = quizDTO,
+      setFavorite = { chapterIndex, quizIndex, favorite, favoriteTime ->
+        //if (index == 0) {
+        quizDTO = quizDTO.copy(
+          favorite = favorite,
+          favoriteTime = favoriteTime
+        )
+        //}
+      }
+    )
+  }
+}
+
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "深色模式")
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "浅色模式")
+@Composable
+fun Test() {
+  ComposeQuizTheme {
+    Surface {
+
+      Column {
+        Text(
+          text = "在默认背景上，文字是黑色的。",
+        )
+
+        Surface(
+          color = MaterialTheme.colorScheme.primary,
+          onClick = { }
+        ) {
+          // 在这个 Surface 内部：
+          // - LocalBackgroundColor.current 被设置为 Color.Blue
+          // - LocalContentColor.current 被自动调整为与蓝色形成对比的颜色（这里是白色）
+          Text("在蓝色 Surface 上，文字自动变成白色！")
+          // 注意：这里依然没有显式设置 Text 的 color
+        }
+
+        Text("回到默认背景，文字又变回黑色。")
+      }
     }
-  )
+  }
 }
