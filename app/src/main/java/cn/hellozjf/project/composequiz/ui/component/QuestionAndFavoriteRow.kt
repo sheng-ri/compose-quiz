@@ -4,13 +4,11 @@ import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -49,54 +47,51 @@ fun QuestionAndFavoriteRow(
   val coroutineScope = rememberCoroutineScope()
   val tooltipState = rememberTooltipState(isPersistent = false)
 
-  Surface {
-
-    Row(
-      modifier = Modifier.fillMaxWidth(),
-      verticalAlignment = Alignment.CenterVertically
-    ) {
-      Box(
-        modifier = Modifier
-          .weight(1f)
-          .clickable {
-            if (BuildConfig.DEBUG) {
-              coroutineScope.launch {
-                tooltipState.show()
-              }
+  Row(
+    modifier = Modifier.fillMaxWidth(),
+    verticalAlignment = Alignment.CenterVertically
+  ) {
+    Box(
+      modifier = Modifier
+        .weight(1f)
+        .clickable {
+          if (BuildConfig.DEBUG) {
+            coroutineScope.launch {
+              tooltipState.show()
             }
           }
+        }
+    ) {
+      TooltipBox(
+        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        tooltip = {
+          // 这是气泡内显示的内容
+          PlainTooltip {
+            Text("${quizDTO.chapterIndex}-${quizDTO.quizIndex}")
+          }
+        },
+        state = tooltipState,
       ) {
-        TooltipBox(
-          positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-          tooltip = {
-            // 这是气泡内显示的内容
-            PlainTooltip {
-              Text("${quizDTO.chapterIndex}-${quizDTO.quizIndex}")
-            }
-          },
-          state = tooltipState,
-        ) {
-          val color = LocalContentColor.current
-          Log.d(TAG, "color = $color")
-          Text(
-            text = "${index + 1}. ${quizDTO.question}",
+        val color = LocalContentColor.current
+        Log.d(TAG, "color = $color")
+        Text(
+          text = "${index + 1}. ${quizDTO.question}",
+        )
+      }
+    }
+    FavoriteButton(
+      isFavorite = quizDTO.favorite,
+      onFavoriteChange = {
+        coroutineScope.launch {
+          setFavorite(
+            quizDTO.chapterIndex,
+            quizDTO.quizIndex,
+            !quizDTO.favorite,
+            System.currentTimeMillis()
           )
         }
       }
-      FavoriteButton(
-        isFavorite = quizDTO.favorite,
-        onFavoriteChange = {
-          coroutineScope.launch {
-            setFavorite(
-              quizDTO.chapterIndex,
-              quizDTO.quizIndex,
-              !quizDTO.favorite,
-              System.currentTimeMillis()
-            )
-          }
-        }
-      )
-    }
+    )
   }
 }
 
@@ -105,33 +100,19 @@ fun FavoriteButton(
   isFavorite: Boolean,
   onFavoriteChange: (Boolean) -> Unit
 ) {
-  Surface {
-    IconButton(
-      onClick = { onFavoriteChange(!isFavorite) }
-    ) {
-      Icon(
-        imageVector = if (isFavorite) {
-          Icons.Filled.Favorite
-        } else {
-          Icons.Filled.FavoriteBorder
-        },
-        contentDescription = if (isFavorite) "取消收藏" else "收藏",
-        tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-      )
-    }
+  IconButton(
+    onClick = { onFavoriteChange(!isFavorite) }
+  ) {
+    Icon(
+      imageVector = if (isFavorite) {
+        Icons.Filled.Favorite
+      } else {
+        Icons.Filled.FavoriteBorder
+      },
+      contentDescription = if (isFavorite) "取消收藏" else "收藏",
+      tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
+    )
   }
-//  Row {
-//    Icon(
-//      imageVector = Icons.Outlined.Favorite,
-//      contentDescription = "轮廓",
-//      tint = Color.Red
-//    )
-//    Icon(
-//      imageVector = Icons.Filled.FavoriteBorder,
-//      contentDescription = "填充",
-//      tint = Color.Red
-//    )
-//  }
 }
 
 @Preview(
@@ -149,10 +130,12 @@ fun FavoriteButtonPreview() {
     isFavorite = it
   }
   ComposeQuizTheme {
-    FavoriteButton(
-      isFavorite = isFavorite,
-      onFavoriteChange = onFavoriteChange
-    )
+    Surface {
+      FavoriteButton(
+        isFavorite = isFavorite,
+        onFavoriteChange = onFavoriteChange
+      )
+    }
   }
 }
 
@@ -187,46 +170,17 @@ fun QuestionAndFavoriteRowPreview() {
     )
   }
   ComposeQuizTheme {
-    QuestionAndFavoriteRow(
-      index = 0,
-      quizDTO = quizDTO,
-      setFavorite = { chapterIndex, quizIndex, favorite, favoriteTime ->
-        //if (index == 0) {
-        quizDTO = quizDTO.copy(
-          favorite = favorite,
-          favoriteTime = favoriteTime
-        )
-        //}
-      }
-    )
-  }
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, name = "深色模式")
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO, name = "浅色模式")
-@Composable
-fun Test() {
-  ComposeQuizTheme {
     Surface {
-
-      Column {
-        Text(
-          text = "在默认背景上，文字是黑色的。",
-        )
-
-        Surface(
-          color = MaterialTheme.colorScheme.primary,
-          onClick = { }
-        ) {
-          // 在这个 Surface 内部：
-          // - LocalBackgroundColor.current 被设置为 Color.Blue
-          // - LocalContentColor.current 被自动调整为与蓝色形成对比的颜色（这里是白色）
-          Text("在蓝色 Surface 上，文字自动变成白色！")
-          // 注意：这里依然没有显式设置 Text 的 color
+      QuestionAndFavoriteRow(
+        index = 0,
+        quizDTO = quizDTO,
+        setFavorite = { chapterIndex, quizIndex, favorite, favoriteTime ->
+          quizDTO = quizDTO.copy(
+            favorite = favorite,
+            favoriteTime = favoriteTime
+          )
         }
-
-        Text("回到默认背景，文字又变回黑色。")
-      }
+      )
     }
   }
 }
