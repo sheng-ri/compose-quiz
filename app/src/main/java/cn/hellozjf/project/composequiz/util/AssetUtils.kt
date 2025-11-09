@@ -11,6 +11,7 @@ class AssetUtils {
   companion object {
     val CHAPTER_EN_CSV = "csv/chapter.en.csv"
     val CHAPTER_ZH_CSV = "csv/chapter.zh.csv"
+    val QUIZ_EXT_CSV = "csv/quiz.ext.csv"
     val QUIZ_EN_CSV = "csv/quiz.en.csv"
     val QUIZ_ZH_CSV = "csv/quiz.zh.csv"
 

@@ -8,6 +8,7 @@ class QuizConstant {
     val CHAPTER_INDEX = "章节序号"      // 实际书中的章节序号
     val QUIZ_INDEX = "题目序号"         // 从0开始的题目序号
     val QUESTION = "问题"
+    val DESCRIPTION = "描述"
     val OPTIONS = "选项"              // JSON 数组字符串
     val CORRECT_OPTION_INDEX = "正确选项序号"   // 从0开始的选项序号
     val EXPLANATION = "解释"

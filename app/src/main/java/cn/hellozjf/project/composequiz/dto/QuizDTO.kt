@@ -44,6 +44,17 @@ data class QuizDTO(
     )
   }
 
+  /**
+   * 生成用于 Excel 或 CSV 上面的 EXT 数据行
+   */
+  fun toExtDataRow(): List<String> {
+    return listOf(
+      chapterIndex.toString(),
+      quizIndex.toString(),
+      description
+    )
+  }
+
   fun toQuizEn(): QuizEn {
     return QuizEn(
       chapterIndex = chapterIndex,

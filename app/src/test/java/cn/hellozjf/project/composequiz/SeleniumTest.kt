@@ -147,6 +147,11 @@ class SeleniumTest {
       file = File(QuizUtils.defaultEnCsvFilePath),
       quizDTOList = sortedDataList
     )
+    // 将所有章节下面的所有题目写入到 EXT CSV 中
+    QuizUtils.writeQuizDTOListToExtCsv(
+      file = File(QuizUtils.defaultExtCsvFilePath),
+      quizDTOList = sortedDataList
+    )
   }
 
   @Test

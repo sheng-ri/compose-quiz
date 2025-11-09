@@ -14,6 +14,7 @@ import kotlin.text.toInt
 class QuizUtils {
   companion object {
 
+    val defaultExtCsvFilePath = "src/main/assets/${AssetUtils.QUIZ_EXT_CSV}"
     val defaultEnCsvFilePath = "src/main/assets/${AssetUtils.QUIZ_EN_CSV}"
     val defaultZhCsvFilePath = "src/main/assets/${AssetUtils.QUIZ_ZH_CSV}"
 
@@ -53,6 +54,20 @@ class QuizUtils {
         dataList = quizDTOList
           .map {
             it.toDataRow()
+          }
+      )
+    }
+
+    fun writeQuizDTOListToExtCsv(
+      file: File = File(defaultExtCsvFilePath),
+      quizDTOList: List<QuizDTO>
+    ) {
+      CsvUtils.writeToCsv(
+        file = file,
+        header = getExtHeader(),
+        dataList = quizDTOList
+          .map {
+            it.toExtDataRow()
           }
       )
     }
@@ -115,6 +130,18 @@ class QuizUtils {
         QuizConstant.OPTIONS,
         QuizConstant.CORRECT_OPTION_INDEX,
         QuizConstant.EXPLANATION,
+      )
+      return header
+    }
+
+    /**
+     * 获取用于 Excel 或 CSV 上面的 Ext 标题
+     */
+    fun getExtHeader(): List<String> {
+      val header = listOf(
+        QuizConstant.CHAPTER_INDEX,
+        QuizConstant.QUIZ_INDEX,
+        QuizConstant.DESCRIPTION
       )
       return header
     }
