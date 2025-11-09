@@ -64,6 +64,7 @@ fun FavoriteQuizQuestionPreview() {
       chapterIndex = 0,
       quizIndex = 1,
       question = "第0章题目的标题第0章题目的标题第0章题目的标题第0章题目的标题第0章题目的标题",
+      description = "",
       options = listOf(
         "题目正确选项",
         "题目错误选项1",

@@ -78,6 +78,7 @@ class QuizUtils {
           chapterIndex = chapterIndex,
           quizIndex = quizIndex,
           question = question,
+          description = "",
           options = Converters().fromString(options),
           correctOptionIndex = correctOptionIndex,
           explanation = explanation

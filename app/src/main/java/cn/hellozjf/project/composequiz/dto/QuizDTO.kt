@@ -13,6 +13,7 @@ data class QuizDTO(
   // 这个是问题序号，从0开始
   val quizIndex: Int,
   val question: String,
+  val description: String,
   val options: List<String>,
   // 这个是选项序号，从0开始
   val correctOptionIndex: Int,
@@ -47,6 +48,7 @@ data class QuizDTO(
       chapterIndex = chapterIndex,
       quizIndex = quizIndex,
       question = question,
+      description = description,
       options = options,
       correctOptionIndex = correctOptionIndex,
       explanation = explanation
@@ -58,6 +60,7 @@ data class QuizDTO(
       chapterIndex = chapterIndex,
       quizIndex = quizIndex,
       question = question,
+      description = description,
       options = options,
       correctOptionIndex = correctOptionIndex,
       explanation = explanation
@@ -69,6 +72,7 @@ fun QuizEn.toDTO() = QuizDTO(
   chapterIndex = chapterIndex,
   quizIndex = quizIndex,
   question = question,
+  description = description,
   options = options,
   correctOptionIndex = correctOptionIndex,
   explanation = explanation
@@ -78,6 +82,7 @@ fun QuizZh.toDTO() = QuizDTO(
   chapterIndex = chapterIndex,
   quizIndex = quizIndex,
   question = question,
+  description = description,
   options = options,
   correctOptionIndex = correctOptionIndex,
   explanation = explanation

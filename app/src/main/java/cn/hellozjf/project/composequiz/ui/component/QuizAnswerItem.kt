@@ -78,6 +78,7 @@ fun QuizAnswerItemPreview() {
         chapterIndex = 0,
         quizIndex = 0,
         question = "问题0",
+        description = "",
         options = listOf(
           "错误答案3",
           "错误答案1",

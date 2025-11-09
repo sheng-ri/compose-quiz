@@ -156,6 +156,7 @@ fun QuestionAndFavoriteRowPreview() {
         chapterIndex = 0,
         quizIndex = 1,
         question = "问题0",
+        description = "",
         options = listOf(
           "正确答案",
           "错误答案1",

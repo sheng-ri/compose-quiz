@@ -110,6 +110,7 @@ fun FavoriteQuizPanelPreview() {
     chapterIndex = 0,
     quizIndex = 1,
     question = "第0章问题0",
+    description = "",
     options = listOf(
       "正确选项",
       "错误选项1",
@@ -126,6 +127,7 @@ fun FavoriteQuizPanelPreview() {
     chapterIndex = 0,
     quizIndex = 2,
     question = "第0章问题1",
+    description = "",
     options = listOf(
       "正确选项",
       "错误选项1",
@@ -142,6 +144,7 @@ fun FavoriteQuizPanelPreview() {
     chapterIndex = 1,
     quizIndex = 1,
     question = "第1章问题0",
+    description = "",
     options = listOf(
       "正确选项",
       "错误选项1",
@@ -158,6 +161,7 @@ fun FavoriteQuizPanelPreview() {
     chapterIndex = 1,
     quizIndex = 2,
     question = "第1章问题1",
+    description = "",
     options = listOf(
       "正确选项",
       "错误选项1",
@@ -187,6 +191,7 @@ fun FavoriteQuizPanelPreview() {
         chapterIndex = i,
         quizIndex = 1,
         question = "问题$i",
+        description = "",
         options = listOf(
           "正确选项",
           "错误选项1",

@@ -103,17 +103,29 @@ class SeleniumUtils {
 
         // 记录问题
         val quizList = mutableListOf<QuizDTO>()
+        // 找到所有问题所在的 div
         val questions = driver.findElements(By.cssSelector("div.qmn_question_answer"))
         for (question in questions) {
+          // 对于每个问题所在的 div
+          // 获取问题的标题
           val questionText =
             question.findElement(By.cssSelector("span.qsm-result-question-title")).text
+          // 获取问题相关的代码
+          var questionDescription = ""
+          val webElements = question.findElements(By.cssSelector("span.qsm-result-question-description"))
+          if (webElements.isNotEmpty()) {
+            questionDescription = webElements[0].text
+          }
+          // 获取问题的错误选项
           val simpleOptions = mutableListOf<String>()
           question.findElements(By.cssSelector("span.qsm-text-simple-option")).forEach {
             simpleOptions.add(it.text)
           }
+          // 获取问题的正确选项
           var correctOption: String?
           try {
-            correctOption = question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
+            correctOption =
+              question.findElement(By.cssSelector("span.qsm-text-correct-option")).text
           } catch (e: Exception) {
             correctOption = null
           }
@@ -133,6 +145,7 @@ class SeleniumUtils {
               chapterIndex = chapterIndex,
               quizIndex = -1,
               question = questionText,
+              description = questionDescription,
               options = options,
               correctOptionIndex = correctOptionIndex,
               explanation = explanation

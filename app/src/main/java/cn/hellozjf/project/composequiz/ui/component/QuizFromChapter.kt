@@ -73,6 +73,7 @@ fun QuizFromChapterPreview() {
       chapterIndex = 0,
       quizIndex = 0,
       question = "哈哈哈",
+      description = "",
       options = listOf(),
       correctOptionIndex = 0,
       explanation = "",

@@ -104,6 +104,7 @@ fun ChapterListItemPreview() {
           chapterIndex = chapterIndex,
           quizIndex = i,
           question = "章节${chapterIndex}问题${i}",
+          description = "",
           options = listOf(
             "问题${i}正确选项",
             "问题${i}错误选项1",

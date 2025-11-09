@@ -36,6 +36,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -64,6 +65,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -84,6 +86,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -108,6 +111,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -128,6 +132,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -148,6 +153,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -168,6 +174,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -188,6 +195,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -208,6 +216,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -243,6 +252,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
@@ -259,35 +269,6 @@ interface QuizZhDao {
     quizIndex: Int
   ): QuizDTO?
 
-//  fun findFlowByKeyList(quizKeyList: List<QuizKey>): Flow<List<QuizDTO>> {
-//    if (quizKeyList.isEmpty()) {
-//      return flowOf(emptyList())
-//    }
-//    val placeholders = quizKeyList.joinToString(",") {
-//      "(${it.chapterIndex},${it.quizIndex})"
-//    }
-//    return findFlowByKeyListRaw(placeholders)
-//  }
-//
-//  @Query("""
-//    SELECT
-//        quiz_zh.chapter_index chapterIndex,
-//        quiz_zh.quiz_index quizIndex,
-//        quiz_zh.question question,
-//        quiz_zh.correct_option correctOption,
-//        quiz_zh.wrong_option1 wrongOption1,
-//        quiz_zh.wrong_option2 wrongOption2,
-//        quiz_zh.wrong_option3 wrongOption3,
-//        quiz_zh.explanation explanation,
-//        quiz_ext.favorite favorite,
-//        quiz_ext.favorite_time favoriteTime,
-//        quiz_ext.wrong_answer_count wrongAnswerCount
-//    FROM quiz_zh
-//    LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
-//    WHERE (quiz_zh.chapter_index, quiz_zh.quiz_index) IN (:placeholders)
-//  """)
-//  fun findFlowByKeyListRaw(placeholders: String): Flow<List<QuizDTO>>
-
   fun findFlowByKeyList(quizKeyList: List<QuizKey>): Flow<List<QuizDTO>> {
     if (quizKeyList.isEmpty()) {
       return flowOf(emptyList())
@@ -303,6 +284,7 @@ interface QuizZhDao {
                 quiz_zh.chapter_index chapterIndex,
                 quiz_zh.quiz_index quizIndex,
                 quiz_zh.question question,
+                quiz_zh.description description,
                 quiz_zh.options options,
                 quiz_zh.correct_option_index correctOptionIndex,
                 quiz_zh.explanation explanation,
@@ -329,6 +311,7 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
+        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,

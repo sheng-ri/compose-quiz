@@ -136,6 +136,7 @@ fun FavoriteTestRowPreview() {
           chapterIndex = i,
           quizIndex = 1,
           question = "问题$i",
+          description = "",
           options = listOf(
             "正确答案",
             "错误答案1",

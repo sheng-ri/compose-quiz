@@ -119,6 +119,7 @@ fun QuizListItemPreview() {
       chapterIndex = 0,
       quizIndex = 0,
       question = "问题0",
+      description = "",
       options = listOf(
         "正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项正确选项",
         "错误选项1",

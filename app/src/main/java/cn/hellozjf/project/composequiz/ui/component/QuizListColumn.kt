@@ -100,6 +100,7 @@ fun QuizListColumnPreview() {
       chapterIndex = 0,
       quizIndex = 0,
       question = "问题0",
+      description = "",
       options = listOf(
         "正确选项",
         "错误选项1",
@@ -113,6 +114,7 @@ fun QuizListColumnPreview() {
       chapterIndex = 0,
       quizIndex = 1,
       question = "问题1",
+      description = "",
       options = listOf(
         "错误选项1",
         "正确选项",
@@ -126,6 +128,7 @@ fun QuizListColumnPreview() {
       chapterIndex = 0,
       quizIndex = 2,
       question = "问题2",
+      description = "",
       options = listOf(
         "错误选项1",
         "错误选项2",
