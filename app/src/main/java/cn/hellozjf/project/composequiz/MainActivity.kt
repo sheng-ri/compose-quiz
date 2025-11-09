@@ -13,11 +13,13 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.ui.screen.NavDisplayScreen
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import cn.hellozjf.project.composequiz.util.AssetUtils
 import cn.hellozjf.project.composequiz.util.ChapterUtils
 import cn.hellozjf.project.composequiz.util.LanguageConstant
+import cn.hellozjf.project.composequiz.util.QuizConstant
 import cn.hellozjf.project.composequiz.util.QuizUtils
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
@@ -25,6 +27,8 @@ import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
 
 class MainActivity : ComponentActivity() {
 
@@ -150,12 +154,33 @@ class MainActivity : ComponentActivity() {
   private suspend fun readQuizEnCsvAndWriteToDB(
     quizViewModel: QuizViewModel
   ) {
+    // 首先从 EXT 文件中读取描述信息
+    val quizKeyDescriptionMap = mutableMapOf<QuizKey, String>()
+    AssetUtils.openAndRead(
+      context = this,
+      path = AssetUtils.QUIZ_EXT_CSV
+    ) { reader ->
+      val format = CSVFormat.Builder.create(CSVFormat.DEFAULT)
+        .setHeader()
+        .build()
+      val csvParser = CSVParser(reader, format)
+      for (record in csvParser) {
+        val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
+        val quizIndex = record.get(QuizConstant.QUIZ_INDEX).toInt()
+        val description = record.get(QuizConstant.DESCRIPTION)
+        quizKeyDescriptionMap.put(QuizKey(chapterIndex, quizIndex), description)
+      }
+    }
+    // 然后读取 CSV 文件，拼上刚才获取的描述信息，得到 quizDTOList
     var quizDTOList: List<QuizDTO>? = null
     AssetUtils.openAndRead(
       context = this,
       path = AssetUtils.QUIZ_EN_CSV
     ) { reader ->
-      quizDTOList = QuizUtils.getQuizDTOListFromCsv(reader)
+      quizDTOList = QuizUtils.getQuizDTOListFromCsv(
+        reader = reader,
+        quizKeyDescriptionMap = quizKeyDescriptionMap
+      )
     }
     quizDTOList?.let {
       for (quizDTO in it) {

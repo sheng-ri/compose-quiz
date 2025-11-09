@@ -32,7 +32,7 @@ import kotlinx.coroutines.launch
     QuizZh::class,
     QuizExt::class,
     Config::class
-  ], version = 30, exportSchema = false
+  ], version = 31, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class QuizRoomDatabase : RoomDatabase() {

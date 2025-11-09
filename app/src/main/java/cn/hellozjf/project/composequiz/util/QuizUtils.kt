@@ -2,6 +2,7 @@ package cn.hellozjf.project.composequiz.util
 
 import cn.hellozjf.project.composequiz.database.converter.Converters
 import cn.hellozjf.project.composequiz.dto.QuizDTO
+import cn.hellozjf.project.composequiz.dto.QuizKey
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 import org.openqa.selenium.WebDriver
@@ -9,7 +10,6 @@ import java.io.File
 import java.io.FileReader
 import java.io.IOException
 import java.io.Reader
-import kotlin.text.toInt
 
 class QuizUtils {
   companion object {
@@ -73,7 +73,8 @@ class QuizUtils {
     }
 
     fun getQuizDTOListFromCsv(
-      reader: Reader
+      reader: Reader,
+      quizKeyDescriptionMap: Map<QuizKey, String> = mutableMapOf()
     ): List<QuizDTO> {
       val result = mutableListOf<QuizDTO>()
 
@@ -89,15 +90,17 @@ class QuizUtils {
         val options = record.get(QuizConstant.OPTIONS)
         val correctOptionIndex = record.get(QuizConstant.CORRECT_OPTION_INDEX).toInt()
         val explanation = record.get(QuizConstant.EXPLANATION)
-        result.add(QuizDTO(
-          chapterIndex = chapterIndex,
-          quizIndex = quizIndex,
-          question = question,
-          description = "",
-          options = Converters().fromString(options),
-          correctOptionIndex = correctOptionIndex,
-          explanation = explanation
-        ))
+        result.add(
+          QuizDTO(
+            chapterIndex = chapterIndex,
+            quizIndex = quizIndex,
+            question = question,
+            description = quizKeyDescriptionMap[QuizKey(chapterIndex, quizIndex)] ?: "",
+            options = Converters().fromString(options),
+            correctOptionIndex = correctOptionIndex,
+            explanation = explanation
+          )
+        )
       }
 
       return result.toList()
