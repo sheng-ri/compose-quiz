@@ -33,6 +33,10 @@ class QuizViewModel(application: Application) : ViewModel() {
     repository.insertQuiz(quizEn)
   }
 
+  suspend fun insertQuizExt(quizExt: QuizExt) {
+    repository.insertQuizExt(quizExt)
+  }
+
   suspend fun insertQuiz(quizZh: QuizZh) {
     repository.insertQuiz(quizZh)
   }
@@ -45,19 +49,6 @@ class QuizViewModel(application: Application) : ViewModel() {
 
   suspend fun getExtCount(): Int {
     return repository.getExtCount()
-  }
-
-  suspend fun initExtList(keyList: List<QuizKey>) {
-    for (key in keyList) {
-      val quizExt = QuizExt(
-        chapterIndex = key.chapterIndex,
-        quizIndex = key.quizIndex,
-        favorite = false,
-        favoriteTime = 0L,
-        wrongAnswerCount = 0
-      )
-      repository.insertQuizExt(quizExt)
-    }
   }
 
   fun findQuizDTOListFlowByChapterIndex(

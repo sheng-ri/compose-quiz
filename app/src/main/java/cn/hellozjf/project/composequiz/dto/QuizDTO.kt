@@ -2,6 +2,7 @@ package cn.hellozjf.project.composequiz.dto
 
 import cn.hellozjf.project.composequiz.database.converter.Converters
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
+import cn.hellozjf.project.composequiz.database.entity.QuizExt
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 
 /**
@@ -48,10 +49,17 @@ data class QuizDTO(
       chapterIndex = chapterIndex,
       quizIndex = quizIndex,
       question = question,
-      description = description,
       options = options,
       correctOptionIndex = correctOptionIndex,
       explanation = explanation
+    )
+  }
+
+  fun toQuizExt(): QuizExt {
+    return QuizExt(
+      chapterIndex = chapterIndex,
+      quizIndex = quizIndex,
+      description = description
     )
   }
 
@@ -60,30 +68,9 @@ data class QuizDTO(
       chapterIndex = chapterIndex,
       quizIndex = quizIndex,
       question = question,
-      description = description,
       options = options,
       correctOptionIndex = correctOptionIndex,
       explanation = explanation
     )
   }
 }
-
-fun QuizEn.toDTO() = QuizDTO(
-  chapterIndex = chapterIndex,
-  quizIndex = quizIndex,
-  question = question,
-  description = description,
-  options = options,
-  correctOptionIndex = correctOptionIndex,
-  explanation = explanation
-)
-
-fun QuizZh.toDTO() = QuizDTO(
-  chapterIndex = chapterIndex,
-  quizIndex = quizIndex,
-  question = question,
-  description = description,
-  options = options,
-  correctOptionIndex = correctOptionIndex,
-  explanation = explanation
-)

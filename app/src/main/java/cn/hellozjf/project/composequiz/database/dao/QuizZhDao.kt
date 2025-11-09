@@ -36,13 +36,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh
     LEFT JOIN quiz_ext ON quiz_zh.chapter_index = quiz_ext.chapter_index AND quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_zh.chapter_index = :chapterIndex
@@ -65,13 +65,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh
     LEFT JOIN quiz_ext ON quiz_zh.chapter_index = quiz_ext.chapter_index AND quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_zh.chapter_index = :chapterIndex
@@ -86,13 +86,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh 
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1
@@ -111,13 +111,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh 
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -132,13 +132,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh 
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -153,13 +153,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -174,13 +174,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -195,13 +195,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -216,13 +216,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -252,13 +252,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     WHERE quiz_zh.chapter_index=:chapterIndex and quiz_zh.quiz_index=:quizIndex
@@ -284,13 +284,13 @@ interface QuizZhDao {
                 quiz_zh.chapter_index chapterIndex,
                 quiz_zh.quiz_index quizIndex,
                 quiz_zh.question question,
-                quiz_zh.description description,
                 quiz_zh.options options,
                 quiz_zh.correct_option_index correctOptionIndex,
                 quiz_zh.explanation explanation,
                 quiz_ext.favorite favorite,
                 quiz_ext.favorite_time favoriteTime,
-                quiz_ext.wrong_answer_count wrongAnswerCount
+                quiz_ext.wrong_answer_count wrongAnswerCount,
+                quiz_ext.description description
             FROM quiz_zh
             LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index 
                               and quiz_zh.quiz_index = quiz_ext.quiz_index
@@ -311,13 +311,13 @@ interface QuizZhDao {
         quiz_zh.chapter_index chapterIndex,
         quiz_zh.quiz_index quizIndex,
         quiz_zh.question question,
-        quiz_zh.description description,
         quiz_zh.options options,
         quiz_zh.correct_option_index correctOptionIndex,
         quiz_zh.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_zh
     LEFT JOIN quiz_ext on quiz_zh.chapter_index = quiz_ext.chapter_index and quiz_zh.quiz_index = quiz_ext.quiz_index
     ORDER BY quiz_zh.chapter_index, quiz_zh.quiz_index

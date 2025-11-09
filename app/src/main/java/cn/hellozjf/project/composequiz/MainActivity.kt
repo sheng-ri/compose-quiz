@@ -105,18 +105,7 @@ class MainActivity : ComponentActivity() {
         // 中文的题目表没有初始化过
         readQuizZhCsvAndWriteToDB(quizViewModel)
       }
-      if (quizViewModel.getExtCount() == 0) {
-        // EXT表没有初始化过
-        initQuizExtAndWriteToDB(quizViewModel)
-      }
     }
-  }
-
-  private suspend fun initQuizExtAndWriteToDB(
-    quizViewModel: QuizViewModel
-  ) {
-    val quizKeyList = quizViewModel.findQuizKeyList(language = LanguageConstant.EN)
-    quizViewModel.initExtList(quizKeyList)
   }
 
   private suspend fun readChapterEnCsvAndWriteToDB(
@@ -155,6 +144,9 @@ class MainActivity : ComponentActivity() {
     }
   }
 
+  /**
+   * 初始化英文版本的题目，同时初始化问题的描述信息
+   */
   private suspend fun readQuizEnCsvAndWriteToDB(
     quizViewModel: QuizViewModel
   ) {
@@ -167,12 +159,19 @@ class MainActivity : ComponentActivity() {
     }
     quizDTOList?.let {
       for (quizDTO in it) {
+        // 首先存储问题的英文版本内容
         val quizEn = quizDTO.toQuizEn()
         quizViewModel.insertQuiz(quizEn)
+        // 然后存储问题的描述信息
+        val quizExt = quizDTO.toQuizExt()
+        quizViewModel.insertQuizExt(quizExt)
       }
     }
   }
 
+  /**
+   * 初始化中文版本的题目
+   */
   private suspend fun readQuizZhCsvAndWriteToDB(
     quizViewModel: QuizViewModel
   ) {

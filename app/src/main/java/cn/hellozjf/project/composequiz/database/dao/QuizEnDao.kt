@@ -30,27 +30,6 @@ interface QuizEnDao {
   """)
   fun findFlowByChapterIndex(chapterIndex: Int): Flow<List<QuizEn>>
 
-  @Query(
-    """
-    SELECT 
-        quiz_en.chapter_index chapterIndex,
-        quiz_en.quiz_index quizIndex,
-        quiz_en.question question,
-        quiz_en.description description,
-        quiz_en.options options,
-        quiz_en.correct_option_index correctOptionIndex,
-        quiz_en.explanation explanation,
-        quiz_ext.favorite favorite,
-        quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
-    FROM quiz_en
-    LEFT JOIN quiz_ext ON quiz_en.chapter_index = quiz_ext.chapter_index AND quiz_en.quiz_index = quiz_ext.quiz_index
-    WHERE quiz_en.chapter_index = :chapterIndex
-    ORDER BY quiz_en.chapter_index, quiz_en.quiz_index
-  """
-  )
-  fun findQuizDTOFlowByChapterIndex(chapterIndex: Int): Flow<List<QuizDTO>>
-
   @Query("""
     SELECT * 
     FROM quiz_en 
@@ -65,13 +44,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en
     LEFT JOIN quiz_ext ON quiz_en.chapter_index = quiz_ext.chapter_index AND quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_en.chapter_index = :chapterIndex
@@ -86,13 +65,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en 
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1
@@ -100,6 +79,27 @@ interface QuizEnDao {
   """
   )
   suspend fun findByFavorite(): List<QuizDTO>
+
+  @Query(
+    """
+    SELECT 
+        quiz_en.chapter_index chapterIndex,
+        quiz_en.quiz_index quizIndex,
+        quiz_en.question question,
+        quiz_en.options options,
+        quiz_en.correct_option_index correctOptionIndex,
+        quiz_en.explanation explanation,
+        quiz_ext.favorite favorite,
+        quiz_ext.favorite_time favoriteTime,
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
+    FROM quiz_en
+    LEFT JOIN quiz_ext ON quiz_en.chapter_index = quiz_ext.chapter_index AND quiz_en.quiz_index = quiz_ext.quiz_index
+    WHERE quiz_en.chapter_index = :chapterIndex
+    ORDER BY quiz_en.chapter_index, quiz_en.quiz_index
+  """
+  )
+  fun findQuizDTOFlowByChapterIndex(chapterIndex: Int): Flow<List<QuizDTO>>
 
 //  @Query("SELECT * FROM quiz_en WHERE id IN (:idList)")
 //  fun findByIdListFlow(idList: List<Int>): Flow<List<QuizEn>>
@@ -110,13 +110,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -131,13 +131,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -152,13 +152,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -173,13 +173,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -194,13 +194,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -215,13 +215,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_ext.favorite = 1 
@@ -236,12 +236,6 @@ interface QuizEnDao {
   @Query("SELECT count(*) FROM quiz_en")
   suspend fun getCount(): Int
 
-//  @Query("UPDATE quiz_en SET favorite = :favorite, favorite_time = :favoriteTime WHERE id = :id")
-//  suspend fun setFavorite(id: Int, favorite: Boolean, favoriteTime: Long)
-//
-//  @Query("UPDATE quiz_en SET wrong_answer_count = wrong_answer_count + 1 WHERE id = :id")
-//  suspend fun incWrongAnswerCount(id: Int)
-
   @Query("""
     SELECT * 
     FROM quiz_en 
@@ -255,13 +249,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     WHERE quiz_en.chapter_index=:chapterIndex and quiz_en.quiz_index=:quizIndex
@@ -287,13 +281,13 @@ interface QuizEnDao {
                 quiz_en.chapter_index chapterIndex,
                 quiz_en.quiz_index quizIndex,
                 quiz_en.question question,
-                quiz_en.description description,
                 quiz_en.options options,
                 quiz_en.correct_option_index correctOptionIndex,
                 quiz_en.explanation explanation,
                 quiz_ext.favorite favorite,
                 quiz_ext.favorite_time favoriteTime,
-                quiz_ext.wrong_answer_count wrongAnswerCount
+                quiz_ext.wrong_answer_count wrongAnswerCount,
+                quiz_ext.description description
             FROM quiz_en
             LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index 
                               and quiz_en.quiz_index = quiz_ext.quiz_index
@@ -314,13 +308,13 @@ interface QuizEnDao {
         quiz_en.chapter_index chapterIndex,
         quiz_en.quiz_index quizIndex,
         quiz_en.question question,
-        quiz_en.description description,
         quiz_en.options options,
         quiz_en.correct_option_index correctOptionIndex,
         quiz_en.explanation explanation,
         quiz_ext.favorite favorite,
         quiz_ext.favorite_time favoriteTime,
-        quiz_ext.wrong_answer_count wrongAnswerCount
+        quiz_ext.wrong_answer_count wrongAnswerCount,
+        quiz_ext.description description
     FROM quiz_en
     LEFT JOIN quiz_ext on quiz_en.chapter_index = quiz_ext.chapter_index and quiz_en.quiz_index = quiz_ext.quiz_index
     ORDER BY quiz_en.chapter_index, quiz_en.quiz_index

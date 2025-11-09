@@ -28,5 +28,8 @@ data class QuizExt(
   val favoriteTime: Long = 0L,
 
   @ColumnInfo(name = "wrong_answer_count")
-  val wrongAnswerCount: Int = 0
+  val wrongAnswerCount: Int = 0,
+
+  @ColumnInfo(name = "description")
+  val description: String,
 )

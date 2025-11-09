@@ -26,9 +26,6 @@ data class QuizEn(
   @ColumnInfo(name = "question")
   val question: String,
 
-  @ColumnInfo(name = "description")
-  val description: String,
-
   @ColumnInfo(name = "options")
   val options: List<String>,
 

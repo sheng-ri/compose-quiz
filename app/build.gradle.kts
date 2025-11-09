@@ -14,8 +14,8 @@ android {
     applicationId = "cn.hellozjf.project.composequiz"
     minSdk = 26
     targetSdk = 36
-    versionCode = 28
-    versionName = "1.0.28"
+    versionCode = 30
+    versionName = "1.0.30"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
