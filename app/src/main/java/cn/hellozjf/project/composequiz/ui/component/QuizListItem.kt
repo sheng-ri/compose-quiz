@@ -87,6 +87,13 @@ fun QuizListItem(
           )
         }
       }
+      // 如果有相关描述代码，显示描述代码
+      if (quizDTO.description.isNotBlank()) {
+        Text(
+          text = quizDTO.description,
+          modifier = Modifier.padding(start = 4.dp)
+        )
+      }
       val options = quizDTO.options
       // 可以进行的选项
       options.forEachIndexed { index, option ->

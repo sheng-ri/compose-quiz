@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -63,6 +64,13 @@ fun FavoriteQuiz(
         modifier = Modifier
       )
       if (expanded) {
+        // 如果有相关描述代码，显示描述代码
+        if (quizDTO.description.isNotBlank()) {
+          Text(
+            text = quizDTO.description,
+            modifier = Modifier.padding(start = 4.dp)
+          )
+        }
         // 显示这题的所有选项，正确选项，解释，答错次数
         val correctOptionKey = OptionKey(
           chapterIndex = quizDTO.chapterIndex,

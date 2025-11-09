@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +45,13 @@ fun QuizAnswerItem(
         quizDTO = quizDTO,
         setFavorite = setFavorite
       )
+      // 如果有相关描述代码，显示描述代码
+      if (quizDTO.description.isNotBlank()) {
+        Text(
+          text = quizDTO.description,
+          modifier = Modifier.padding(start = 4.dp)
+        )
+      }
       val optionList = quizDTO.options
       val correctOptionKey = OptionKey(
         chapterIndex = quizDTO.chapterIndex,
