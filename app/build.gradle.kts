@@ -86,5 +86,6 @@ dependencies {
   implementation(libs.alimt)
   implementation(libs.tea.openapi)
   ksp(libs.hilt.compiler)
-  ksp(libs.hilt.android)
+  implementation(libs.hilt.android)
+  implementation(libs.androidx.hilt.navigation.compose)
 }

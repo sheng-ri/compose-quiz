@@ -1,33 +1,22 @@
 package cn.hellozjf.project.composequiz.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.hellozjf.project.composequiz.database.QuizRoomDatabase
 import cn.hellozjf.project.composequiz.database.entity.QuizEn
 import cn.hellozjf.project.composequiz.database.entity.QuizExt
 import cn.hellozjf.project.composequiz.database.entity.QuizZh
 import cn.hellozjf.project.composequiz.database.repository.QuizRepository
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class QuizViewModel(application: Application) : ViewModel() {
-
+@HiltViewModel
+class QuizViewModel @Inject constructor(
   private val repository: QuizRepository
-
-  init {
-    val quizDb = QuizRoomDatabase.getInstance(application)
-    val quizEnDao = quizDb.quizEnDao()
-    val quizZhDao = quizDb.quizZhDao()
-    val quizExtDao = quizDb.quizExtDao()
-    repository = QuizRepository(
-      quizEnDao = quizEnDao,
-      quizZhDao = quizZhDao,
-      quizExtDao = quizExtDao
-    )
-  }
+) : ViewModel() {
 
   suspend fun insertQuiz(quizEn: QuizEn) {
     repository.insertQuiz(quizEn)

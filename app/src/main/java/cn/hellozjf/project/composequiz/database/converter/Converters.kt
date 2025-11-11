@@ -3,6 +3,9 @@ package cn.hellozjf.project.composequiz.database.converter
 import androidx.room.TypeConverter
 import kotlinx.serialization.json.Json
 
+/**
+ * TODO 这个也可以改成依赖注入
+ */
 class Converters {
 
   @TypeConverter

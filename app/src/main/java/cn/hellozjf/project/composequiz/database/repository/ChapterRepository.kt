@@ -7,8 +7,11 @@ import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ChapterRepository(
+@Singleton
+class ChapterRepository @Inject constructor(
   private val chapterEnDao: ChapterEnDao,
   private val chapterZhDao: ChapterZhDao,
 ) {

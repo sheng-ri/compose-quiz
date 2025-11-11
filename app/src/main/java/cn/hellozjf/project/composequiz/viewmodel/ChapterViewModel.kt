@@ -1,26 +1,18 @@
 package cn.hellozjf.project.composequiz.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
-import cn.hellozjf.project.composequiz.database.QuizRoomDatabase
 import cn.hellozjf.project.composequiz.database.entity.ChapterEn
 import cn.hellozjf.project.composequiz.database.entity.ChapterZh
 import cn.hellozjf.project.composequiz.database.repository.ChapterRepository
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ChapterViewModel(application: Application) : ViewModel() {
+@HiltViewModel
+class ChapterViewModel @Inject constructor(
   private val repository: ChapterRepository
-
-  init {
-    val quizDb = QuizRoomDatabase.getInstance(application)
-    val chapterEnDao = quizDb.chapterEnDao()
-    val chapterZhDao = quizDb.chapterZhDao()
-    repository = ChapterRepository(
-      chapterEnDao = chapterEnDao,
-      chapterZhDao = chapterZhDao
-    )
-  }
+) : ViewModel() {
 
   suspend fun insertChapter(chapterEn: ChapterEn) {
     repository.insertChapter(chapterEn)

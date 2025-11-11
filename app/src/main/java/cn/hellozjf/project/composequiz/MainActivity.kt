@@ -1,17 +1,13 @@
 package cn.hellozjf.project.composequiz
 
-import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
@@ -25,12 +21,14 @@ import cn.hellozjf.project.composequiz.util.QuizUtils
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
   private val TAG = "MainActivity"
@@ -46,27 +44,30 @@ class MainActivity : ComponentActivity() {
         val coroutineScope = rememberCoroutineScope()
         val owner = LocalViewModelStoreOwner.current
         owner?.let {
-          val quizViewModel: QuizViewModel = viewModel(
-            viewModelStoreOwner = it,
-            key = "QuizViewModel",
-            factory = QuizViewModelFactory(
-              LocalContext.current.applicationContext as Application
-            )
-          )
-          val chapterViewModel: ChapterViewModel = viewModel(
-            viewModelStoreOwner = it,
-            key = "ChapterViewModel",
-            factory = ChapterViewModelFactory(
-              LocalContext.current.applicationContext as Application
-            )
-          )
-          val configViewModel: ConfigViewModel = viewModel(
-            viewModelStoreOwner = it,
-            key = "ConfigViewModel",
-            factory = ConfigViewModelFactory(
-              LocalContext.current.applicationContext as Application
-            )
-          )
+//          val quizViewModel: QuizViewModel = viewModel(
+//            viewModelStoreOwner = it,
+//            key = "QuizViewModel",
+//            factory = QuizViewModelFactory(
+//              LocalContext.current.applicationContext as Application
+//            )
+//          )
+//          val chapterViewModel: ChapterViewModel = viewModel(
+//            viewModelStoreOwner = it,
+//            key = "ChapterViewModel",
+//            factory = ChapterViewModelFactory(
+//              LocalContext.current.applicationContext as Application
+//            )
+//          )
+//          val configViewModel: ConfigViewModel = viewModel(
+//            viewModelStoreOwner = it,
+//            key = "ConfigViewModel",
+//            factory = ConfigViewModelFactory(
+//              LocalContext.current.applicationContext as Application
+//            )
+//          )
+          val quizViewModel: QuizViewModel = hiltViewModel()
+          val chapterViewModel: ChapterViewModel = hiltViewModel()
+          val configViewModel: ConfigViewModel = hiltViewModel()
           NavDisplayScreen(
             chapterViewModel = chapterViewModel,
             quizViewModel = quizViewModel,
@@ -219,26 +220,26 @@ class MainActivity : ComponentActivity() {
   }
 }
 
-class QuizViewModelFactory(
-  val application: Application
-) : ViewModelProvider.Factory {
-  override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    return QuizViewModel(application) as T
-  }
-}
-
-class ChapterViewModelFactory(
-  val application: Application
-) : ViewModelProvider.Factory {
-  override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    return ChapterViewModel(application) as T
-  }
-}
-
-class ConfigViewModelFactory(
-  val application: Application
-) : ViewModelProvider.Factory {
-  override fun <T : ViewModel> create(modelClass: Class<T>): T {
-    return ConfigViewModel(application) as T
-  }
-}
+//class QuizViewModelFactory(
+//  val application: Application
+//) : ViewModelProvider.Factory {
+//  override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//    return QuizViewModel(application) as T
+//  }
+//}
+//
+//class ChapterViewModelFactory(
+//  val application: Application
+//) : ViewModelProvider.Factory {
+//  override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//    return ChapterViewModel(application) as T
+//  }
+//}
+//
+//class ConfigViewModelFactory(
+//  val application: Application
+//) : ViewModelProvider.Factory {
+//  override fun <T : ViewModel> create(modelClass: Class<T>): T {
+//    return ConfigViewModel(application) as T
+//  }
+//}

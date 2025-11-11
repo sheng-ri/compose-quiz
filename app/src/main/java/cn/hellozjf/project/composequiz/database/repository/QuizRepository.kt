@@ -10,8 +10,11 @@ import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class QuizRepository(
+@Singleton
+class QuizRepository @Inject constructor(
   private val quizEnDao: QuizEnDao,
   private val quizZhDao: QuizZhDao,
   private val quizExtDao: QuizExtDao

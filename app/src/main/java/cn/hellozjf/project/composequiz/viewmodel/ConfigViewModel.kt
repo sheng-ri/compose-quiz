@@ -1,22 +1,17 @@
 package cn.hellozjf.project.composequiz.viewmodel
 
-import android.app.Application
 import androidx.lifecycle.ViewModel
-import cn.hellozjf.project.composequiz.database.QuizRoomDatabase
 import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.database.repository.ConfigRepository
 import cn.hellozjf.project.composequiz.util.LanguageConstant
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ConfigViewModel(application: Application) : ViewModel() {
-
+@HiltViewModel
+class ConfigViewModel @Inject constructor(
   private val repository: ConfigRepository
-
-  init {
-    val quizDb = QuizRoomDatabase.getInstance(application)
-    val configDao = quizDb.configDao()
-    repository = ConfigRepository(configDao)
-  }
+) : ViewModel() {
 
   suspend fun updateConfig(config: Config) {
     repository.updateConfig(config)

@@ -3,8 +3,13 @@ package cn.hellozjf.project.composequiz.database.repository
 import cn.hellozjf.project.composequiz.database.dao.ConfigDao
 import cn.hellozjf.project.composequiz.database.entity.Config
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ConfigRepository(private val configDao: ConfigDao) {
+@Singleton
+class ConfigRepository @Inject constructor(
+  private val configDao: ConfigDao
+) {
 
   suspend fun updateConfig(config: Config) {
     configDao.updateConfig(config)
