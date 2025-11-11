@@ -21,6 +21,7 @@ commonCsv = "1.9.0"
 alimt = "1.5.1"
 tea-openapi = "0.3.10"
 uiTooling = "1.9.4"
+hilt = "2.56"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,6 +57,8 @@ commons-csv = { group = "org.apache.commons", name = "commons-csv", version.ref 
 alimt = {group = "com.aliyun",name="alimt20181012",version.ref="alimt"}
 tea-openapi = {group = "com.aliyun",name="tea-openapi",version.ref="tea-openapi"}
 ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -63,3 +66,4 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization" }
 devtoolsKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
