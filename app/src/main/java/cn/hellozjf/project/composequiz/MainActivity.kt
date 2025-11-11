@@ -2,6 +2,7 @@ package cn.hellozjf.project.composequiz
 
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -39,6 +40,8 @@ class MainActivity : ComponentActivity() {
     enableEdgeToEdge()
     setContent {
       ComposeQuizTheme {
+
+        Log.d(TAG, "MainActivity setContent")
 
         val coroutineScope = rememberCoroutineScope()
         val owner = LocalViewModelStoreOwner.current

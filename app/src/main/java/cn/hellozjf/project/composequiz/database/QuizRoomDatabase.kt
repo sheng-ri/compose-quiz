@@ -1,10 +1,12 @@
 package cn.hellozjf.project.composequiz.database
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import cn.hellozjf.project.composequiz.database.converter.Converters
 import cn.hellozjf.project.composequiz.database.dao.ChapterEnDao
@@ -24,6 +26,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+private val TAG = "QuizRoomDatabase"
+
 @Database(
   entities = [
     ChapterEn::class,
@@ -32,7 +36,7 @@ import kotlinx.coroutines.launch
     QuizZh::class,
     QuizExt::class,
     Config::class
-  ], version = 31, exportSchema = false
+  ], version = 32, exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class QuizRoomDatabase : RoomDatabase() {
@@ -47,45 +51,51 @@ abstract class QuizRoomDatabase : RoomDatabase() {
   abstract fun configDao(): ConfigDao
 
   companion object {
+    @Volatile
     private var INSTANCE: QuizRoomDatabase? = null
 
     fun getInstance(context: Context): QuizRoomDatabase {
-      synchronized(this) {
-        var instance = INSTANCE
-        if (instance == null) {
-          instance = Room.databaseBuilder(
-            context.applicationContext,
-            QuizRoomDatabase::class.java,
-            "quiz_database"
-          )
-            .addCallback(object : RoomDatabase.Callback() {
-              override fun onCreate(db: SupportSQLiteDatabase) {
-                // 只在首次创建数据库时执行
-                insertInitialData() // 版本升级时不会执行！
-              }
+      return INSTANCE ?: synchronized(this) {
+        INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+      }
+    }
 
-              override fun onDestructiveMigration(db: SupportSQLiteDatabase) {
-                super.onDestructiveMigration(db)
-                insertInitialData()
-              }
+    private fun buildDatabase(context: Context): QuizRoomDatabase {
+      return Room.databaseBuilder(
+        context.applicationContext,
+        QuizRoomDatabase::class.java,
+        "quiz_database"
+      )
+        .addCallback(databaseCallback(context))
+        .addMigrations(
+          MIGRATION_31_32
+        )
+        .build()
+    }
 
-              private fun insertInitialData() {
-                val scope = CoroutineScope(Dispatchers.IO)
-                scope.launch {
-                  val database = QuizRoomDatabase.getInstance(context)
-                  // 重新插入初始数据
-                  database.configDao().insertConfig(
-                    Config(language = LanguageConstant.EN)
-                  )
-                }
-              }
-            })
-            // TODO 这里如果数据库版本变化，会销毁所有数据，所以后面记得把它改掉
-            .fallbackToDestructiveMigration()
-            .build()
-          INSTANCE = instance
+    private fun databaseCallback(context: Context): RoomDatabase.Callback {
+      return object : RoomDatabase.Callback() {
+        override fun onCreate(db: SupportSQLiteDatabase) {
+          super.onCreate(db)
+          Log.d(TAG, "databaseCallback onCreate")
+          insertInitialData(db)
+          Log.d(TAG, "databaseCallback after insertInitialData")
         }
-        return instance
+      }
+    }
+
+    private fun insertInitialData(db: SupportSQLiteDatabase) {
+      CoroutineScope(Dispatchers.IO).launch {
+        // 直接使用传入的数据库连接，避免循环依赖
+        db.query(
+          "INSERT INTO config (language) VALUES (?)",
+          arrayOf(LanguageConstant.EN)
+        )
+      }
+    }
+
+    val MIGRATION_31_32 = object : Migration(31, 32) {
+      override fun migrate(db: SupportSQLiteDatabase) {
       }
     }
   }

@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,8 @@ import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
 
+private val TAG = "MainScreen"
+
 /**
  * NavDisplayScreen 默认显示的 Screen
  * 它下面有 ChapterScreen、FavoriteQuizScreen、DailyQuizScreen 这三个 Screen
@@ -47,11 +50,13 @@ fun MainScreen(
   val coroutineScope = rememberCoroutineScope()
 
   var showMenu by remember { mutableStateOf(false) }
+  Log.d(TAG, "before configViewModel.getConfigFlow().collectAsState")
   val config by configViewModel.getConfigFlow().collectAsState(
     Config(
       language = LanguageConstant.EN
     )
   )
+  Log.d(TAG, "after configViewModel.getConfigFlow().collectAsState")
 
   Scaffold(
     modifier = Modifier.fillMaxSize(),
