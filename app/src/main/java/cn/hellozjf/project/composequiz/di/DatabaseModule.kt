@@ -23,8 +23,9 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 import javax.inject.Singleton
+
+private val TAG = "DatabaseModule"
 
 /**
  * 这个写法表示，生成的 bean 注入到整个 app 作用域范围
@@ -48,10 +49,12 @@ class DatabaseModule {
       QuizRoomDatabase::class.java,
       "quiz_database"
     )
-      .addCallback(databaseCallback(
-        application = application,
-        eventBus = eventBus
-      ))
+      .addCallback(
+        databaseCallback(
+          application = application,
+          eventBus = eventBus
+        )
+      )
       .addMigrations(
         MIGRATION_31_32
       )
@@ -99,6 +102,10 @@ class DatabaseModule {
     eventBus: NavigationEventBus
   ): RoomDatabase.Callback {
     return object : RoomDatabase.Callback() {
+
+      /**
+       * 首次创建数据库时会进行回调
+       */
       override fun onCreate(db: SupportSQLiteDatabase) {
         super.onCreate(db)
         application.applicationScope.launch {
@@ -106,13 +113,23 @@ class DatabaseModule {
           try {
             // 先执行数据库插入
             insertInitialData(db)
-            // 然后发送事件
-            eventBus.sendEvent(NavigationEvent.DatabaseCreated)
             Log.d(TAG, "databaseCallback after insertInitialData")
           } catch (e: Exception) {
-            eventBus.sendEvent(NavigationEvent.DatabaseError(e.message ?: "Initialization failed"))
             Log.e(TAG, "databaseCallback failed: ${e.message}", e)
           }
+        }
+      }
+
+      /**
+       * 每次打开数据库时会进行回调
+       */
+      override fun onOpen(db: SupportSQLiteDatabase) {
+        super.onOpen(db)
+        application.applicationScope.launch {
+          Log.d(TAG, "databaseCallback onOpen")
+          // 然后发送事件
+          eventBus.sendEvent(NavigationEvent.DatabaseOpened)
+          Log.d(TAG, "eventBus.sendEvent")
         }
       }
     }
@@ -121,9 +138,9 @@ class DatabaseModule {
   private suspend fun insertInitialData(db: SupportSQLiteDatabase) {
     withContext(Dispatchers.IO) {
       // 直接使用传入的数据库连接，避免循环依赖
-      db.query(
-        "INSERT INTO config (language) VALUES (?)",
-        arrayOf(LanguageConstant.EN)
+      db.execSQL(
+        "INSERT OR IGNORE INTO config (id, language, lastTestChapterIndex) VALUES (?,?,?)",
+        arrayOf(1, LanguageConstant.EN, null)
       )
     }
   }
@@ -133,5 +150,3 @@ class DatabaseModule {
     }
   }
 }
-
-private val TAG = "DatabaseModule"

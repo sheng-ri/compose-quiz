@@ -1,5 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,8 @@ import cn.hellozjf.project.composequiz.eventbus.NavigationEvent
 import cn.hellozjf.project.composequiz.nav.MainScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.LaunchViewModel
 
+private val TAG = "LaunchScreen"
+
 @Composable
 fun LaunchScreen(
   onNavigation: (NavKey) -> Unit,
@@ -24,7 +27,8 @@ fun LaunchScreen(
   LaunchedEffect(Unit) {
     viewModel.navigationEvents.collect { event ->
       when (event) {
-        is NavigationEvent.DatabaseCreated -> {
+        is NavigationEvent.DatabaseOpened -> {
+          Log.d(TAG, "receive NavigationEvent.DatabaseCreated")
           onNavigation(MainScreenKey)
         }
 
@@ -39,7 +43,9 @@ fun LaunchScreen(
     modifier = Modifier.fillMaxSize(),
   ) { innerPadding ->
     Box(
-      modifier = Modifier.padding(innerPadding),
+      modifier = Modifier
+        .padding(innerPadding)
+        .fillMaxSize(),
       contentAlignment = Alignment.Center
     ) {
       Text("App 启动中……")
