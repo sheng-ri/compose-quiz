@@ -20,7 +20,7 @@ data class QuizScreenKey(
 data class ChapterQuizScreenKey(
   val chapterIndex: Int,
   val chapterSimpleTitle: String
-): NavKey
+) : NavKey
 
 @Serializable
 data class QuizAnswerScreenKey(
@@ -31,3 +31,6 @@ data class QuizAnswerScreenKey(
   val quizOrderList: List<Int>,
   val optionOrderList: List<List<Int>>
 ) : NavKey
+
+@Serializable
+data object LaunchScreenKey : NavKey

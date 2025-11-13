@@ -6,12 +6,13 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import cn.hellozjf.project.composequiz.nav.ChapterQuizScreenKey
+import cn.hellozjf.project.composequiz.nav.LaunchScreenKey
 import cn.hellozjf.project.composequiz.nav.MainScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
-import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 
 /**
  * 这个是最顶层的 Screen，它会根据 NavKey 显示具体的 Screen
@@ -22,7 +23,7 @@ fun NavDisplayScreen(
   quizViewModel: QuizViewModel,
   configViewModel: ConfigViewModel,
 ) {
-  val backStack = rememberNavBackStack(MainScreenKey)
+  val backStack = rememberNavBackStack(LaunchScreenKey)
   val onNavigation: (NavKey) -> Unit = {
     backStack.add(it)
   }
@@ -94,6 +95,12 @@ fun NavDisplayScreen(
           configViewModel = configViewModel,
           chapterViewModel = chapterViewModel,
           quizViewModel = quizViewModel,
+          onNavigation = onNavigation
+        )
+      }
+      entry<LaunchScreenKey> { key: LaunchScreenKey ->
+        // 展示启动页
+        LaunchScreen(
           onNavigation = onNavigation
         )
       }
