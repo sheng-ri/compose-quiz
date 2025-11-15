@@ -88,4 +88,5 @@ dependencies {
   ksp(libs.hilt.compiler)
   implementation(libs.hilt.android)
   implementation(libs.androidx.hilt.navigation.compose)
+  implementation(libs.androidx.constraintlayout.compose)
 }

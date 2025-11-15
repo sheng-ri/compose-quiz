@@ -1,7 +1,6 @@
 package cn.hellozjf.project.composequiz.ui.component
 
 import android.content.res.Configuration
-import android.graphics.Color
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -11,9 +10,11 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -50,6 +51,8 @@ fun CheckboxRow(
   val successTextColor = if (isDarkMode) SuccessText40 else SuccessText80
   val errorTextColor = if (isDarkMode) ErrorText40 else ErrorText80
 
+  var firstLineCenter by remember { mutableIntStateOf(0) }
+
   Row(
     modifier = modifier
       .fillMaxWidth()
@@ -60,12 +63,15 @@ fun CheckboxRow(
           Modifier
         }
       ),
+    // 当 verticalAlignment 和 Modifier.alignBy 同时使用时
+    // Modifier.alignBy 优先级更高，所以竖直居中失效了
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Start
   ) {
     Checkbox(
       checked = selectedOptionKey == optionKey,
-      onCheckedChange = null
+      onCheckedChange = null,
+      modifier = Modifier.alignBy { it.measuredHeight / 2 }
     )
     Spacer(modifier = Modifier.width(8.dp))
     Text(
@@ -78,76 +84,95 @@ fun CheckboxRow(
         }
       } else {
         normalTextColor
+      },
+      modifier = modifier.alignBy { firstLineCenter },
+      onTextLayout = { layoutResult ->
+        if (layoutResult.lineCount > 0) {
+          val top = layoutResult.getLineTop(0)
+          val bottom = layoutResult.getLineBottom(0)
+          firstLineCenter = ((top + bottom) / 2).toInt()
+        }
+      }
+    )
+  }
+}
+
+@Preview
+@Composable
+fun CheckboxRowPreview() {
+  Surface {
+    val optionKey = OptionKey(
+      chapterIndex = 0,
+      quizIndex = 0,
+      optionIndex = 0
+    )
+    var selectOptionKey: OptionKey? by remember {
+      mutableStateOf(null)
+    }
+    CheckboxRow(
+      option = "错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案",
+      optionKey = optionKey,
+      selectedOptionKey = selectOptionKey,
+      onSelectedOptionKeyChange = {
+        selectOptionKey = if (selectOptionKey != it) {
+          it
+        } else {
+          null
+        }
       }
     )
   }
 }
 
 @Preview(
-  showBackground = true
+  uiMode = Configuration.UI_MODE_NIGHT_NO,
+  name = "浅色模式"
+)
+@Preview(
+  uiMode = Configuration.UI_MODE_NIGHT_YES,
+  name = "深色模式"
 )
 @Composable
-fun CheckboxRowPreview() {
-  val optionKey = OptionKey(
-    chapterIndex = 0,
-    quizIndex = 0,
-    optionIndex = 0
-  )
-  var selectOptionKey: OptionKey? by remember {
-    mutableStateOf(null)
-  }
-  CheckboxRow(
-    option = "错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案错误答案",
-    optionKey = optionKey,
-    selectedOptionKey = selectOptionKey,
-    onSelectedOptionKeyChange = {
-      selectOptionKey = if (selectOptionKey != it) {
-        it
-      } else {
-        null
-      }
-    }
-  )
-}
-
-@Preview(showBackground = true, backgroundColor = Color.WHITE.toLong(), uiMode = Configuration.UI_MODE_NIGHT_NO, name = "浅色模式")
-@Preview(showBackground = true, backgroundColor = Color.BLACK.toLong(), uiMode = Configuration.UI_MODE_NIGHT_YES, name = "深色模式")
-@Composable
 fun CheckboxRowListPreview() {
-  val chapterIndex = 0
-  val quizIndex = 0
-  var selectedOptionKey by remember {
-    mutableStateOf<OptionKey?>(null)
-  }
-
   ComposeQuizTheme {
-    Column(
-      modifier = Modifier
-        .fillMaxWidth()
-    ) {
-      for (i in 0 until 4) {
-        CheckboxRow(
-          option = "选项$i",
-          optionKey = OptionKey(
-            chapterIndex = chapterIndex,
-            quizIndex = quizIndex,
-            optionIndex = i
-          ),
-          selectedOptionKey = selectedOptionKey,
-          onSelectedOptionKeyChange = { newSelectedOptionKey ->
-            selectedOptionKey = if (selectedOptionKey != newSelectedOptionKey) {
-              newSelectedOptionKey
-            } else {
-              null
-            }
-          },
-          correctOptionKey = OptionKey(
-            chapterIndex = chapterIndex,
-            quizIndex = quizIndex,
-            optionIndex = 0
-          ),
-          showColor = true
-        )
+    Surface {
+
+      val chapterIndex = 0
+      val quizIndex = 0
+      var selectedOptionKey by remember {
+        mutableStateOf<OptionKey?>(null)
+      }
+
+      ComposeQuizTheme {
+        Column(
+          modifier = Modifier
+            .fillMaxWidth()
+        ) {
+          for (i in 0 until 4) {
+            CheckboxRow(
+              option = "选项${i}选项${i}选项${i}选项${i}选项${i}选项${i}选项${i}选项${i}选项${i}选项${i}选项${i}选项${i}选项${i}",
+              optionKey = OptionKey(
+                chapterIndex = chapterIndex,
+                quizIndex = quizIndex,
+                optionIndex = i
+              ),
+              selectedOptionKey = selectedOptionKey,
+              onSelectedOptionKeyChange = { newSelectedOptionKey ->
+                selectedOptionKey = if (selectedOptionKey != newSelectedOptionKey) {
+                  newSelectedOptionKey
+                } else {
+                  null
+                }
+              },
+              correctOptionKey = OptionKey(
+                chapterIndex = chapterIndex,
+                quizIndex = quizIndex,
+                optionIndex = 0
+              ),
+              showColor = true
+            )
+          }
+        }
       }
     }
   }
