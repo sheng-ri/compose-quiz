@@ -140,7 +140,7 @@ class DatabaseModule {
       // 直接使用传入的数据库连接，避免循环依赖
       db.execSQL(
         "INSERT OR IGNORE INTO config (id, language, lastTestChapterIndex) VALUES (?,?,?)",
-        arrayOf(1, LanguageConstant.EN, null)
+        arrayOf<Any?>(1, LanguageConstant.EN, null)
       )
     }
   }

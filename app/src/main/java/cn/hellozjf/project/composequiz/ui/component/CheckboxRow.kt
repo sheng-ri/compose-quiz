@@ -60,7 +60,7 @@ fun CheckboxRow(
           Modifier
         }
       ),
-    verticalAlignment = Alignment.Top,
+    verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.Start
   ) {
     Checkbox(

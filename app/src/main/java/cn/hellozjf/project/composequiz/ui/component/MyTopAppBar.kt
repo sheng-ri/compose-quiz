@@ -15,6 +15,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -71,7 +72,8 @@ fun MyTopAppBar(
           coroutineScope.launch {
             toggleLanguage()
           }
-        }
+        },
+        verticalAlignment = Alignment.CenterVertically
       ) {
         Icon(
           painter = painterResource(R.drawable.outline_language_24),
