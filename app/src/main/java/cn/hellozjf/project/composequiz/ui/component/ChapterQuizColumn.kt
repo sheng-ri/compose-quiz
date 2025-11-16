@@ -1,10 +1,12 @@
 package cn.hellozjf.project.composequiz.ui.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,6 +21,7 @@ import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
+import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import cn.hellozjf.project.composequiz.util.ChapterUtils
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import kotlinx.coroutines.flow.Flow
@@ -39,18 +42,24 @@ fun ChapterQuizColumn(
   onNavigation: (NavKey) -> Unit
 ) {
 
-  val quizDTOList by findQuizDTOListFlowByChapterIndex(language, chapterIndex).collectAsState(listOf())
-  val chapterEnDTO by findChapterDTOFlowByIndex(LanguageConstant.EN, chapterIndex).collectAsState(null)
-  val chapterZhDTO by findChapterDTOFlowByIndex(LanguageConstant.ZH, chapterIndex).collectAsState(null)
+  val quizDTOList by findQuizDTOListFlowByChapterIndex(
+    language,
+    chapterIndex
+  ).collectAsState(listOf())
+  val chapterEnDTO by findChapterDTOFlowByIndex(LanguageConstant.EN, chapterIndex).collectAsState(
+    null
+  )
+  val chapterZhDTO by findChapterDTOFlowByIndex(LanguageConstant.ZH, chapterIndex).collectAsState(
+    null
+  )
   val listState = rememberLazyListState()
   val coroutineScope = rememberCoroutineScope()
 
   Column(
-    modifier = Modifier.padding(4.dp),
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     LazyColumn(
-      modifier = Modifier.weight(1f),
+      modifier = Modifier.weight(1f).padding(4.dp),
       state = listState
     ) {
       quizDTOList.forEach { quizDTO ->
@@ -93,85 +102,144 @@ fun ChapterQuizColumn(
   }
 }
 
-@Preview(showBackground = true)
+/**
+ * TODO 我不知道为什么深色模式显示不出东西？？
+ */
+@Preview(
+  uiMode = Configuration.UI_MODE_NIGHT_NO,
+  name = "浅色模式"
+)
+@Preview(
+  uiMode = Configuration.UI_MODE_NIGHT_YES,
+  name = "深色模式"
+)
 @Composable
 fun ChapterQuizColumnPreview() {
-  ChapterQuizColumn(
-    language = LanguageConstant.ZH,
-    chapterIndex = 0,
-    findChapterDTOFlowByIndex = { language, chapterIndex ->
-      if (language == LanguageConstant.ZH) {
-        flowOf(
-          ChapterDTO(
-            simpleTitle = "I'm zero chapter"
-          )
-        )
-      } else {
-        flowOf(
-          ChapterDTO(
-            simpleTitle = "我是第0章标题"
-          )
-        )
-      }
-    },
-    findQuizDTOListFlowByChapterIndex = { language, chapterIndex ->
-      if (language == LanguageConstant.ZH) {
-        flowOf(
-          listOf(
-            QuizDTO(
-              chapterIndex = 0,
-              quizIndex = 0,
-              question = "问题0",
-              description = "",
-              options = listOf(
-                "正确选项",
-                "错误选项1",
-                "错误选项2",
-                "错误选项3"
-              ),
-              correctOptionIndex = 0,
-              explanation = "问题0解释"
-            ),
-            QuizDTO(
-              chapterIndex = 0,
-              quizIndex = 1,
-              question = "问题1",
-              description = "",
-              options = listOf(
-                "错误选项1",
-                "正确选项",
-                "错误选项2",
-                "错误选项3"
-              ),
-              correctOptionIndex = 1,
-              explanation = "问题1解释"
-            ),
-            QuizDTO(
-              chapterIndex = 0,
-              quizIndex = 2,
-              question = "问题2",
-              description = "",
-              options = listOf(
-                "错误选项1",
-                "错误选项2",
-                "正确选项",
-                "错误选项3"
-              ),
-              correctOptionIndex = 2,
-              explanation = "问题2解释"
+  ComposeQuizTheme {
+    Surface {
+      ChapterQuizColumn(
+        language = LanguageConstant.ZH,
+        chapterIndex = 0,
+        findChapterDTOFlowByIndex = { language, chapterIndex ->
+          if (language == LanguageConstant.ZH) {
+            flowOf(
+              ChapterDTO(
+                simpleTitle = "我是第0章标题"
+              )
             )
-          )
-        )
-      } else {
-        flowOf()
-      }
-    },
-    setFavorite = { chapterIndex: Int,
-                    quizIndex: Int,
-                    favorite: Boolean,
-                    favoriteTime: Long ->
-    },
-    setLastTestChapterIndex = {},
-    onNavigation = {}
-  )
+          } else {
+            flowOf(
+              ChapterDTO(
+                simpleTitle = "I'm zero chapter"
+              )
+            )
+          }
+        },
+        findQuizDTOListFlowByChapterIndex = { language, chapterIndex ->
+          if (language == LanguageConstant.ZH) {
+            flowOf(
+              listOf(
+                QuizDTO(
+                  chapterIndex = 0,
+                  quizIndex = 0,
+                  question = "问题0",
+                  description = "",
+                  options = listOf(
+                    "正确选项",
+                    "错误选项1",
+                    "错误选项2",
+                    "错误选项3"
+                  ),
+                  correctOptionIndex = 0,
+                  explanation = "问题0解释"
+                ),
+                QuizDTO(
+                  chapterIndex = 0,
+                  quizIndex = 1,
+                  question = "问题1",
+                  description = "",
+                  options = listOf(
+                    "错误选项1",
+                    "正确选项",
+                    "错误选项2",
+                    "错误选项3"
+                  ),
+                  correctOptionIndex = 1,
+                  explanation = "问题1解释"
+                ),
+                QuizDTO(
+                  chapterIndex = 0,
+                  quizIndex = 2,
+                  question = "问题2",
+                  description = "",
+                  options = listOf(
+                    "错误选项1",
+                    "错误选项2",
+                    "正确选项",
+                    "错误选项3"
+                  ),
+                  correctOptionIndex = 2,
+                  explanation = "问题2解释"
+                )
+              )
+            )
+          } else {
+            flowOf(
+              listOf(
+                QuizDTO(
+                  chapterIndex = 0,
+                  quizIndex = 0,
+                  question = "问题0",
+                  description = "",
+                  options = listOf(
+                    "正确选项",
+                    "错误选项1",
+                    "错误选项2",
+                    "错误选项3"
+                  ),
+                  correctOptionIndex = 0,
+                  explanation = "问题0解释"
+                ),
+                QuizDTO(
+                  chapterIndex = 0,
+                  quizIndex = 1,
+                  question = "问题1",
+                  description = "",
+                  options = listOf(
+                    "错误选项1",
+                    "正确选项",
+                    "错误选项2",
+                    "错误选项3"
+                  ),
+                  correctOptionIndex = 1,
+                  explanation = "问题1解释"
+                ),
+                QuizDTO(
+                  chapterIndex = 0,
+                  quizIndex = 2,
+                  question = "问题2",
+                  description = "",
+                  options = listOf(
+                    "错误选项1",
+                    "错误选项2",
+                    "正确选项",
+                    "错误选项3"
+                  ),
+                  correctOptionIndex = 2,
+                  explanation = "问题2解释"
+                )
+              )
+            )
+          }
+        },
+        setFavorite = { chapterIndex: Int,
+                        quizIndex: Int,
+                        favorite: Boolean,
+                        favoriteTime: Long ->
+        },
+        setLastTestChapterIndex = {},
+        onNavigation = {}
+      )
+    }
+  }
 }

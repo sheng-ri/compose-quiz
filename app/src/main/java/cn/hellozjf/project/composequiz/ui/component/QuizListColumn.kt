@@ -20,6 +20,9 @@ import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.util.QuizUtils
 
+/**
+ * TODO 找找这个界面显示不了预览的原因
+ */
 @Composable
 fun QuizListColumn(
   findQuizDTOByKey: suspend (String, QuizKey) -> QuizDTO?,

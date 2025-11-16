@@ -21,6 +21,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.dto.OptionKey
@@ -132,7 +133,7 @@ fun AnswerScreen(
       )
 
       LazyColumn(
-        modifier = Modifier.weight(1f),
+        modifier = Modifier.weight(1f).padding(4.dp),
         state = listState
       ) {
         reorderQuizList.forEachIndexed { index, quizDTO ->
