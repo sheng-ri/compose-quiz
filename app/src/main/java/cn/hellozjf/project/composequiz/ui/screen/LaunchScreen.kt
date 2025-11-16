@@ -11,16 +11,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.eventbus.NavigationEvent
-import cn.hellozjf.project.composequiz.nav.MainScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.LaunchViewModel
 
 private val TAG = "LaunchScreen"
 
 @Composable
 fun LaunchScreen(
-  onNavigation: (NavKey) -> Unit,
+  onOpenMainScreen: () -> Unit,
   viewModel: LaunchViewModel = hiltViewModel()
 ) {
 
@@ -28,8 +26,8 @@ fun LaunchScreen(
     viewModel.navigationEvents.collect { event ->
       when (event) {
         is NavigationEvent.DatabaseOpened -> {
-          Log.d(TAG, "receive NavigationEvent.DatabaseCreated")
-          onNavigation(MainScreenKey)
+          Log.d(TAG, "receive NavigationEvent.DatabaseOpened")
+          onOpenMainScreen()
         }
 
         else -> {

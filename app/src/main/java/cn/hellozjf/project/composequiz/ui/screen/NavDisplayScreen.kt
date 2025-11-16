@@ -27,6 +27,10 @@ fun NavDisplayScreen(
   val onNavigation: (NavKey) -> Unit = {
     backStack.add(it)
   }
+  val onOpenMainScreen: () -> Unit = {
+    backStack.clear()
+    backStack.add(MainScreenKey)
+  }
   val onClearBackStack: () -> Unit = {
     while (backStack.size > 1) {
       backStack.removeLastOrNull()
@@ -101,7 +105,7 @@ fun NavDisplayScreen(
       entry<LaunchScreenKey> { key: LaunchScreenKey ->
         // 展示启动页
         LaunchScreen(
-          onNavigation = onNavigation
+          onOpenMainScreen = onOpenMainScreen
         )
       }
     }

@@ -20,9 +20,6 @@ class MyApplication : Application() {
   override fun onCreate() {
     super.onCreate()
 
-    // 2. 安全地获取依赖实例
-    // TODO 需要增加一个启动页，等待初始化完成再跳转到主界面
-
     // 在这里进行全局初始化
     // 初始化日志库
     // 初始化数据库

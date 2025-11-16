@@ -64,6 +64,9 @@ fun QuizScreen(
       restore = { string ->
         val result: MutableMap<QuizKey, OptionKey> = mutableMapOf()
         string.split(",").map {
+          if (it.isBlank()) {
+            return@map
+          }
           val (key, value) = it.split(":")
           val (quizChapterIndex, quizQuizIndex) = key.split("_")
           val quizKey = QuizKey(
