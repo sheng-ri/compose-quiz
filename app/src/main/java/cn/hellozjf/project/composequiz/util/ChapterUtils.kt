@@ -68,26 +68,23 @@ class ChapterUtils {
     ): List<ChapterDTO> {
       val result = mutableListOf<ChapterDTO>()
 
-      val format = CSVFormat.Builder.create(CSVFormat.DEFAULT)
-        .setHeader()
-        .build()
-      val csvParser = CSVParser(reader, format)
-
-      for (record in csvParser) {
-        val chapterIndex = record.get(ChapterConstant.INDEX).toInt()
-        val fullTitle = record.get(ChapterConstant.FULL_TITLE)
-        val simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
-        val simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
-        val actualUrl = record.get(ChapterConstant.FULL_URL)
-        result.add(
-          ChapterDTO(
-            index = chapterIndex,
-            fullTitle = fullTitle,
-            simpleTitle = simpleTitle,
-            simpleUrl = simpleUrl,
-            fullUrl = actualUrl
+      CSVFormat.DEFAULT.parse(reader).use { csvParser ->
+        for (record in csvParser) {
+          val chapterIndex = record.get(ChapterConstant.INDEX).toInt()
+          val fullTitle = record.get(ChapterConstant.FULL_TITLE)
+          val simpleTitle = record.get(ChapterConstant.SIMPLE_TITLE)
+          val simpleUrl = record.get(ChapterConstant.SIMPLE_URL)
+          val actualUrl = record.get(ChapterConstant.FULL_URL)
+          result.add(
+            ChapterDTO(
+              index = chapterIndex,
+              fullTitle = fullTitle,
+              simpleTitle = simpleTitle,
+              simpleUrl = simpleUrl,
+              fullUrl = actualUrl
+            )
           )
-        )
+        }
       }
 
       return result.toList()

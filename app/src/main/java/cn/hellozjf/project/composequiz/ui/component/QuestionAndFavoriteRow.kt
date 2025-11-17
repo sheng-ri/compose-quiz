@@ -17,8 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,6 +48,7 @@ fun QuestionAndFavoriteRow(
 
   val coroutineScope = rememberCoroutineScope()
   val tooltipState = rememberTooltipState(isPersistent = false)
+  val positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
 
   Row(
     modifier = Modifier.fillMaxWidth(),
@@ -63,7 +66,7 @@ fun QuestionAndFavoriteRow(
         }
     ) {
       TooltipBox(
-        positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+        positionProvider = positionProvider,
         tooltip = {
           // 这是气泡内显示的内容
           PlainTooltip {

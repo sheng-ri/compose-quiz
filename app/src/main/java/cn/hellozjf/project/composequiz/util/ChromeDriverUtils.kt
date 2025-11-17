@@ -81,8 +81,10 @@ class ChromeDriverUtils {
     }
 
     private fun setExecutablePermission(filePath: String) {
-      if (!System.getProperty("os.name").lowercase().contains("windows")) {
-        File(filePath).setExecutable(true)
+      System.getProperty("os.name")?.lowercase()?.contains("windows")?.let {
+        if (!it) {
+          File(filePath).setExecutable(true)
+        }
       }
     }
   }

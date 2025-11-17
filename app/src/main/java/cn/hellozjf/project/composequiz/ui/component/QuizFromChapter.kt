@@ -4,8 +4,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -27,11 +29,12 @@ fun QuizFromChapter(
 ) {
 
   val coroutineScope = rememberCoroutineScope()
+  val positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
 
   // isPersistent=true 允许多次点击显示/隐藏
   val tooltipState = rememberTooltipState(isPersistent = false)
   TooltipBox(
-    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+    positionProvider = positionProvider,
     tooltip = {
       if (BuildConfig.DEBUG) {
         // 这是气泡内显示的内容

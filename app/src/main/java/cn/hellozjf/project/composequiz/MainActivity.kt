@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
 import cn.hellozjf.project.composequiz.dto.QuizDTO
@@ -44,27 +44,6 @@ class MainActivity : ComponentActivity() {
         val coroutineScope = rememberCoroutineScope()
         val owner = LocalViewModelStoreOwner.current
         owner?.let {
-//          val quizViewModel: QuizViewModel = viewModel(
-//            viewModelStoreOwner = it,
-//            key = "QuizViewModel",
-//            factory = QuizViewModelFactory(
-//              LocalContext.current.applicationContext as Application
-//            )
-//          )
-//          val chapterViewModel: ChapterViewModel = viewModel(
-//            viewModelStoreOwner = it,
-//            key = "ChapterViewModel",
-//            factory = ChapterViewModelFactory(
-//              LocalContext.current.applicationContext as Application
-//            )
-//          )
-//          val configViewModel: ConfigViewModel = viewModel(
-//            viewModelStoreOwner = it,
-//            key = "ConfigViewModel",
-//            factory = ConfigViewModelFactory(
-//              LocalContext.current.applicationContext as Application
-//            )
-//          )
           val quizViewModel: QuizViewModel = hiltViewModel()
           val chapterViewModel: ChapterViewModel = hiltViewModel()
           val configViewModel: ConfigViewModel = hiltViewModel()
@@ -164,15 +143,13 @@ class MainActivity : ComponentActivity() {
       context = this,
       path = AssetUtils.QUIZ_EXT_CSV
     ) { reader ->
-      val format = CSVFormat.Builder.create(CSVFormat.DEFAULT)
-        .setHeader()
-        .build()
-      val csvParser = CSVParser(reader, format)
-      for (record in csvParser) {
-        val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
-        val quizIndex = record.get(QuizConstant.QUIZ_INDEX).toInt()
-        val description = record.get(QuizConstant.DESCRIPTION)
-        quizKeyDescriptionMap.put(QuizKey(chapterIndex, quizIndex), description)
+      CSVFormat.DEFAULT.parse(reader).use { csvParser ->
+        for (record in csvParser) {
+          val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
+          val quizIndex = record.get(QuizConstant.QUIZ_INDEX).toInt()
+          val description = record.get(QuizConstant.DESCRIPTION)
+          quizKeyDescriptionMap.put(QuizKey(chapterIndex, quizIndex), description)
+        }
       }
     }
     // 然后读取 CSV 文件，拼上刚才获取的描述信息，得到 quizDTOList

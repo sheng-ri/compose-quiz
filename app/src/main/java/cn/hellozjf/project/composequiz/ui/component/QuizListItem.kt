@@ -12,8 +12,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,6 +47,7 @@ fun QuizListItem(
 
   val coroutineScope = rememberCoroutineScope()
   val tooltipState = rememberTooltipState(isPersistent = false)
+  val positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
 
   Card(
     colors = CardDefaults.cardColors(
@@ -64,7 +67,7 @@ fun QuizListItem(
         verticalAlignment = Alignment.CenterVertically
       ) {
         TooltipBox(
-          positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+          positionProvider = positionProvider,
           tooltip = {
             // 这是气泡内显示的内容
             PlainTooltip {

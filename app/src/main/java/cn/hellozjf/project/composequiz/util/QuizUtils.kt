@@ -4,7 +4,6 @@ import cn.hellozjf.project.composequiz.database.converter.Converters
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
 import org.openqa.selenium.WebDriver
 import java.io.File
 import java.io.FileReader
@@ -78,29 +77,26 @@ class QuizUtils {
     ): List<QuizDTO> {
       val result = mutableListOf<QuizDTO>()
 
-      val format = CSVFormat.Builder.create(CSVFormat.DEFAULT)
-        .setHeader()
-        .build()
-      val csvParser = CSVParser(reader, format)
-
-      for (record in csvParser) {
-        val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
-        val quizIndex = record.get(QuizConstant.QUIZ_INDEX).toInt()
-        val question = record.get(QuizConstant.QUESTION)
-        val options = record.get(QuizConstant.OPTIONS)
-        val correctOptionIndex = record.get(QuizConstant.CORRECT_OPTION_INDEX).toInt()
-        val explanation = record.get(QuizConstant.EXPLANATION)
-        result.add(
-          QuizDTO(
-            chapterIndex = chapterIndex,
-            quizIndex = quizIndex,
-            question = question,
-            description = quizKeyDescriptionMap[QuizKey(chapterIndex, quizIndex)] ?: "",
-            options = Converters().fromString(options),
-            correctOptionIndex = correctOptionIndex,
-            explanation = explanation
+      CSVFormat.DEFAULT.parse(reader).use { csvParser ->
+        for (record in csvParser) {
+          val chapterIndex = record.get(QuizConstant.CHAPTER_INDEX).toInt()
+          val quizIndex = record.get(QuizConstant.QUIZ_INDEX).toInt()
+          val question = record.get(QuizConstant.QUESTION)
+          val options = record.get(QuizConstant.OPTIONS)
+          val correctOptionIndex = record.get(QuizConstant.CORRECT_OPTION_INDEX).toInt()
+          val explanation = record.get(QuizConstant.EXPLANATION)
+          result.add(
+            QuizDTO(
+              chapterIndex = chapterIndex,
+              quizIndex = quizIndex,
+              question = question,
+              description = quizKeyDescriptionMap[QuizKey(chapterIndex, quizIndex)] ?: "",
+              options = Converters().fromString(options),
+              correctOptionIndex = correctOptionIndex,
+              explanation = explanation
+            )
           )
-        )
+        }
       }
 
       return result.toList()

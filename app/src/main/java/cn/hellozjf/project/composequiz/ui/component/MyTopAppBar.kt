@@ -9,8 +9,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
 import androidx.compose.material3.TooltipBox
-import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.TooltipDefaults.rememberTooltipPositionProvider
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
@@ -33,11 +34,12 @@ fun MyTopAppBar(
 
   val coroutineScope = rememberCoroutineScope()
   val tooltipState = rememberTooltipState()
+  val positionProvider = rememberTooltipPositionProvider(TooltipAnchorPosition.Above)
 
   TopAppBar(
     title = {
       TooltipBox(
-        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(),
+        positionProvider = positionProvider,
         tooltip = {
           PlainTooltip {
             Text(text = title)
