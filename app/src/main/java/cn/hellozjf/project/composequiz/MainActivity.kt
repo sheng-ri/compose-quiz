@@ -196,27 +196,3 @@ class MainActivity : ComponentActivity() {
     }
   }
 }
-
-//class QuizViewModelFactory(
-//  val application: Application
-//) : ViewModelProvider.Factory {
-//  override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//    return QuizViewModel(application) as T
-//  }
-//}
-//
-//class ChapterViewModelFactory(
-//  val application: Application
-//) : ViewModelProvider.Factory {
-//  override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//    return ChapterViewModel(application) as T
-//  }
-//}
-//
-//class ConfigViewModelFactory(
-//  val application: Application
-//) : ViewModelProvider.Factory {
-//  override fun <T : ViewModel> create(modelClass: Class<T>): T {
-//    return ConfigViewModel(application) as T
-//  }
-//}
