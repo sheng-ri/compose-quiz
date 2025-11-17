@@ -209,7 +209,7 @@ class SeleniumUtils {
       return try {
         val wait = WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds))
         val button = wait.until(ExpectedConditions.elementToBeClickable(by))
-        button.click()
+        button?.click()
         // println("成功点击按钮: $by")
         true
       } catch (e: Exception) {

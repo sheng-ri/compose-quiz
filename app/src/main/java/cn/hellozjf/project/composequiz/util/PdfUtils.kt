@@ -1,6 +1,7 @@
 package cn.hellozjf.project.composequiz.util
 
 import cn.hellozjf.project.composequiz.dto.ChapterDTO
+import org.apache.pdfbox.Loader
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.pdmodel.interactive.action.PDActionGoTo
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination
@@ -49,7 +50,7 @@ class PdfUtils {
      */
     private fun extractBookmarkContents(file: File): List<BookmarkContent> {
       // 加载 PDF 文件
-      val document = PDDocument.load(file)
+      val document = Loader.loadPDF(file)
       val result = mutableListOf<BookmarkContent>()
 
       try {
