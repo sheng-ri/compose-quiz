@@ -10,6 +10,7 @@ import cn.hellozjf.project.composequiz.database.QuizRoomDatabase
 import cn.hellozjf.project.composequiz.database.dao.ChapterEnDao
 import cn.hellozjf.project.composequiz.database.dao.ChapterZhDao
 import cn.hellozjf.project.composequiz.database.dao.ConfigDao
+import cn.hellozjf.project.composequiz.database.dao.PunchDao
 import cn.hellozjf.project.composequiz.database.dao.QuizEnDao
 import cn.hellozjf.project.composequiz.database.dao.QuizExtDao
 import cn.hellozjf.project.composequiz.database.dao.QuizZhDao
@@ -56,7 +57,8 @@ class DatabaseModule {
         )
       )
       .addMigrations(
-        MIGRATION_31_32
+        MIGRATION_31_32,
+        MIGRATION_32_33,
       )
       .build()
   }
@@ -95,6 +97,12 @@ class DatabaseModule {
   @Singleton
   fun provideConfigDao(database: QuizRoomDatabase): ConfigDao {
     return database.configDao()
+  }
+
+  @Provides
+  @Singleton
+  fun providePunchDao(database: QuizRoomDatabase): PunchDao {
+    return database.punchDao()
   }
 
   private fun databaseCallback(
@@ -147,6 +155,13 @@ class DatabaseModule {
 
   val MIGRATION_31_32 = object : Migration(31, 32) {
     override fun migrate(db: SupportSQLiteDatabase) {
+    }
+  }
+
+  val MIGRATION_32_33 = object: Migration(32, 33) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+      db.execSQL("DROP TABLE IF EXISTS `punch`")
+      db.execSQL("CREATE TABLE IF NOT EXISTS `punch` (`year` INTEGER NOT NULL, `month` INTEGER NOT NULL, `day` INTEGER NOT NULL, PRIMARY KEY(`year`, `month`, `day`))")
     }
   }
 }

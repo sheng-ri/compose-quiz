@@ -8,10 +8,12 @@ import androidx.navigation3.ui.NavDisplay
 import cn.hellozjf.project.composequiz.nav.ChapterQuizScreenKey
 import cn.hellozjf.project.composequiz.nav.LaunchScreenKey
 import cn.hellozjf.project.composequiz.nav.MainScreenKey
+import cn.hellozjf.project.composequiz.nav.PunchScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.nav.QuizScreenKey
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.PunchViewModel
 import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 
 /**
@@ -22,8 +24,9 @@ fun NavDisplayScreen(
   chapterViewModel: ChapterViewModel,
   quizViewModel: QuizViewModel,
   configViewModel: ConfigViewModel,
+  punchViewModel: PunchViewModel,
 ) {
-  val backStack = rememberNavBackStack(LaunchScreenKey)
+  val backStack = rememberNavBackStack(PunchScreenKey)
   val onNavigation: (NavKey) -> Unit = {
     backStack.add(it)
   }
@@ -100,6 +103,11 @@ fun NavDisplayScreen(
           chapterViewModel = chapterViewModel,
           quizViewModel = quizViewModel,
           onNavigation = onNavigation
+        )
+      }
+      entry<PunchScreenKey> { key: PunchScreenKey ->
+        PunchScreen(
+          punchViewModel = punchViewModel
         )
       }
       entry<LaunchScreenKey> { key: LaunchScreenKey ->

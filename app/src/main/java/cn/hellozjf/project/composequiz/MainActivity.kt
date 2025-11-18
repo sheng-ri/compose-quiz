@@ -20,6 +20,7 @@ import cn.hellozjf.project.composequiz.util.QuizConstant
 import cn.hellozjf.project.composequiz.util.QuizUtils
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.PunchViewModel
 import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -47,10 +48,12 @@ class MainActivity : ComponentActivity() {
           val quizViewModel: QuizViewModel = hiltViewModel()
           val chapterViewModel: ChapterViewModel = hiltViewModel()
           val configViewModel: ConfigViewModel = hiltViewModel()
+          val punchViewModel: PunchViewModel = hiltViewModel()
           NavDisplayScreen(
             chapterViewModel = chapterViewModel,
             quizViewModel = quizViewModel,
-            configViewModel = configViewModel
+            configViewModel = configViewModel,
+            punchViewModel = punchViewModel
           )
 
           // 从 CSV 中读取章节和章节题目数据，并写入数据库中

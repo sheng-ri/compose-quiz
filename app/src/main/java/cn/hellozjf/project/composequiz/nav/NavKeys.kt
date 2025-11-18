@@ -33,4 +33,7 @@ data class QuizAnswerScreenKey(
 ) : NavKey
 
 @Serializable
+data object PunchScreenKey : NavKey
+
+@Serializable
 data object LaunchScreenKey : NavKey
