@@ -3,6 +3,7 @@ package cn.hellozjf.project.composequiz.ui.component
 import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
@@ -63,7 +66,8 @@ fun DailyQuiz(
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     // Text("${currentDate.year}年${currentDate.monthValue}月${currentDate.dayOfMonth}日")
-    PunchCalendar()
+    // TODO
+//    PunchCalendar()
     Button(onClick = {
       Log.d(TAG, "测试")
     }) {
@@ -94,7 +98,10 @@ fun PunchCalendarPreview() {
     Surface {
       PunchCalendar(
         currentMonth = currentMonth,
-        punchRecords = punchRecords
+        punchRecords = punchRecords,
+        onMonthChange = { yearMonth ->
+          Log.d(TAG, "onMonthChange: $yearMonth")
+        }
       )
     }
   }
@@ -102,8 +109,10 @@ fun PunchCalendarPreview() {
 
 @Composable
 fun PunchCalendar(
-  currentMonth: YearMonth = YearMonth.now(),
-  punchRecords: Set<LocalDate> = setOf()
+  currentMonth: YearMonth,
+  punchRecords: Set<LocalDate>,
+  onMonthChange: (YearMonth) -> Unit,
+  modifier: Modifier = Modifier,
 ) {
 //  // 状态管理：当前显示的月份和打卡记录
 //  val currentMonth = remember { YearMonth.now() }
@@ -114,8 +123,34 @@ fun PunchCalendar(
     generateCalendarDates(currentMonth)
   }
 
+  // 用于累计水平拖动距离
+  var dragAmount by remember { mutableFloatStateOf(0f) }
+
   // 构建日历UI
   Column(
+    modifier = modifier.pointerInput(Unit) {
+      // 修正拼写错误
+      detectHorizontalDragGestures(
+        onDragEnd = {
+          // 当拖动结束时判断方向
+          // 向右拖动（dragAmount为正），显示上一个月
+          if (dragAmount > 50) { // 阈值设为50像素
+            onMonthChange(currentMonth.minusMonths(1))
+          } else if (dragAmount < -50) { // 向左拖动（dragAmount为负），显示下一个月
+            onMonthChange(currentMonth.plusMonths(1))
+          }
+          // 重置拖动距离
+          dragAmount = 0f
+        },
+        onHorizontalDrag = { change, drag ->
+          // 实时累加拖动距离
+          // drag > 0 表示向右拖动, drag < 0 表示向左拖动
+          dragAmount += drag
+          // 消费掉事件，防止父组件也响应拖动
+          change.consume()
+        }
+      )
+    },
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
     Text(
