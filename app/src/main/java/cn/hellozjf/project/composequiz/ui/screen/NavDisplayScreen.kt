@@ -31,10 +31,12 @@ fun NavDisplayScreen(
     backStack.add(it)
   }
   val onOpenMainScreen: () -> Unit = {
+    // 清除栈中的启动页，添加首页
     backStack.clear()
     backStack.add(MainScreenKey)
   }
   val onClearBackStack: () -> Unit = {
+    // 清除栈中除首页以外的页面
     while (backStack.size > 1) {
       backStack.removeLastOrNull()
     }

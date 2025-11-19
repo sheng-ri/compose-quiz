@@ -10,6 +10,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import cn.hellozjf.project.composequiz.ui.component.PunchCalendar
 import cn.hellozjf.project.composequiz.viewmodel.PunchViewModel
@@ -27,7 +28,7 @@ fun PunchScreen(
 ) {
 
   // 把当前的年月取出来
-  val currentMonth by remember { mutableStateOf(YearMonth.now()) }
+  var currentMonth by remember { mutableStateOf(YearMonth.now()) }
   // 根据当前的年月，把punch记录取出来
   val punchList by punchViewModel.getByYearMonthFlow(currentMonth.year, currentMonth.monthValue)
     .collectAsState(listOf())
@@ -43,6 +44,7 @@ fun PunchScreen(
         punchRecords = punchList.map { LocalDate.of(it.year, it.month, it.day) }.toSet(),
         onMonthChange = { yearMonth ->
           Log.d(TAG, "onMonthChange: $yearMonth")
+          currentMonth = yearMonth
         }
       )
     }

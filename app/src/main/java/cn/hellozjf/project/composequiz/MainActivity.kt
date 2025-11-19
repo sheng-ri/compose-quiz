@@ -27,7 +27,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.apache.commons.csv.CSVFormat
-import org.apache.commons.csv.CSVParser
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

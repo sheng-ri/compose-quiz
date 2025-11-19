@@ -128,7 +128,7 @@ fun PunchCalendar(
 
   // 构建日历UI
   Column(
-    modifier = modifier.pointerInput(Unit) {
+    modifier = modifier.pointerInput(key1 = currentMonth) {
       // 修正拼写错误
       detectHorizontalDragGestures(
         onDragEnd = {
@@ -166,6 +166,7 @@ fun PunchCalendar(
       items(dates) { date ->
         CalendarDay(
           date = date,
+          currentMonth = currentMonth,
           isPunched = punchRecords.contains(date),
         )
       }
@@ -197,6 +198,7 @@ private fun generateCalendarDates(month: YearMonth): List<LocalDate> {
 @Composable
 fun CalendarDay(
   date: LocalDate,
+  currentMonth: YearMonth,
   isPunched: Boolean,
 ) {
   Box(
@@ -218,7 +220,7 @@ fun CalendarDay(
       // 未打卡状态：显示日期数字
       Text(
         text = date.dayOfMonth.toString(),
-        color = if (date.month == YearMonth.now().month) {
+        color = if (date.month == currentMonth.month) {
           // 当前月份的日期用主色
           MaterialTheme.colorScheme.onBackground
         } else {
