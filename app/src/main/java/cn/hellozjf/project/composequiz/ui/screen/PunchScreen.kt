@@ -35,9 +35,6 @@ fun PunchScreen(
 
   // 把当前的年月取出来
   var currentMonth by remember { mutableStateOf(YearMonth.now()) }
-  // 根据当前的年月，把punch记录取出来
-  val punchList by punchViewModel.getByYearMonthFlow(currentMonth.year, currentMonth.monthValue)
-    .collectAsState(listOf())
 
   // 页面状态
   val pagerState = rememberPagerState(initialPage = Int.MAX_VALUE / 2) { Int.MAX_VALUE }
@@ -48,34 +45,19 @@ fun PunchScreen(
     Box(
       modifier = Modifier.padding(innerPadding)
     ) {
-//      PunchCalendar(
-//        currentMonth = currentMonth,
-//        punchRecords = punchList.map { LocalDate.of(it.year, it.month, it.day) }.toSet(),
-//        onMonthChange = { yearMonth ->
-//          Log.d(TAG, "onMonthChange: $yearMonth")
-//          currentMonth = yearMonth
-//        }
-//      )
-
-      // 我试一下 HorizontalPager
       HorizontalPager(
         state = pagerState,
         modifier = Modifier.fillMaxWidth()
       ) { page ->
 
+        val yearMonth = currentMonth.plusMonths((page - Int.MAX_VALUE / 2).toLong())
+        val punchList by punchViewModel.getByYearMonthFlow(yearMonth.year, yearMonth.monthValue)
+          .collectAsState(listOf())
+
         PunchCalendar(
-          currentMonth = currentMonth.plusMonths((page - Int.MAX_VALUE / 2).toLong()),
+          currentMonth = yearMonth,
           punchRecords = punchList.map { LocalDate.of(it.year, it.month, it.day) }.toSet(),
         )
-//        Box(
-//          modifier = Modifier.fillMaxWidth(),
-//          contentAlignment = Alignment.Center
-//        ) {
-//          Text(
-//            text = "$page",
-//            style = MaterialTheme.typography.titleLarge
-//          )
-//        }
       }
     }
   }
