@@ -26,9 +26,10 @@ import cn.hellozjf.project.composequiz.ui.component.DailyQuiz
 import cn.hellozjf.project.composequiz.ui.component.FavoriteQuizPanel
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.util.LanguageConstant
-import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ChapterViewModel
 import cn.hellozjf.project.composequiz.viewmodel.ConfigViewModel
+import cn.hellozjf.project.composequiz.viewmodel.PunchViewModel
+import cn.hellozjf.project.composequiz.viewmodel.QuizViewModel
 
 private val TAG = "MainScreen"
 
@@ -44,6 +45,7 @@ fun MainScreen(
   chapterViewModel: ChapterViewModel,
   quizViewModel: QuizViewModel,
   configViewModel: ConfigViewModel,
+  punchViewModel: PunchViewModel,
   onNavigation: (NavKey) -> Unit
 ) {
   var destination by rememberSaveable { mutableStateOf(DestinationQuiz.DAILY_QUIZ) }
@@ -124,8 +126,9 @@ fun MainScreen(
 
           DestinationQuiz.DAILY_QUIZ -> {
             DailyQuiz(
-              icon = destination.icon,
-              contentDescription = destination.contentDescription
+              language = config.language,
+              getByYearMonth = punchViewModel::getByYearMonth,
+              onNavigation = onNavigation
             )
           }
         }

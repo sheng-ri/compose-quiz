@@ -1,9 +1,11 @@
 package cn.hellozjf.project.composequiz.ui.component
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,8 +32,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import cn.hellozjf.project.composequiz.database.entity.Punch
+import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -38,7 +43,8 @@ import java.time.YearMonth
 @Composable
 fun PunchCalendarHorizontalPager(
   currentMonth: YearMonth,
-  getByYearMonth: suspend (Int, Int) -> List<Punch>
+  getByYearMonth: suspend (Int, Int) -> List<Punch>,
+  modifier: Modifier = Modifier
 ) {
 
   // 定义一个无限大翻页
@@ -46,7 +52,7 @@ fun PunchCalendarHorizontalPager(
 
   HorizontalPager(
     state = pagerState,
-    modifier = Modifier.fillMaxWidth()
+    modifier = modifier.fillMaxWidth()
   ) { page ->
 
     val yearMonth = currentMonth.plusMonths((page - Int.MAX_VALUE / 2).toLong())
@@ -60,6 +66,47 @@ fun PunchCalendarHorizontalPager(
       currentMonth = yearMonth,
       punchRecords = punchList.map { LocalDate.of(it.year, it.month, it.day) }.toSet(),
     )
+  }
+}
+
+@Preview(
+  uiMode = Configuration.UI_MODE_NIGHT_NO,
+  name = "浅色模式"
+)
+@Preview(
+  uiMode = Configuration.UI_MODE_NIGHT_YES,
+  name = "深色模式"
+)
+@Composable
+fun PunchCalendarHorizontalPagerPreview() {
+  ComposeQuizTheme {
+    Scaffold(
+      modifier = Modifier.fillMaxSize()
+    ) { innerPadding ->
+      PunchCalendarHorizontalPager(
+        currentMonth = YearMonth.now(),
+        getByYearMonth = { year, month ->
+          if (year == 2025) {
+            when (month) {
+              10 -> {
+                listOf(Punch(2025, 10, 1))
+              }
+
+              11 -> {
+                listOf(Punch(2025, 11, 19), Punch(2025, 11, 20))
+              }
+
+              else -> {
+                listOf()
+              }
+            }
+          } else {
+            listOf()
+          }
+        },
+        modifier = Modifier.padding(paddingValues = innerPadding)
+      )
+    }
   }
 }
 

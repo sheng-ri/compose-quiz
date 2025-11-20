@@ -26,7 +26,7 @@ fun NavDisplayScreen(
   configViewModel: ConfigViewModel,
   punchViewModel: PunchViewModel,
 ) {
-  val backStack = rememberNavBackStack(PunchScreenKey)
+  val backStack = rememberNavBackStack(LaunchScreenKey)
   val onNavigation: (NavKey) -> Unit = {
     backStack.add(it)
   }
@@ -58,6 +58,7 @@ fun NavDisplayScreen(
           chapterViewModel = chapterViewModel,
           quizViewModel = quizViewModel,
           configViewModel = configViewModel,
+          punchViewModel = punchViewModel,
           onNavigation = onNavigation
         )
       }
@@ -105,11 +106,6 @@ fun NavDisplayScreen(
           chapterViewModel = chapterViewModel,
           quizViewModel = quizViewModel,
           onNavigation = onNavigation
-        )
-      }
-      entry<PunchScreenKey> { key: PunchScreenKey ->
-        PunchScreen(
-          punchViewModel = punchViewModel
         )
       }
       entry<LaunchScreenKey> { key: LaunchScreenKey ->

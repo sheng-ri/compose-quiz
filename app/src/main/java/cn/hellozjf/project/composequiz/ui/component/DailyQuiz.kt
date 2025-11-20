@@ -33,7 +33,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavKey
+import cn.hellozjf.project.composequiz.database.entity.Punch
 import cn.hellozjf.project.composequiz.ui.theme.ComposeQuizTheme
+import cn.hellozjf.project.composequiz.util.LanguageConstant
+import org.apache.fontbox.ttf.model.Language
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -46,15 +50,11 @@ private val TAG = "DailyQuiz"
 
 @Composable
 fun DailyQuiz(
+  language: String,
+  getByYearMonth: suspend (Int, Int) -> List<Punch>,
+  onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier,
-  icon: ImageVector,
-  contentDescription: String
 ) {
-  // 今天是 xxxx年xx月xx日，今天未打卡
-  val currentDate by remember {
-    mutableStateOf<LocalDate>(LocalDate.now())
-  }
-
   // 开始今日测试
   // 以 yyyyMMdd 为种子，去数据库随机抽取20题，然后打开做题页面
   Column(
@@ -62,11 +62,13 @@ fun DailyQuiz(
     verticalArrangement = Arrangement.SpaceAround,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    // Text("${currentDate.year}年${currentDate.monthValue}月${currentDate.dayOfMonth}日")
-    // TODO
-//    PunchCalendar()
+    PunchCalendarHorizontalPager(
+      currentMonth = YearMonth.now(),
+      getByYearMonth = getByYearMonth
+    )
     Button(onClick = {
       Log.d(TAG, "测试")
+      // TODO 这里要跳转到测试页面
     }) {
       Text("开始测试")
     }
@@ -83,19 +85,30 @@ fun DailyQuiz(
 )
 @Composable
 fun PunchCalendarPreview() {
-  val currentMonth = remember { YearMonth.now() }
-  var punchRecords by remember {
-    mutableStateOf(
-      setOf<LocalDate>(
-        LocalDate.of(2025, 11, 17)
-      )
-    )
-  }
   ComposeQuizTheme {
     Surface {
-      PunchCalendar(
-        currentMonth = currentMonth,
-        punchRecords = punchRecords
+      DailyQuiz(
+        language = LanguageConstant.EN,
+        getByYearMonth = { year, month ->
+          if (year == 2025) {
+            when (month) {
+              10 -> {
+                listOf(Punch(2025, 10, 1))
+              }
+
+              11 -> {
+                listOf(Punch(2025, 11, 19), Punch(2025, 11, 20))
+              }
+
+              else -> {
+                listOf()
+              }
+            }
+          } else {
+            listOf()
+          }
+        },
+        onNavigation = {}
       )
     }
   }
