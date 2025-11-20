@@ -26,8 +26,11 @@ interface QuizExtDao {
   suspend fun query(
     chapterIndex: Int,
     quizIndex: Int
-  ) : QuizExt?
+  ): QuizExt?
 
   @Query("SELECT count(*) FROM quiz_ext")
   suspend fun getCount(): Int
+
+  @Query("select * from quiz_ext")
+  suspend fun findAll(): List<QuizExt>
 }

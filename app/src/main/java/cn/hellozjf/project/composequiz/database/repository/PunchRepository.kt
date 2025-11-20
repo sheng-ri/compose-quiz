@@ -23,4 +23,8 @@ class PunchRepository @Inject constructor(
     return punchDao.getByYearMonthFlow(year, month)
   }
 
+  suspend fun exists(year: Int, month: Int, day: Int): Boolean {
+    return punchDao.exists(year, month, day)
+  }
+
 }

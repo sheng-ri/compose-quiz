@@ -232,4 +232,8 @@ class QuizRepository @Inject constructor(
       quizEnDao.findQuizDTOList()
     }
   }
+
+  suspend fun findAllQuizExt(): List<QuizExt> {
+    return quizExtDao.findAll()
+  }
 }

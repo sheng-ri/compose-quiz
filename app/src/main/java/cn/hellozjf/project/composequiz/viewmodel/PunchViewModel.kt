@@ -27,6 +27,10 @@ class PunchViewModel @Inject constructor(
     return repository.getByYearMonthFlow(year, month)
   }
 
+  suspend fun exists(year: Int, month: Int, day: Int): Boolean {
+    return repository.exists(year, month, day)
+  }
+
   @OptIn(ExperimentalCoroutinesApi::class)
   fun getCacheByYearMonthFlow(year: Int, month: Int): Flow<Map<YearMonth, List<Punch>>> {
     val currentYearMonth: YearMonth = YearMonth.of(year, month)

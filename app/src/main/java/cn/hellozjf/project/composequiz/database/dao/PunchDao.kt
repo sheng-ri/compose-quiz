@@ -18,4 +18,7 @@ interface PunchDao {
   @Query("SELECT * FROM punch WHERE year = :year AND month = :month")
   fun getByYearMonthFlow(year: Int, month: Int): Flow<List<Punch>>
 
+  @Query("SELECT EXISTS(SELECT 1 FROM punch WHERE year = :year and month = :month and day = :day)")
+  suspend fun exists(year: Int, month: Int, day: Int): Boolean
+
 }

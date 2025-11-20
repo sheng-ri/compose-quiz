@@ -177,4 +177,8 @@ class QuizViewModel @Inject constructor(
       quizIndex = quizIndex
     )
   }
+
+  suspend fun findAllQuizExt(): List<QuizExt> {
+    return repository.findAllQuizExt()
+  }
 }

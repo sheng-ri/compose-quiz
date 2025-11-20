@@ -128,6 +128,8 @@ fun MainScreen(
             DailyQuiz(
               language = config.language,
               getByYearMonth = punchViewModel::getByYearMonth,
+              exists = punchViewModel::exists,
+              findAllQuizExt = quizViewModel::findAllQuizExt,
               onNavigation = onNavigation
             )
           }
