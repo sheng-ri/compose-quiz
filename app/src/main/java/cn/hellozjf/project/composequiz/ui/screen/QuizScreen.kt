@@ -41,7 +41,8 @@ fun QuizScreen(
   chapterViewModel: ChapterViewModel,
   quizViewModel: QuizViewModel,
   configViewModel: ConfigViewModel,
-  onNavigation: (NavKey) -> Unit
+  onNavigation: (NavKey) -> Unit,
+  onAnswerAllCorrect: () -> Unit,
 ) {
 
   val config by configViewModel.getConfigFlow().collectAsState(
@@ -169,7 +170,8 @@ fun QuizScreen(
               quizKeyList = quizKeyList,
               chooseOptionMap = quizSelectOption,
               quizOrderList = quizOrder,
-              optionOrderList = optionOrderList
+              optionOrderList = optionOrderList,
+              onAnswerAllCorrect = onAnswerAllCorrect
             )
           )
         }

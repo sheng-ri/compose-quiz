@@ -129,6 +129,7 @@ fun MainScreen(
               language = config.language,
               getByYearMonth = punchViewModel::getByYearMonth,
               exists = punchViewModel::exists,
+              insertPunch = punchViewModel::insertPunch,
               findAllQuizExt = quizViewModel::findAllQuizExt,
               onNavigation = onNavigation
             )

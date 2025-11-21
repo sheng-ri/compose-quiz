@@ -67,6 +67,7 @@ fun NavDisplayScreen(
         val titleEn = key.titleEn
         val titleZh = key.titleZh
         val quizKeyList = key.quizKeyList
+        val onAnswerAllCorrect = key.onAnswerAllCorrect
         QuizScreen(
           titleEn = titleEn,
           titleZh = titleZh,
@@ -74,7 +75,8 @@ fun NavDisplayScreen(
           chapterViewModel = chapterViewModel,
           quizViewModel = quizViewModel,
           configViewModel = configViewModel,
-          onNavigation = onNavigation
+          onNavigation = onNavigation,
+          onAnswerAllCorrect = onAnswerAllCorrect
         )
       }
       entry<QuizAnswerScreenKey> { key: QuizAnswerScreenKey ->
@@ -84,6 +86,7 @@ fun NavDisplayScreen(
         val chooseOptionMap = key.chooseOptionMap
         val quizOrderList = key.quizOrderList
         val optionOrderList = key.optionOrderList
+        val onAnswerAllCorrect = key.onAnswerAllCorrect
         AnswerScreen(
           titleEn = titleEn,
           titleZh = titleZh,
@@ -95,6 +98,7 @@ fun NavDisplayScreen(
           quizOrderList = quizOrderList,
           optionOrderList = optionOrderList,
           onNavigation = onNavigation,
+          onAnswerAllCorrect = onAnswerAllCorrect,
           onClearBackStack = onClearBackStack
         )
       }

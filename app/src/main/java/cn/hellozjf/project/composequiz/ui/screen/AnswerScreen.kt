@@ -52,6 +52,7 @@ fun AnswerScreen(
   quizOrderList: List<Int>,
   optionOrderList: List<List<Int>>,
   onNavigation: (NavKey) -> Unit,
+  onAnswerAllCorrect: () -> Unit,
   onClearBackStack: () -> Unit
 ) {
 
@@ -106,6 +107,11 @@ fun AnswerScreen(
       }
     }
     Log.d(TAG, "totalCorrectCount = $totalCorrectCount")
+
+    if (totalCorrectCount == totalQuestionCount) {
+      // 问题全都答对了
+      onAnswerAllCorrect()
+    }
   }
 
   Scaffold(

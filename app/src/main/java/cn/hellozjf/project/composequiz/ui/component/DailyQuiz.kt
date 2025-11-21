@@ -42,6 +42,7 @@ fun DailyQuiz(
   getByYearMonth: suspend (Int, Int) -> List<Punch>,
   exists: suspend (Int, Int, Int) -> Boolean,
   findAllQuizExt: suspend () -> List<QuizExt>,
+  insertPunch: suspend (Punch) -> Unit,
   onNavigation: (NavKey) -> Unit,
   modifier: Modifier = Modifier,
 ) {
@@ -73,21 +74,37 @@ fun DailyQuiz(
         coroutineScope.launch {
           // 从 quiz_ext 表中随机挑选20题
           val quizExtList = findAllQuizExt()
-          val seededRandom = Random(seed = 1L * (now.year * 10000 + now.monthValue * 100 + now.dayOfMonth))
+          val seededRandom =
+            Random(seed = 1L * (now.year * 10000 + now.monthValue * 100 + now.dayOfMonth))
           val quizKeyList = mutableListOf<QuizKey>()
           for (i in 0 until 20) {
             val index = seededRandom.nextInt(quizExtList.size)
             val quizExt = quizExtList[index]
-            quizKeyList.add(QuizKey(
-              chapterIndex = quizExt.chapterIndex,
-              quizIndex = quizExt.quizIndex
-            ))
+            quizKeyList.add(
+              QuizKey(
+                chapterIndex = quizExt.chapterIndex,
+                quizIndex = quizExt.quizIndex
+              )
+            )
           }
           // 跳转 QuizScreen
-          onNavigation(QuizScreenKey(
+          onNavigation(
+            QuizScreenKey(
             titleEn = "${now.year}-${now.monthValue}-${now.dayOfMonth} Test",
             titleZh = "${now.year}-${now.monthValue}-${now.dayOfMonth} 测试",
-            quizKeyList = quizKeyList
+            quizKeyList = quizKeyList,
+            onAnswerAllCorrect = {
+              coroutineScope.launch {
+                // 往 punch 表添加记录
+                insertPunch(
+                  Punch(
+                    year = now.year,
+                    month = now.monthValue,
+                    day = now.dayOfMonth
+                  )
+                )
+              }
+            }
           ))
         }
       },
@@ -141,6 +158,7 @@ fun PunchCalendarPreview() {
         findAllQuizExt = {
           listOf()
         },
+        insertPunch = { _ -> },
         onNavigation = {}
       )
     }
