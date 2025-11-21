@@ -21,6 +21,7 @@ import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
+import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.ui.component.QuizListColumn
 import cn.hellozjf.project.composequiz.util.LanguageConstant
@@ -159,7 +160,19 @@ fun QuizScreen(
         titleEn = titleEn,
         titleZh = titleZh,
         quizKeyList = quizKeyList,
-        onNavigation = onNavigation
+        onNavigation = onNavigation,
+        onSubmit = {
+          onNavigation(
+            QuizAnswerScreenKey(
+              titleEn = titleEn,
+              titleZh = titleZh,
+              quizKeyList = quizKeyList,
+              chooseOptionMap = quizSelectOption,
+              quizOrderList = quizOrder,
+              optionOrderList = optionOrderList
+            )
+          )
+        }
       )
     }
   }

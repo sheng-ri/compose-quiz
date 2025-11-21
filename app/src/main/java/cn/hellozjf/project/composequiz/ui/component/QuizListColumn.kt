@@ -16,7 +16,6 @@ import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.dto.OptionKey
 import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
-import cn.hellozjf.project.composequiz.nav.QuizAnswerScreenKey
 import cn.hellozjf.project.composequiz.util.LanguageConstant
 import cn.hellozjf.project.composequiz.util.QuizUtils
 
@@ -35,6 +34,7 @@ fun QuizListColumn(
   titleZh: String,
   quizKeyList: List<QuizKey>,
   onNavigation: (NavKey) -> Unit,
+  onSubmit: () -> Unit,
   modifier: Modifier = Modifier
 ) {
   var quizDTOList: List<QuizDTO> by remember {
@@ -62,17 +62,8 @@ fun QuizListColumn(
 
     Button(
       onClick = {
-        // TODO 这段代码移出去，让进入测试页面的调用者决定，测试页面提交之后的逻辑
-        onNavigation(
-          QuizAnswerScreenKey(
-            titleEn = titleEn,
-            titleZh = titleZh,
-            quizKeyList = quizKeyList,
-            chooseOptionMap = quizSelectOption,
-            quizOrderList = quizOrder,
-            optionOrderList = optionOrderList
-          )
-        )
+        // 让进入测试页面的调用者决定，测试页面提交之后的逻辑
+        onSubmit()
       }
     ) {
       Text("提交")
@@ -174,7 +165,8 @@ fun QuizListColumnPreview() {
       QuizKey(chapterIndex = 0, quizIndex = 1),
       QuizKey(chapterIndex = 0, quizIndex = 2),
     ),
-    onNavigation = {}
+    onNavigation = {},
+    onSubmit = {}
   )
 }
 
