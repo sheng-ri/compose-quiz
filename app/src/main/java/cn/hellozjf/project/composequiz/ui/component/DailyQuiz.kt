@@ -2,6 +2,7 @@ package cn.hellozjf.project.composequiz.ui.component
 
 import android.content.res.Configuration
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Punch
@@ -50,6 +52,7 @@ fun DailyQuiz(
   var enabled by remember { mutableStateOf(true) }
   val coroutineScope = rememberCoroutineScope()
   val now by remember { mutableStateOf(LocalDate.now()) }
+  val context = LocalContext.current
 
   LaunchedEffect(key1 = Unit) {
     enabled = !exists(now.year, now.monthValue, now.dayOfMonth)
@@ -90,11 +93,17 @@ fun DailyQuiz(
           // 跳转 QuizScreen
           onNavigation(
             QuizScreenKey(
-            titleEn = "${now.year}-${now.monthValue}-${now.dayOfMonth} Test",
-            titleZh = "${now.year}-${now.monthValue}-${now.dayOfMonth} 测试",
-            quizKeyList = quizKeyList,
-            onAnswerAllCorrect = {
-              coroutineScope.launch {
+              titleEn = "${now.year}-${now.monthValue}-${now.dayOfMonth} Test",
+              titleZh = "${now.year}-${now.monthValue}-${now.dayOfMonth} 测试",
+              quizKeyList = quizKeyList,
+              onAnswerAllCorrect = {
+                // 弹出打卡成功的提示
+                Toast.makeText(
+                  context,
+                  "今日打卡成功",
+                  Toast.LENGTH_SHORT
+                ).show()
+
                 // 往 punch 表添加记录
                 insertPunch(
                   Punch(
@@ -104,8 +113,7 @@ fun DailyQuiz(
                   )
                 )
               }
-            }
-          ))
+            ))
         }
       },
       enabled = enabled

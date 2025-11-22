@@ -14,7 +14,7 @@ data class QuizScreenKey(
   val titleEn: String,                        // 语言为英文时的标题
   val titleZh: String,                        // 语言为中文时的标题
   val quizKeyList: List<QuizKey>,             // 问题列表
-  val onAnswerAllCorrect: () -> Unit = {},    // 回答完全正确的回调，以便我往 punch 表里添加记录
+  val onAnswerAllCorrect: suspend () -> Unit = {},    // 回答完全正确的回调，以便我往 punch 表里添加记录
 ) : NavKey
 
 @Serializable
@@ -31,7 +31,7 @@ data class QuizAnswerScreenKey(
   val chooseOptionMap: Map<QuizKey, OptionKey>,
   val quizOrderList: List<Int>,
   val optionOrderList: List<List<Int>>,
-  val onAnswerAllCorrect: () -> Unit
+  val onAnswerAllCorrect: suspend () -> Unit
 ) : NavKey
 
 @Serializable

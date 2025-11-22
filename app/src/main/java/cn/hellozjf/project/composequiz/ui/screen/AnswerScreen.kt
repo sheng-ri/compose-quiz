@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavKey
 import cn.hellozjf.project.composequiz.database.entity.Config
 import cn.hellozjf.project.composequiz.dto.OptionKey
+import cn.hellozjf.project.composequiz.dto.QuizDTO
 import cn.hellozjf.project.composequiz.dto.QuizKey
 import cn.hellozjf.project.composequiz.ui.component.MyTopAppBar
 import cn.hellozjf.project.composequiz.ui.component.QuizAnswerItem
@@ -51,8 +52,9 @@ fun AnswerScreen(
   chooseOptionMap: Map<QuizKey, OptionKey>,
   quizOrderList: List<Int>,
   optionOrderList: List<List<Int>>,
+  findQuizDTOByKey: suspend (String, QuizKey) -> QuizDTO?,
   onNavigation: (NavKey) -> Unit,
-  onAnswerAllCorrect: () -> Unit,
+  onAnswerAllCorrect: suspend () -> Unit,
   onClearBackStack: () -> Unit
 ) {
 
@@ -60,17 +62,18 @@ fun AnswerScreen(
     Config(language = LanguageConstant.EN)
   )
 
-  val quizList by quizViewModel.findFlowByKeyList(
-    language = config.language,
-    quizKeyList = quizKeyList
-  ).collectAsState(listOf())
-  val reorderQuizList by remember(
-    key1 = quizList.map { it.getQuizKey() }.joinToString(",")
-  ) {
-    derivedStateOf {
-      QuizUtils.reorder(quizList, quizOrderList, optionOrderList)
-    }
-  }
+//  val quizList by quizViewModel.findFlowByKeyList(
+//    language = config.language,
+//    quizKeyList = quizKeyList
+//  ).collectAsState(listOf())
+//  val reorderQuizList by remember(
+//    key1 = quizList.map { it.getQuizKey() }.joinToString(",")
+//  ) {
+//    derivedStateOf {
+//      QuizUtils.reorder(quizList, quizOrderList, optionOrderList)
+//    }
+//  }
+  var reorderQuizList by remember { mutableStateOf(listOf<QuizDTO>()) }
 
   // 这是所有的题目
   val listState = rememberLazyListState()
@@ -81,15 +84,24 @@ fun AnswerScreen(
 
   val coroutineScope = rememberCoroutineScope()
 
-  // 下面这句话只会检查 quizDTOList 的内容，当内容不变（除 wrongAnswerCount 以外）时就不会重复执行
   LaunchedEffect(
-    key1 = reorderQuizList.map { it.getQuizKey() }.joinToString(",")
+    key1 = quizKeyList.joinToString(","),
+    key2 = config.language
   ) {
+    val oldQuizDTOList = quizKeyList.mapNotNull {
+      findQuizDTOByKey(config.language, it)
+    }
+    val quizDTOList = QuizUtils.reorder(
+      oldQuizDTOList = oldQuizDTOList,
+      quizOrder = quizOrderList,
+      optionOrders = optionOrderList
+    )
+    reorderQuizList = quizDTOList
+
     // 题目更新了，所以要计算一下正确和总的的题目数量
     totalQuestionCount = quizKeyList.size
-
     totalCorrectCount = 0
-    for (quiz in reorderQuizList) {
+    for (quiz in quizDTOList) {
       val quizIndex = quiz.quizIndex
       val optionIndex = quiz.correctOptionIndex
       val chapterIndex = quiz.chapterIndex
@@ -107,12 +119,44 @@ fun AnswerScreen(
       }
     }
     Log.d(TAG, "totalCorrectCount = $totalCorrectCount")
-
     if (totalCorrectCount == totalQuestionCount) {
       // 问题全都答对了
       onAnswerAllCorrect()
     }
   }
+
+//  // 下面这句话只会检查 quizDTOList 的内容，当内容不变（除 wrongAnswerCount 以外）时就不会重复执行
+//  LaunchedEffect(
+//    key1 = reorderQuizList.map { it.getQuizKey() }.joinToString(",")
+//  ) {
+//    // 题目更新了，所以要计算一下正确和总的的题目数量
+//    totalQuestionCount = quizKeyList.size
+//
+//    totalCorrectCount = 0
+//    for (quiz in reorderQuizList) {
+//      val quizIndex = quiz.quizIndex
+//      val optionIndex = quiz.correctOptionIndex
+//      val chapterIndex = quiz.chapterIndex
+//      val correctOptionKey = OptionKey(
+//        chapterIndex = chapterIndex,
+//        quizIndex = quizIndex,
+//        optionIndex = optionIndex
+//      )
+//      if (correctOptionKey == chooseOptionMap[quiz.getQuizKey()]) {
+//        // 这题答对了
+//        totalCorrectCount++
+//      } else {
+//        // 这题答错了，需要记录答错次数
+//        quizViewModel.incWrongAnswerCount(quiz.chapterIndex, quiz.quizIndex)
+//      }
+//    }
+//    Log.d(TAG, "totalCorrectCount = $totalCorrectCount")
+//
+//    if (totalCorrectCount == totalQuestionCount) {
+//      // 问题全都答对了
+//      onAnswerAllCorrect()
+//    }
+//  }
 
   Scaffold(
     modifier = Modifier.fillMaxSize(),

@@ -97,6 +97,7 @@ fun NavDisplayScreen(
           chooseOptionMap = chooseOptionMap,
           quizOrderList = quizOrderList,
           optionOrderList = optionOrderList,
+          findQuizDTOByKey = quizViewModel::findQuizDTOByKey,
           onNavigation = onNavigation,
           onAnswerAllCorrect = onAnswerAllCorrect,
           onClearBackStack = onClearBackStack

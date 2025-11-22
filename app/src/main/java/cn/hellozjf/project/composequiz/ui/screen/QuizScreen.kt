@@ -42,7 +42,7 @@ fun QuizScreen(
   quizViewModel: QuizViewModel,
   configViewModel: ConfigViewModel,
   onNavigation: (NavKey) -> Unit,
-  onAnswerAllCorrect: () -> Unit,
+  onAnswerAllCorrect: suspend () -> Unit,
 ) {
 
   val config by configViewModel.getConfigFlow().collectAsState(
